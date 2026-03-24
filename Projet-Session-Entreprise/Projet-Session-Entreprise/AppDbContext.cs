@@ -5,6 +5,7 @@ namespace Projet_Session_Entreprise
     public class AppDbContext : DbContext
     {
         public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<AppUser> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
