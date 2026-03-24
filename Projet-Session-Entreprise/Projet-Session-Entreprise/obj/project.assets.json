@@ -2305,23 +2305,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Reda2\\.nuget\\packages\\": {},
+    "C:\\Users\\mikha\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Reda2\\OneDrive\\Bureau\\420-413-MV-EntrepriseFinal\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj",
+      "projectUniqueName": "C:\\Users\\mikha\\Desktop\\Work\\Dev pour entreprise\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj",
       "projectName": "Projet-Session-Entreprise",
-      "projectPath": "C:\\Users\\Reda2\\OneDrive\\Bureau\\420-413-MV-EntrepriseFinal\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj",
-      "packagesPath": "C:\\Users\\Reda2\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Reda2\\OneDrive\\Bureau\\420-413-MV-EntrepriseFinal\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\obj\\",
+      "projectPath": "C:\\Users\\mikha\\Desktop\\Work\\Dev pour entreprise\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj",
+      "packagesPath": "C:\\Users\\mikha\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mikha\\Desktop\\Work\\Dev pour entreprise\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Reda2\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\mikha\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2330,6 +2330,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2348,7 +2349,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.300"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -2388,7 +2389,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.312/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
