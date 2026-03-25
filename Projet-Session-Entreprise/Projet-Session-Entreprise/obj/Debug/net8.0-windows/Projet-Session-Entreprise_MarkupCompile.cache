@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 c:\Users\mikha\Desktop\Work\Dev pour entreprise\Projet eq\TutoMV\Projet-Session-Entreprise\Projet-Session-Entreprise\App.xaml
-6-816655595
+6837387687
 
-15-583126606
+152087233301
 212823094083
-Login.xaml;LoginWindow.xaml;MainWindow.xaml;ModifierCompte.xaml;RequeteRoleTuteur.xaml;SignUp.xaml;
+LoginWindow.xaml;Views\EditCompteView.xaml;Views\LoginView.xaml;Views\MainWindow.xaml;Views\RegisterView.xaml;Views\RequeteRoleTuteurView.xaml;
 
 True
 
