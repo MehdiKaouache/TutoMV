@@ -1,4 +1,4 @@
-﻿<Window x:Class="Projet_Session_Entreprise.RequeteRoleTuteurView"
+﻿<Window x:Class="Projet_Session_Entreprise.Views.RequeteRoleTuteurView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -43,28 +43,24 @@
             Grid.Column="1"
             TextAlignment="Center"/>
 
-        <!-- faut encore le data binding -->
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <StackPanel Grid.Row="0" Margin="10">
-                <TextBlock Text="Cours choisi" FontWeight="SemiBold"/>
-                <TextBox x:Name="txtClass"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="1">
-                <Button x:Name="btnSendRequest" 
-                    Width="120" Height="30" 
-                    Content="Faire une demande" 
-                    Margin="0 15"                         
-                    Background="#2ECC71"
-                    Foreground="White"
-                    FontWeight="Bold"/>
-            </StackPanel>
-
-        </Grid>
+		<Grid Grid.Column="1" Grid.Row="1">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			<StackPanel Grid.Row="0" Margin="10">
+				<TextBlock Text="Cours choisi" FontWeight="SemiBold"/>
+				<TextBox x:Name="txtClass" Text="{Binding SelectedCourse, UpdateSourceTrigger=PropertyChanged}"/>
+			</StackPanel>
+			<StackPanel Grid.Row="1">
+				<Button x:Name="btnSendRequest"
+						Command="{Binding SendRequestCommand}"
+						Width="120" Height="30"
+						Content="Faire une demande"
+						Margin="0 15"
+						Background="#2ECC71" Foreground="White" FontWeight="Bold"/>
+				<TextBlock Text="{Binding StatusMessage}" TextAlignment="Center" Foreground="Red" Margin="5"/>
+			</StackPanel>
+		</Grid>
     </Grid>
 </Window>

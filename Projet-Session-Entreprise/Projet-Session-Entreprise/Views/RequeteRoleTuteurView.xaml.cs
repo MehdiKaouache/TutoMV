@@ -11,17 +11,24 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
-namespace Projet_Session_Entreprise
+namespace Projet_Session_Entreprise.Views
 {
-    /// <summary>
-    /// Interaction logic for RequeteRoleTuteur.xaml
-    /// </summary>
-    public partial class RequeteRoleTuteur : Window
+    public partial class RequeteRoleTuteurView : Window
     {
-        public RequeteRoleTuteur()
+
+        public RequeteRoleTuteurView()
         {
             InitializeComponent();
+           
+            var fakeUser = new AppUser { Id = 1, AverageGrade = 85 };
+           
+        }
+
+        public RequeteRoleTuteurView(AppUser currentUser, AppDbContext db)
+        {
+            InitializeComponent();
+            var service = new Services.TutorService(db);
+            this.DataContext = new ViewModels.RequeteRoleTuteurViewModel(service, currentUser);
         }
     }
 }

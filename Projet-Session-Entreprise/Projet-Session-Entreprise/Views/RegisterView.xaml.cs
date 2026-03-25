@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Projet_Session_Entreprise
+namespace Projet_Session_Entreprise.Views
 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class SignUp : Window
+    public partial class RegisterView : Window
     {
-        public SignUp()
+        public RegisterView()
         {
             InitializeComponent();
         }

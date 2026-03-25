@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Projet_Session_Entreprise.Vues
+namespace Projet_Session_Entreprise.Views
 {
     /// <summary>
     /// Logique d'interaction pour ProfileView.xaml
