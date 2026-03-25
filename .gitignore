@@ -1,21 +1,17 @@
 # Visual Studio
 .vs/
-**/.vs/
 **/bin/
 **/obj/
 
 # User files
 *.user
 *.suo
-*.rsuser
+*.userosscache
+*.sln.docstates
 
-# VS cache/build files
-*.cache
-*.dtbcache.v2
-*.futdcache.v2
-
-# Logs
-*.log
+# Build results
+[Dd]ebug/
+[Rr]elease/
 
 # OS files
 .DS_Store
