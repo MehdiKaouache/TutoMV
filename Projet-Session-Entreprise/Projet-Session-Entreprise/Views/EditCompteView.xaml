@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projet_Session_Entreprise"
         mc:Ignorable="d"
-        Title="ModifierCompte" Height="450" Width="800">
+        Title="Modifier le Compte" Height="450" Width="800">
 
     <Window.Resources>
         <Style TargetType="TextBox">

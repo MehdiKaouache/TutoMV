@@ -1,7 +1,6 @@
 {
   "format": 1,
   "restore": {
-<<<<<<< HEAD
     "C:\\Users\\mikha\\Desktop\\Work\\Dev pour entreprise\\Projet eq\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj": {}
   },
   "projects": {
@@ -13,19 +12,6 @@
         "projectPath": "C:\\Users\\mikha\\Desktop\\Work\\Dev pour entreprise\\Projet eq\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj",
         "packagesPath": "C:\\Users\\mikha\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\mikha\\Desktop\\Work\\Dev pour entreprise\\Projet eq\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\obj\\",
-=======
-    "C:\\Users\\Reda2\\OneDrive\\Bureau\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj": {}
-  },
-  "projects": {
-    "C:\\Users\\Reda2\\OneDrive\\Bureau\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Reda2\\OneDrive\\Bureau\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj",
-        "projectName": "Projet-Session-Entreprise",
-        "projectPath": "C:\\Users\\Reda2\\OneDrive\\Bureau\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\Projet-Session-Entreprise.csproj",
-        "packagesPath": "C:\\Users\\Reda2\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Reda2\\OneDrive\\Bureau\\TutoMV\\Projet-Session-Entreprise\\Projet-Session-Entreprise\\obj\\",
->>>>>>> 8de2cd30c267de0b04b8f4b269ba998ab8078e79
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
