@@ -1,12 +1,18 @@
 # Visual Studio
 .vs/
 **/.vs/
-bin/
-obj/
+**/bin/
+**/obj/
 
 # User files
 *.user
 *.suo
+*.rsuser
+
+# VS cache/build files
+*.cache
+*.dtbcache.v2
+*.futdcache.v2
 
 # Logs
 *.log
