@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Projet_Session_Entreprise
 {
     /// <summary>
-    /// Interaction logic for Login.xaml
+    /// Interaction logic for EditCompteView.xaml
     /// </summary>
-    public partial class Login : UserControl
+    public partial class EditCompteView : Window
     {
-        public Login()
+        public EditCompteView()
         {
             InitializeComponent();
         }

@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace Projet_Session_Entreprise
 {
     /// <summary>
-    /// Interaction logic for ModifierCompte.xaml
+    /// Interaction logic for Login.xaml
     /// </summary>
-    public partial class ModifierCompte : Window
+    public partial class Login : Window
     {
-        public ModifierCompte()
+        public Login()
         {
             InitializeComponent();
         }

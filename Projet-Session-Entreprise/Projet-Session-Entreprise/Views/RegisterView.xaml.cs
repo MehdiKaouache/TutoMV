@@ -17,9 +17,9 @@ namespace Projet_Session_Entreprise
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class SignUp : Window
     {
-        public Window1()
+        public SignUp()
         {
             InitializeComponent();
         }
