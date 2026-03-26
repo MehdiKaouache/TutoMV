@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Projet_Session_Entreprise.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Projet_Session_Entreprise.Views
 {
-    /// <summary>
-    /// Logique d'interaction pour ProfileView.xaml
-    /// </summary>
-    public partial class ProfileView : UserControl
+    public partial class ProfileView : Window
     {
         public ProfileView()
         {
             InitializeComponent();
+            var fakeUser = new AppUser { Id = 1, DA = "123456", Nom = "Tremblay", Prenom = "Hamza", Role = "Étudiant" };
+            DataContext = new ProfileViewModel(fakeUser);
+        }
+
+        public ProfileView(AppUser user)
+        {
+            InitializeComponent();
+            DataContext = new ProfileViewModel(user);
         }
     }
 }
