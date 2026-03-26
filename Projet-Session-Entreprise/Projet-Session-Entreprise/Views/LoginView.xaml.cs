@@ -24,5 +24,12 @@ namespace Projet_Session_Entreprise
         {
             InitializeComponent();
         }
+
+        public LoginView(AppUser currentUser)
+        {
+            InitializeComponent();
+            var service = new Services.AuthService();
+            this.DataContext = new ViewModels.LoginViewModel(service, currentUser);
+        }
     }
 }

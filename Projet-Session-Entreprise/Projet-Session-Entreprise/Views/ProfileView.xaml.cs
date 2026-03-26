@@ -23,6 +23,8 @@ namespace Projet_Session_Entreprise.Views
         public ProfileView()
         {
             InitializeComponent();
+            var service = new Services.AuthService();
+            this.DataContext = new ViewModels.RegisterViewModel(service);
         }
     }
 }

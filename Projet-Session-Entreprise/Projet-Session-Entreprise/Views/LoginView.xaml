@@ -45,7 +45,6 @@
             Grid.Column="1"
             TextAlignment="Center"/>
 
-        <!-- faut encore le data binding -->
         <Grid Grid.Column="1" Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -53,14 +52,15 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
+            <!-- faut encore le data binding, les passwordBoxes marchent pas comme les TextBoxes normales -->
             <StackPanel Grid.Row="0" Margin="10">
-                <TextBlock Text="Courriel" FontWeight="SemiBold"/>
-                <TextBox x:Name="txtEmail"/> 
+                <TextBlock Text="no. DA" FontWeight="SemiBold"/>
+                <TextBox x:Name="txtDA" Text="{Binding NoDa, UpdateSourceTrigger=PropertyChanged}"/> 
             </StackPanel>
 
             <StackPanel Grid.Row="1" Margin="10">
                 <TextBlock Text="Mot de passe" FontWeight="SemiBold"/>
-                <PasswordBox x:Name="txtPassword" Height="30" Margin="5" Padding="5"/>
+                <PasswordBox x:Name="txtPassword" Height="30" Margin="5" Padding="5"/> 
             </StackPanel>
 
             <StackPanel Grid.Row="2">
