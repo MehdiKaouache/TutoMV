@@ -8,16 +8,16 @@ namespace Projet_Session_Entreprise.ViewModels
     public partial class RequeteRoleTuteurViewModel : ObservableObject
     {
         private readonly TutorService _tutorService;
-        private readonly AppUser _user;
+        private readonly Tutor _tutor;
 
         [ObservableProperty] private string _statusMessage = string.Empty;
         [ObservableProperty] private string _selectedCourse = string.Empty;
+        [ObservableProperty] private double _enteredGrade;
 
-
-        public RequeteRoleTuteurViewModel(TutorService tutorService, AppUser user)
+        public RequeteRoleTuteurViewModel(TutorService tutorService, Tutor tutor)
         {
             _tutorService = tutorService;
-            _user = user;
+            _tutor = tutor;
         }
 
         [RelayCommand]
@@ -25,16 +25,20 @@ namespace Projet_Session_Entreprise.ViewModels
         {
             if (string.IsNullOrEmpty(SelectedCourse))
             {
-                StatusMessage = "Vous devez entrer un nom de cours.";
+                StatusMessage = "Entrez un cours.";
                 return;
             }
 
-            bool success = await _tutorService.PromoteStudentAsync(_user.Id, true);
+            bool success = await _tutorService.PromoteTutorAsync(_tutor.Id, EnteredGrade);
 
             if (success)
-                StatusMessage = $"Demande envoyée pour le cours : {SelectedCourse}";
+            {
+                StatusMessage = "Demande acceptée !";
+            }
             else
-                StatusMessage = "Votre moyenne est inférieure à 80%.";
+            {
+                StatusMessage = "Moyenne insuffisante.";
+            }
         }
     }
 }

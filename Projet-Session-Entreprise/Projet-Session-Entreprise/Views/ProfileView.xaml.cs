@@ -1,21 +1,20 @@
-﻿using Projet_Session_Entreprise.ViewModels;
-using System.Windows;
+﻿using System.Windows;
+using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
 {
     public partial class ProfileView : Window
     {
-        public ProfileView()
+        public ProfileView(Student student)
         {
             InitializeComponent();
-            var fakeUser = new AppUser { Id = 1, DA = "123456", Nom = "Tremblay", Prenom = "Hamza", Role = "Étudiant" };
-            DataContext = new ProfileViewModel(fakeUser);
+            this.DataContext = new ProfileViewModel(student);
         }
 
-        public ProfileView(AppUser user)
+        public ProfileView(Tutor tutor)
         {
             InitializeComponent();
-            DataContext = new ProfileViewModel(user);
+            this.DataContext = new ProfileViewModel(tutor);
         }
     }
 }

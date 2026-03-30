@@ -1,17 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Projet_Session_Entreprise.Services
 {
     public class AuthService
     {
-        public async Task<bool> LoginAsync(string da, string password)
+        public async Task<object?> LoginAsync(string da, string password)
         {
             using (var db = new AppDbContext())
             {
-                var user = await db.Users
-                    .FirstOrDefaultAsync(u => u.DA == da && u.Password == password);
+                var student = await db.Students.FirstOrDefaultAsync(s => s.DA == da && s.Password == password);
+                if (student != null) return student;
 
-                return user != null;
+                var tutor = await db.Tutors.FirstOrDefaultAsync(t => t.DA == da && t.Password == password);
+                if (tutor != null) return tutor;
+
+                return null;
             }
         }
     }

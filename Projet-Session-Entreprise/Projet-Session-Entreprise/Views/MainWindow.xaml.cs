@@ -6,7 +6,7 @@ namespace Projet_Session_Entreprise
 {
     public partial class MainWindow : Window
     {
-        private Teacher? selected;
+        private Tutor selected;
 
         public MainWindow()
         {
@@ -21,7 +21,7 @@ namespace Projet_Session_Entreprise
         {
             using (var db = new AppDbContext())
             {
-                grid.ItemsSource = db.Teachers.ToList();
+                grid.ItemsSource = db.Tutors.ToList();
             }
         }
 
@@ -34,14 +34,14 @@ namespace Projet_Session_Entreprise
         {
             using (var db = new AppDbContext())
             {
-                Teacher t = new Teacher
+                Tutor t = new Tutor
                 {
-                    Name = txtName.Text,
+                    Nom = txtName.Text,
                     Subject = txtSubject.Text,
                     Availability = GetSelectedAvailability()
                 };
 
-                db.Teachers.Add(t);
+                db.Tutors.Add(t);
                 db.SaveChanges();
             }
 
@@ -54,11 +54,11 @@ namespace Projet_Session_Entreprise
 
             using (var db = new AppDbContext())
             {
-                var t = db.Teachers.FirstOrDefault(x => x.Id == selected.Id);
+                var t = db.Tutors.FirstOrDefault(x => x.Id == selected.Id);
 
                 if (t != null)
                 {
-                    t.Name = txtName.Text;
+                    t.Nom = txtName.Text;
                     t.Subject = txtSubject.Text;
                     t.Availability = GetSelectedAvailability();
 
@@ -75,11 +75,11 @@ namespace Projet_Session_Entreprise
 
             using (var db = new AppDbContext())
             {
-                var t = db.Teachers.FirstOrDefault(x => x.Id == selected.Id);
+                var t = db.Tutors.FirstOrDefault(x => x.Id == selected.Id);
 
                 if (t != null)
                 {
-                    db.Teachers.Remove(t);
+                    db.Tutors.Remove(t);
                     db.SaveChanges();
                 }
             }
@@ -89,11 +89,11 @@ namespace Projet_Session_Entreprise
 
         private void grid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (grid.SelectedItem is Teacher t)
+            if (grid.SelectedItem is Tutor t)
             {
                 selected = t;
 
-                txtName.Text = t.Name;
+                txtName.Text = t.Nom;
                 txtSubject.Text = t.Subject;
 
                 // set ComboBox selection

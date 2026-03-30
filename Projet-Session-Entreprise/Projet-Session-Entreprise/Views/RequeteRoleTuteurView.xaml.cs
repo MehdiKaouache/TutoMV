@@ -1,34 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Services;
+
 namespace Projet_Session_Entreprise.Views
 {
     public partial class RequeteRoleTuteurView : Window
     {
-
-        public RequeteRoleTuteurView()
+        public RequeteRoleTuteurView(Tutor tutor, AppDbContext db)
         {
             InitializeComponent();
-           
-            var fakeUser = new AppUser { Id = 1, AverageGrade = 85 };
-           
-        }
 
-        public RequeteRoleTuteurView(AppUser currentUser, AppDbContext db)
-        {
-            InitializeComponent();
-            var service = new Services.TutorService(db);
-            this.DataContext = new ViewModels.RequeteRoleTuteurViewModel(service, currentUser);
+            var vm = new RequeteRoleTuteurViewModel(new TutorService(db), tutor);
+            this.DataContext = vm;
+
+            vm.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "StatusMessage" && vm.StatusMessage == "Demande acceptée !")
+                {
+                    MessageBox.Show("Promotion réussie !");
+
+                    new ProfileView(tutor).Show();
+                    this.Close();
+                }
+            };
         }
     }
 }

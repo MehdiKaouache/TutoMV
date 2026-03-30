@@ -28,7 +28,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Teacher Manager"
+        <TextBlock Text="TutoMV"
             FontSize="26"
             FontWeight="Bold"
             Foreground="#2C3E50"

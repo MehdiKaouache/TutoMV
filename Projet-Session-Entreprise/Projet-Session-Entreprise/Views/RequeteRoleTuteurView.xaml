@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Projet_Session_Entreprise"
         mc:Ignorable="d"
-        Title="RequeteRoleTuteur" Height="450" Width="450">
-    
+        Title="RequeteRoleTuteur" Height="500" Width="450"
+        WindowStartupLocation="CenterScreen">
+
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="5"/>
@@ -18,7 +19,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -28,14 +29,15 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Teacher Manager"
+        <TextBlock Text="TutoMV"
             FontSize="26"
             FontWeight="Bold"
             Foreground="#2C3E50"
             Grid.Column="1"
-            TextAlignment="Center"/>
+            TextAlignment="Center"
+            Margin="0,20,0,0"/>
 
-        <TextBlock Margin="0,43,0,15"
+        <TextBlock Margin="0,55,0,15"
             Text="Devenir tuteur"
             FontSize="20"
             FontWeight="Medium"
@@ -43,24 +45,36 @@
             Grid.Column="1"
             TextAlignment="Center"/>
 
-		<Grid Grid.Column="1" Grid.Row="1">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
-			<StackPanel Grid.Row="0" Margin="10">
-				<TextBlock Text="Cours choisi" FontWeight="SemiBold"/>
-				<TextBox x:Name="txtClass" Text="{Binding SelectedCourse, UpdateSourceTrigger=PropertyChanged}"/>
-			</StackPanel>
-			<StackPanel Grid.Row="1">
-				<Button x:Name="btnSendRequest"
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="10,5">
+                <TextBlock Text="Cours choisi" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding SelectedCourse, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Margin="10,5">
+                <TextBlock Text="Note obtenue (%)" FontWeight="SemiBold"/>
+                <TextBox Text="{Binding EnteredGrade, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2">
+                <Button x:Name="btnSendRequest"
 						Command="{Binding SendRequestCommand}"
-						Width="120" Height="30"
-						Content="Faire une demande"
-						Margin="0 15"
+						Width="150" Height="35"
+						Content="Vérifier et postuler"
+						Margin="0,20,0,10"
 						Background="#2ECC71" Foreground="White" FontWeight="Bold"/>
-				<TextBlock Text="{Binding StatusMessage}" TextAlignment="Center" Foreground="Red" Margin="5"/>
-			</StackPanel>
-		</Grid>
+                <TextBlock Text="{Binding StatusMessage}" 
+                           TextAlignment="Center" 
+                           Foreground="#E74C3C" 
+                           FontWeight="Bold"
+                           Margin="5"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
