@@ -12,5 +12,6 @@
         public double AverageGrade { get; set; } = 85.0;
         public bool IsValidated { get; set; } = false;
         public string Role { get; set; } = "Enseignant";
+        public List<Review> Reviews { get; set; } = new List<Review>();
     }
 }

@@ -1,6 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
@@ -15,6 +18,8 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private string _availability;
         [ObservableProperty] private string _statusMessage;
         [ObservableProperty] private bool _isTutor;
+
+        public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
 
         public ProfileViewModel(Student student)
         {
@@ -33,6 +38,28 @@ namespace Projet_Session_Entreprise.ViewModels
             Nom = tutor.Nom;
             Prenom = tutor.Prenom;
             Availability = tutor.Availability;
+
+            LoadReviews(tutor.Id);
+        }
+
+        private void LoadReviews(int tutorId)
+        {
+            using (var db = new AppDbContext())
+            {
+                var tutor = db.Tutors
+                    .Include(t => t.Reviews)
+                    .FirstOrDefault(t => t.Id == tutorId);
+
+                Reviews.Clear();
+
+                if (tutor != null && tutor.Reviews != null)
+                {
+                    foreach (var review in tutor.Reviews)
+                    {
+                        Reviews.Add(review);
+                    }
+                }
+            }
         }
 
         [RelayCommand]
@@ -43,7 +70,11 @@ namespace Projet_Session_Entreprise.ViewModels
                 if (_student != null)
                 {
                     var s = await db.Students.FindAsync(_student.Id);
-                    if (s != null) { s.Nom = Nom; s.Prenom = Prenom; }
+                    if (s != null)
+                    {
+                        s.Nom = Nom;
+                        s.Prenom = Prenom;
+                    }
                 }
                 else if (_tutor != null)
                 {
