@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Views;
 
 namespace Projet_Session_Entreprise
 {
-    /// <summary>
-    /// Interaction logic for Login.xaml
-    /// </summary>
     public partial class LoginView : Window
     {
         public LoginView()
@@ -25,11 +12,29 @@ namespace Projet_Session_Entreprise
             InitializeComponent();
         }
 
-        public LoginView(AppUser currentUser)
+        private async void btnConn_Click(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
-            var service = new Services.AuthService();
-            this.DataContext = new ViewModels.LoginViewModel(service, currentUser);
+            var auth = new AuthService();
+            var user = await auth.LoginAsync(txtDA.Text, txtPassword.Password);
+
+            if (user is Student s)
+            {
+                new ProfileView(s).Show();
+                this.Close();
+            }
+            else if (user is Tutor t)
+            {
+                new RequeteRoleTuteurView(t, new AppDbContext()).Show();
+                this.Close();
+            }
+            else MessageBox.Show("Erreur DA/Password");
+        }
+
+        private void btnReg_Click(object sender, RoutedEventArgs e)
+        {
+            var reg = new Views.RegisterView();
+            reg.Show();
+            this.Close();
         }
     }
 }

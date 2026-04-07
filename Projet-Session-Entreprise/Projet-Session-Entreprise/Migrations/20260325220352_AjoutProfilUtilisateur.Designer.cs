@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Projet_Session_Entreprise;
 
@@ -10,9 +11,11 @@ using Projet_Session_Entreprise;
 namespace Projet_Session_Entreprise.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260325220352_AjoutProfilUtilisateur")]
+    partial class AjoutProfilUtilisateur
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +24,7 @@ namespace Projet_Session_Entreprise.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Projet_Session_Entreprise.Student", b =>
+            modelBuilder.Entity("Projet_Session_Entreprise.AppUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,47 +39,10 @@ namespace Projet_Session_Entreprise.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<bool>("HasSignedEngagement")
+                        .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Prenom")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("Projet_Session_Entreprise.Tutor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Availability")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<double>("AverageGrade")
-                        .HasColumnType("double");
-
-                    b.Property<string>("DA")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsValidated")
+                    b.Property<bool>("IsTutor")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Nom")
@@ -95,13 +61,34 @@ namespace Projet_Session_Entreprise.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Projet_Session_Entreprise.Teacher", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Availability")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Subject")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tutors");
+                    b.ToTable("Teachers");
                 });
 #pragma warning restore 612, 618
         }
