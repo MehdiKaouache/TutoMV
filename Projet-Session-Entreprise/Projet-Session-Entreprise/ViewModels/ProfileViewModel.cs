@@ -19,12 +19,14 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private string _statusMessage;
         [ObservableProperty] private bool _isTutor;
 
+        public bool IsStudent => !IsTutor;
+
         public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
 
         public ProfileViewModel(Student student)
         {
             _student = student;
-            _isTutor = false;
+            IsTutor = false;
             DA = student.DA;
             Nom = student.Nom;
             Prenom = student.Prenom;
@@ -33,13 +35,18 @@ namespace Projet_Session_Entreprise.ViewModels
         public ProfileViewModel(Tutor tutor)
         {
             _tutor = tutor;
-            _isTutor = true;
+            IsTutor = true;
             DA = tutor.DA;
             Nom = tutor.Nom;
             Prenom = tutor.Prenom;
             Availability = tutor.Availability;
 
             LoadReviews(tutor.Id);
+        }
+
+        partial void OnIsTutorChanged(bool value)
+        {
+            OnPropertyChanged(nameof(IsStudent));
         }
 
         private void LoadReviews(int tutorId)

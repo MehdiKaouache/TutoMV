@@ -8,42 +8,43 @@
         Background="White"
         WindowStartupLocation="CenterScreen">
 
-	<Window.Resources>
-		<BooleanToVisibilityConverter x:Key="BoolToVis"/>
-	</Window.Resources>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
 
-	<Grid Margin="20">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="150"/>
-			<ColumnDefinition Width="300"/>
-		</Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="300"/>
+        </Grid.ColumnDefinitions>
 
-		<TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
                    Text="Mon Profil"
                    FontSize="24"
                    FontWeight="Bold"
                    Margin="0,0,0,20"
                    HorizontalAlignment="Center"/>
 
-		<TextBlock Grid.Row="1" Grid.Column="0"
+        <TextBlock Grid.Row="1" Grid.Column="0"
                    Text="DA :"
                    Margin="5"
                    VerticalAlignment="Center"
                    FontWeight="SemiBold"/>
 
-		<TextBox Grid.Row="1" Grid.Column="1"
+        <TextBox Grid.Row="1" Grid.Column="1"
                  Text="{Binding DA}"
                  IsReadOnly="True"
                  Background="#F0F0F0"
@@ -51,31 +52,31 @@
                  Height="30"
                  Padding="5"/>
 
-		<TextBlock Grid.Row="2" Grid.Column="0"
+        <TextBlock Grid.Row="2" Grid.Column="0"
                    Text="Nom :"
                    Margin="5"
                    VerticalAlignment="Center"
                    FontWeight="SemiBold"/>
 
-		<TextBox Grid.Row="2" Grid.Column="1"
+        <TextBox Grid.Row="2" Grid.Column="1"
                  Text="{Binding Nom, UpdateSourceTrigger=PropertyChanged}"
                  Margin="5"
                  Height="30"
                  Padding="5"/>
 
-		<TextBlock Grid.Row="3" Grid.Column="0"
+        <TextBlock Grid.Row="3" Grid.Column="0"
                    Text="Prénom :"
                    Margin="5"
                    VerticalAlignment="Center"
                    FontWeight="SemiBold"/>
 
-		<TextBox Grid.Row="3" Grid.Column="1"
+        <TextBox Grid.Row="3" Grid.Column="1"
                  Text="{Binding Prenom, UpdateSourceTrigger=PropertyChanged}"
                  Margin="5"
                  Height="30"
                  Padding="5"/>
 
-		<TextBlock Grid.Row="4" Grid.Column="0"
+        <TextBlock Grid.Row="4" Grid.Column="0"
                    Text="Disponibilités :"
                    Margin="5"
                    VerticalAlignment="Center"
@@ -83,7 +84,7 @@
                    Foreground="#2980B9"
                    Visibility="{Binding IsTutor, Converter={StaticResource BoolToVis}}"/>
 
-		<TextBox Grid.Row="4" Grid.Column="1"
+        <TextBox Grid.Row="4" Grid.Column="1"
                  Text="{Binding Availability, UpdateSourceTrigger=PropertyChanged}"
                  Visibility="{Binding IsTutor, Converter={StaticResource BoolToVis}}"
                  Margin="5"
@@ -91,7 +92,7 @@
                  Padding="5"
                  Tag="Ex: Lundi 14h-16h"/>
 
-		<Button Grid.Row="5" Grid.ColumnSpan="2"
+        <Button Grid.Row="5" Grid.ColumnSpan="2"
                 Content="Enregistrer les modifications"
                 Command="{Binding SauvegarderCommand}"
                 Width="200"
@@ -101,33 +102,45 @@
                 Foreground="White"
                 FontWeight="Bold"/>
 
-		<TextBlock Grid.Row="6" Grid.ColumnSpan="2"
+        <TextBlock Grid.Row="6" Grid.ColumnSpan="2"
                    Text="{Binding StatusMessage}"
                    Foreground="#2ECC71"
                    FontWeight="Bold"
                    TextAlignment="Center"
                    Margin="10"/>
 
-		<TextBlock Grid.Row="7" Grid.ColumnSpan="2"
+        <Button Grid.Row="7" Grid.ColumnSpan="2"
+                Content="Réserver un rendez-vous"
+                Width="200"
+                Height="35"
+                Margin="0,10,0,10"
+                Background="#27AE60"
+                Foreground="White"
+                FontWeight="Bold"
+                Visibility="{Binding IsStudent, Converter={StaticResource BoolToVis}}"/>
+
+        <TextBlock Grid.Row="8" Grid.ColumnSpan="2"
                    Text="Avis des étudiants"
                    FontSize="18"
                    FontWeight="SemiBold"
-                   Margin="0,20,0,10"/>
+                   Margin="0,20,0,10"
+                   Visibility="{Binding IsTutor, Converter={StaticResource BoolToVis}}"/>
 
-		<ListBox Grid.Row="8" Grid.ColumnSpan="2"
+        <ListBox Grid.Row="9" Grid.ColumnSpan="2"
                  ItemsSource="{Binding Reviews}"
-                 Margin="5">
-			<ListBox.ItemTemplate>
-				<DataTemplate>
-					<StackPanel Margin="5">
-						<TextBlock Text="{Binding Commentaire}"
+                 Margin="5"
+                 Visibility="{Binding IsTutor, Converter={StaticResource BoolToVis}}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding Commentaire}"
                                    FontSize="14"/>
-						<TextBlock Text="{Binding Note}"
+                        <TextBlock Text="{Binding Note}"
                                    Foreground="Gray"/>
-					</StackPanel>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-	</Grid>
+    </Grid>
 </Window>
