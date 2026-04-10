@@ -1,0 +1,127 @@
+<Window x:Class="Projet_Session_Entreprise.Views.RegisterView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Projet_Session_Entreprise"
+        Title="Register"
+        mc:Ignorable="d"
+        Height="500" Width="450">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="TutoMV"
+            FontSize="26"
+            FontWeight="Bold"
+            Foreground="#2C3E50"
+            Grid.Column="1"
+            TextAlignment="Center"/>
+
+        <TextBlock Margin="0,43,0,289"
+            Text="Créer un compte"
+            FontSize="20"
+            FontWeight="Medium"
+            Foreground="#2C3E50"
+            Grid.Column="1"
+            TextAlignment="Center" Grid.RowSpan="2"/>
+
+        <!-- faut encore le data binding -->
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/> <!-- Subjects -->
+                <RowDefinition Height="Auto"/> <!-- Add subject -->
+                <RowDefinition Height="Auto"/> <!-- Sign up -->
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Width="100">
+                    <TextBlock Text="Nom" FontWeight="SemiBold"/>
+                    <TextBox x:Name="txtName"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Width="100">
+                    <TextBlock Text="Prénom" FontWeight="SemiBold"/>
+                    <TextBox x:Name="txtFirstName"/>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="1" Margin="10">
+                <TextBlock Text="no. DA" FontWeight="SemiBold"/>
+                <TextBox x:Name="txtDA"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Margin="10">
+                <TextBlock Text="Type" FontWeight="SemiBold"/>
+                <ComboBox x:Name="cmbUserType" Height="30" Margin="5">
+                    <ComboBoxItem Content="Étudiant"/>
+                    <ComboBoxItem Content="Enseignant"/>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Margin="10">
+                <TextBlock Text="Mot de passe" FontWeight="SemiBold"/>
+                <PasswordBox x:Name="txtPassword" Height="30" Margin="5" Padding="5"/>
+            </StackPanel>
+
+            <!-- Subjects selector (visible/useful for Enseignant) -->
+            <StackPanel Grid.Row="4" Margin="10">
+                <TextBlock Text="Matières (sélectionnez une ou plusieurs)" FontWeight="SemiBold"/>
+                <ListBox x:Name="lstSubjects" Height="100" SelectionMode="Multiple" Margin="5">
+                    <ListBoxItem Content="Mathématiques"/>
+                    <ListBoxItem Content="Histoire"/>
+                    <ListBoxItem Content="Français"/>
+                    <ListBoxItem Content="Anglais"/>
+                    <ListBoxItem Content="Physique"/>
+                    <ListBoxItem Content="Chimie"/>
+                    <ListBoxItem Content="Informatique"/>
+                    <ListBoxItem Content="Économie"/>
+                </ListBox>
+            </StackPanel>
+
+            <!-- Add custom subject -->
+            <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="10">
+                <TextBox x:Name="txtNewSubject" Width="220" Height="30" Margin="0,0,5,0" PlaceholderText="Ajouter une matière personnalisée"/>
+                <Button x:Name="btnAddSubject" Content="Ajouter" Width="80" Height="30"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="6">
+                <Button x:Name="btnSignUp" 
+                    Width="140" Height="34" 
+                    Margin="5"
+                    Content="Créer un compte" 
+                    Background="#2ECC71"
+                    Foreground="White"
+                    FontWeight="Bold"/>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</Window>

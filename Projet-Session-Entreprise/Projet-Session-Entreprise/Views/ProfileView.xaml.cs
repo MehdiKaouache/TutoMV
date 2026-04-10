@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
@@ -8,13 +9,15 @@ namespace Projet_Session_Entreprise.Views
         public ProfileView(Student student)
         {
             InitializeComponent();
-            this.DataContext = new ProfileViewModel(student);
+            
+            DataContext = new ProfileViewModel(student);
         }
 
         public ProfileView(Tutor tutor)
         {
             InitializeComponent();
-            this.DataContext = new ProfileViewModel(tutor);
+            
+            DataContext = new ProfileViewModel(tutor);
         }
     }
 }

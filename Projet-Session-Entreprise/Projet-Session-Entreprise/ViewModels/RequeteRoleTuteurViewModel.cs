@@ -1,44 +1,28 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+using System.Windows;
 using Projet_Session_Entreprise.Services;
-using System.Threading.Tasks;
+using Projet_Session_Entreprise.ViewModels;
 
-namespace Projet_Session_Entreprise.ViewModels
+namespace Projet_Session_Entreprise.Views
 {
-    public partial class RequeteRoleTuteurViewModel : ObservableObject
+    public partial class RequeteRoleTuteurView : Window
     {
-        private readonly TutorService _tutorService;
-        private readonly Tutor _tutor;
-
-        [ObservableProperty] private string _statusMessage = string.Empty;
-        [ObservableProperty] private string _selectedCourse = string.Empty;
-        [ObservableProperty] private double _enteredGrade;
-
-        public RequeteRoleTuteurViewModel(TutorService tutorService, Tutor tutor)
+        public RequeteRoleTuteurView(Tutor tutor, AppDbContext db)
         {
-            _tutorService = tutorService;
-            _tutor = tutor;
-        }
+            InitializeComponent();
 
-        [RelayCommand]
-        private async Task SendRequestAsync()
-        {
-            if (string.IsNullOrEmpty(SelectedCourse))
-            {
-                StatusMessage = "Entrez un cours.";
-                return;
-            }
+            var vm = new RequeteRoleTuteurViewModel(new TutorService(db), tutor);
+            DataContext = vm;
 
-            bool success = await _tutorService.PromoteTutorAsync(_tutor.Id, EnteredGrade);
-
-            if (success)
+            vm.PropertyChanged += (s, e) =>
             {
-                StatusMessage = "Demande acceptée !";
-            }
-            else
-            {
-                StatusMessage = "Moyenne insuffisante.";
-            }
+                if (e.PropertyName == nameof(vm.StatusMessage) &&
+                    vm.StatusMessage == "Demande acceptée !")
+                {
+                    MessageBox.Show("Promotion réussie !");
+                    new ProfileView(tutor).Show();
+                    Close();
+                }
+            };
         }
     }
 }

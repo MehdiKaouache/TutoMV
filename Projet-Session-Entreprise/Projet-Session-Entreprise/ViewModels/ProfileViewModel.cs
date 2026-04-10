@@ -1,27 +1,37 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.EntityFrameworkCore;
+using Projet_Session_Entreprise.Models;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Linq;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
     public partial class ProfileViewModel : ObservableObject
     {
-        private readonly Student _student;
-        private readonly Tutor _tutor;
+        private Student? _student;
+        private Tutor? _tutor;
 
-        [ObservableProperty] private string _dA;
-        [ObservableProperty] private string _nom;
-        [ObservableProperty] private string _prenom;
-        [ObservableProperty] private string _availability;
-        [ObservableProperty] private string _statusMessage;
         [ObservableProperty] private bool _isTutor;
+        [ObservableProperty] private string _dA = "";
+        [ObservableProperty] private string _nom = "";
+        [ObservableProperty] private string _prenom = "";
+        [ObservableProperty] private string _availability = "";
+        [ObservableProperty] private string _statusMessage = "";
 
-        public bool IsStudent => !IsTutor;
+        public Visibility StudentSectionVisibility => IsTutor ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility TutorSectionVisibility => IsTutor ? Visibility.Visible : Visibility.Collapsed;
 
+        public ObservableCollection<Tutor> Tutors { get; set; } = new ObservableCollection<Tutor>();
         public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
+
+        public ObservableCollection<int> RatingChoices { get; } = new ObservableCollection<int> { 1, 2, 3, 4, 5 };
+        public ObservableCollection<string> AvailabilityChoices { get; } =
+            new ObservableCollection<string> { "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" };
+
+        [ObservableProperty] private Tutor? _selectedTutor;
+        [ObservableProperty] private int _selectedRating = 5;
+        [ObservableProperty] private string _selectedAvailability = "Lundi";
 
         public ProfileViewModel(Student student)
         {
@@ -40,63 +50,21 @@ namespace Projet_Session_Entreprise.ViewModels
             Nom = tutor.Nom;
             Prenom = tutor.Prenom;
             Availability = tutor.Availability;
-
-            LoadReviews(tutor.Id);
-        }
-
-        partial void OnIsTutorChanged(bool value)
-        {
-            OnPropertyChanged(nameof(IsStudent));
-        }
-
-        private void LoadReviews(int tutorId)
-        {
-            using (var db = new AppDbContext())
-            {
-                var tutor = db.Tutors
-                    .Include(t => t.Reviews)
-                    .FirstOrDefault(t => t.Id == tutorId);
-
-                Reviews.Clear();
-
-                if (tutor != null && tutor.Reviews != null)
-                {
-                    foreach (var review in tutor.Reviews)
-                    {
-                        Reviews.Add(review);
-                    }
-                }
-            }
         }
 
         [RelayCommand]
-        private async Task SauvegarderAsync()
+        private void AddRating()
         {
-            using (var db = new AppDbContext())
-            {
-                if (_student != null)
-                {
-                    var s = await db.Students.FindAsync(_student.Id);
-                    if (s != null)
-                    {
-                        s.Nom = Nom;
-                        s.Prenom = Prenom;
-                    }
-                }
-                else if (_tutor != null)
-                {
-                    var t = await db.Tutors.FindAsync(_tutor.Id);
-                    if (t != null)
-                    {
-                        t.Nom = Nom;
-                        t.Prenom = Prenom;
-                        t.Availability = Availability;
-                    }
-                }
+            if (SelectedTutor == null) return;
+            StatusMessage = "Note ajoutée.";
+        }
 
-                await db.SaveChangesAsync();
-                StatusMessage = "Profil mis à jour !";
-            }
+        [RelayCommand]
+        private void SaveAvailability()
+        {
+            if (_tutor == null) return;
+            Availability = SelectedAvailability;
+            StatusMessage = "Dispos mises à jour.";
         }
     }
 }
