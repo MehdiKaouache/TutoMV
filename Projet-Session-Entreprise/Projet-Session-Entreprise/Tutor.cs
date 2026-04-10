@@ -1,4 +1,6 @@
-﻿namespace Projet_Session_Entreprise
+﻿using System;
+
+namespace Projet_Session_Entreprise
 {
     public class Tutor
     {
@@ -12,5 +14,19 @@
         public double AverageGrade { get; set; } = 85.0;
         public bool IsValidated { get; set; } = false;
         public string Role { get; set; } = "Enseignant";
+
+        public int NumberOfRatings { get; set; } = 0;
+        public int TotalRatings { get; set; } = 0;
+
+        public double AverageRating
+        {
+            get
+            {
+                if (NumberOfRatings == 0)
+                    return 0.0;
+
+                return Math.Round((double)TotalRatings / NumberOfRatings, 1);
+            }
+        }
     }
 }

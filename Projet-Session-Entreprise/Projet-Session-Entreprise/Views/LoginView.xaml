@@ -1,8 +1,8 @@
 ﻿<Window x:Class="Projet_Session_Entreprise.LoginView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="Authentification" Height="450" Width="450"
-      WindowStartupLocation="CenterScreen" Background="#F4F6F8" ResizeMode="NoResize">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Authentification" Height="450" Width="450"
+        WindowStartupLocation="CenterScreen" Background="#F4F6F8" ResizeMode="NoResize">
 
     <Window.Resources>
         <Style TargetType="TextBox">

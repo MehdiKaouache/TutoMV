@@ -1,28 +1,49 @@
-﻿using System.Windows;
-using Projet_Session_Entreprise.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Projet_Session_Entreprise.Services;
+using System.Threading.Tasks;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.ViewModels
 {
-    public partial class RequeteRoleTuteurView : Window
+    public partial class RequeteRoleTuteurViewModel : ObservableObject
     {
-        public RequeteRoleTuteurView(Tutor tutor, AppDbContext db)
+        private readonly TutorService _tutorService;
+        private readonly Tutor _tutor;
+
+        [ObservableProperty]
+        private string _statusMessage = string.Empty;
+
+        [ObservableProperty]
+        private string _selectedCourse = string.Empty;
+
+        [ObservableProperty]
+        private double _enteredGrade;
+
+        public RequeteRoleTuteurViewModel(TutorService tutorService, Tutor tutor)
         {
-            InitializeComponent();
+            _tutorService = tutorService;
+            _tutor = tutor;
+        }
 
-            var vm = new RequeteRoleTuteurViewModel(new TutorService(db), tutor);
-            this.DataContext = vm;
-
-            vm.PropertyChanged += (s, e) =>
+        [RelayCommand]
+        private async Task SendRequestAsync()
+        {
+            if (string.IsNullOrEmpty(SelectedCourse))
             {
-                if (e.PropertyName == "StatusMessage" && vm.StatusMessage == "Demande acceptée !")
-                {
-                    MessageBox.Show("Promotion réussie !");
+                StatusMessage = "Entrez un cours.";
+                return;
+            }
 
-                    new ProfileView(tutor).Show();
-                    this.Close();
-                }
-            };
+            bool success = await _tutorService.PromoteTutorAsync(_tutor.Id, EnteredGrade);
+
+            if (success)
+            {
+                StatusMessage = "Demande acceptée !";
+            }
+            else
+            {
+                StatusMessage = "Moyenne insuffisante.";
+            }
         }
     }
 }

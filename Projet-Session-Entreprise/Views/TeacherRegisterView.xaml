@@ -1,0 +1,85 @@
+<Window x:Class="Projet_Session_Entreprise.Views.TeacherRegisterView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Inscription Enseignant" Height="520" Width="450" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Créer un compte - Enseignant" FontSize="18" FontWeight="SemiBold" Margin="10"/>
+
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <StackPanel Width="200">
+                    <TextBlock Text="Nom" FontWeight="SemiBold"/>
+                    <TextBox x:Name="txtName"/>
+                </StackPanel>
+                <StackPanel Width="200" Margin="10,0,0,0">
+                    <TextBlock Text="Prénom" FontWeight="SemiBold"/>
+                    <TextBox x:Name="txtFirstName"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Margin="0,5,0,0">
+                <TextBlock Text="no. DA" FontWeight="SemiBold"/>
+                <TextBox x:Name="txtDA"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Margin="0,5,0,0">
+                <TextBlock Text="Mot de passe" FontWeight="SemiBold"/>
+                <PasswordBox x:Name="txtPassword" Height="30" Margin="5" Padding="5"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Margin="0,5,0,0">
+                <TextBlock Text="Disponibilité" FontWeight="SemiBold"/>
+                <ComboBox x:Name="cmbAvailability" Height="30" Margin="5">
+                    <ComboBoxItem Content="Lundi"/>
+                    <ComboBoxItem Content="Mardi"/>
+                    <ComboBoxItem Content="Mercredi"/>
+                    <ComboBoxItem Content="Jeudi"/>
+                    <ComboBoxItem Content="Vendredi"/>
+                    <ComboBoxItem Content="Samedi"/>
+                    <ComboBoxItem Content="Dimanche"/>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="4" Margin="0,8,0,0">
+                <TextBlock Text="Matières (sélectionnez une ou plusieurs)" FontWeight="SemiBold"/>
+                <ListBox x:Name="lstSubjects" SelectionMode="Multiple" Margin="5">
+                    <ListBoxItem Content="Mathématiques"/>
+                    <ListBoxItem Content="Histoire"/>
+                    <ListBoxItem Content="Français"/>
+                    <ListBoxItem Content="Anglais"/>
+                    <ListBoxItem Content="Physique"/>
+                    <ListBoxItem Content="Chimie"/>
+                    <ListBoxItem Content="Informatique"/>
+                    <ListBoxItem Content="Économie"/>
+                </ListBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">
+                <Button x:Name="btnSignUp" Content="Créer un compte" Width="140" Height="34" Background="#2ECC71" Foreground="White" FontWeight="Bold"/>
+                <Button x:Name="btnCancel" Content="Annuler" Width="100" Height="34" Margin="8,0,0,0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

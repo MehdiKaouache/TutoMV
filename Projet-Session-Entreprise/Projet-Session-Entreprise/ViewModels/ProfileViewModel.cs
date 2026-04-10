@@ -1,64 +1,232 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Input;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
-    public partial class ProfileViewModel : ObservableObject
+    public class ProfileViewModel : INotifyPropertyChanged
     {
-        private readonly Student _student;
-        private readonly Tutor _tutor;
+        private readonly Student? currentStudent;
+        private readonly Tutor? currentTutor;
 
-        [ObservableProperty] private string _dA;
-        [ObservableProperty] private string _nom;
-        [ObservableProperty] private string _prenom;
-        [ObservableProperty] private string _availability;
-        [ObservableProperty] private string _statusMessage;
-        [ObservableProperty] private bool _isTutor;
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public string PageTitle { get; set; } = "Profile";
+        public string WelcomeText { get; set; } = "";
+
+        public Visibility StudentSectionVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility TutorSectionVisibility { get; set; } = Visibility.Collapsed;
+
+        public ObservableCollection<Tutor> Tutors { get; set; } = new ObservableCollection<Tutor>();
+
+        public ObservableCollection<int> RatingChoices { get; } =
+            new ObservableCollection<int> { 1, 2, 3, 4, 5 };
+
+        public ObservableCollection<string> AvailabilityChoices { get; } =
+            new ObservableCollection<string> { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+
+        private Tutor? selectedTutor;
+        public Tutor? SelectedTutor
+        {
+            get => selectedTutor;
+            set
+            {
+                selectedTutor = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(RatingInfo));
+            }
+        }
+
+        private int selectedRating = 5;
+        public int SelectedRating
+        {
+            get => selectedRating;
+            set
+            {
+                selectedRating = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string RatingInfo
+        {
+            get
+            {
+                if (SelectedTutor == null)
+                    return "Select a tutor to see rating.";
+
+                return "Tutor: " + SelectedTutor.Nom + " " + SelectedTutor.Prenom +
+                       " | Rating: " + SelectedTutor.AverageRating.ToString("0.0");
+            }
+        }
+
+        public string TutorFullName
+        {
+            get
+            {
+                if (currentTutor == null) return "";
+                return currentTutor.Nom + " " + currentTutor.Prenom;
+            }
+        }
+
+        public string TutorSubject
+        {
+            get
+            {
+                if (currentTutor == null) return "";
+                return currentTutor.Subject;
+            }
+        }
+
+        private string selectedAvailability = "Monday";
+        public string SelectedAvailability
+        {
+            get => selectedAvailability;
+            set
+            {
+                selectedAvailability = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string tutorInfo = "";
+        public string TutorInfo
+        {
+            get => tutorInfo;
+            set
+            {
+                tutorInfo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand AddRatingCommand { get; }
+        public ICommand SaveAvailabilityCommand { get; }
 
         public ProfileViewModel(Student student)
         {
-            _student = student;
-            _isTutor = false;
-            DA = student.DA;
-            Nom = student.Nom;
-            Prenom = student.Prenom;
+            currentStudent = student;
+
+            PageTitle = "Student Profile";
+            WelcomeText = "Welcome " + student.Prenom + " " + student.Nom;
+            StudentSectionVisibility = Visibility.Visible;
+            TutorSectionVisibility = Visibility.Collapsed;
+
+            AddRatingCommand = new RelayCommand(AddRating);
+            SaveAvailabilityCommand = new RelayCommand(_ => { });
+
+            LoadTutors();
         }
 
         public ProfileViewModel(Tutor tutor)
         {
-            _tutor = tutor;
-            _isTutor = true;
-            DA = tutor.DA;
-            Nom = tutor.Nom;
-            Prenom = tutor.Prenom;
-            Availability = tutor.Availability;
+            currentTutor = tutor;
+
+            PageTitle = "Tutor Profile";
+            WelcomeText = "Welcome " + tutor.Prenom + " " + tutor.Nom;
+            StudentSectionVisibility = Visibility.Collapsed;
+            TutorSectionVisibility = Visibility.Visible;
+
+            AddRatingCommand = new RelayCommand(_ => { });
+            SaveAvailabilityCommand = new RelayCommand(SaveAvailability);
+
+            SelectedAvailability = string.IsNullOrWhiteSpace(tutor.Availability)
+                ? "Monday"
+                : tutor.Availability;
+
+            TutorInfo = "Current availability: " + SelectedAvailability;
         }
 
-        [RelayCommand]
-        private async Task SauvegarderAsync()
+        private void LoadTutors()
         {
             using (var db = new AppDbContext())
             {
-                if (_student != null)
-                {
-                    var s = await db.Students.FindAsync(_student.Id);
-                    if (s != null) { s.Nom = Nom; s.Prenom = Prenom; }
-                }
-                else if (_tutor != null)
-                {
-                    var t = await db.Tutors.FindAsync(_tutor.Id);
-                    if (t != null)
-                    {
-                        t.Nom = Nom;
-                        t.Prenom = Prenom;
-                        t.Availability = Availability;
-                    }
-                }
+                var tutors = db.Tutors
+                    .Where(t => t.IsValidated)
+                    .ToList();
 
-                await db.SaveChangesAsync();
-                StatusMessage = "Profil mis à jour !";
+                Tutors.Clear();
+
+                foreach (var tutor in tutors)
+                {
+                    Tutors.Add(tutor);
+                }
+            }
+
+            OnPropertyChanged(nameof(Tutors));
+            OnPropertyChanged(nameof(RatingInfo));
+        }
+
+        private void AddRating(object? obj)
+        {
+            if (SelectedTutor == null)
+            {
+                MessageBox.Show("Please select a tutor first.");
+                return;
+            }
+
+            int selectedTutorId = SelectedTutor.Id;
+
+            using (var db = new AppDbContext())
+            {
+                var tutor = db.Tutors.FirstOrDefault(t => t.Id == selectedTutorId);
+
+                if (tutor != null)
+                {
+                    tutor.NumberOfRatings += 1;
+                    tutor.TotalRatings += SelectedRating;
+                    db.SaveChanges();
+                }
+            }
+
+            LoadTutors();
+            SelectedTutor = Tutors.FirstOrDefault(t => t.Id == selectedTutorId);
+            OnPropertyChanged(nameof(RatingInfo));
+        }
+
+        private void SaveAvailability(object? obj)
+        {
+            if (currentTutor == null)
+                return;
+
+            using (var db = new AppDbContext())
+            {
+                var tutor = db.Tutors.FirstOrDefault(t => t.Id == currentTutor.Id);
+
+                if (tutor != null)
+                {
+                    tutor.Availability = SelectedAvailability;
+                    db.SaveChanges();
+
+                    currentTutor.Availability = SelectedAvailability;
+                    TutorInfo = "Availability updated to: " + SelectedAvailability;
+                    OnPropertyChanged(nameof(TutorInfo));
+                }
             }
         }
+
+        private void OnPropertyChanged([CallerMemberName] string? name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    }
+
+    public class RelayCommand : ICommand
+    {
+        private readonly System.Action<object?> execute;
+
+        public RelayCommand(System.Action<object?> execute)
+        {
+            this.execute = execute;
+        }
+
+        public event System.EventHandler? CanExecuteChanged;
+
+        public bool CanExecute(object? parameter) => true;
+
+        public void Execute(object? parameter) => execute(parameter);
     }
 }

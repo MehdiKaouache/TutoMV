@@ -15,16 +15,38 @@ namespace Projet_Session_Entreprise.Views
         {
             using (var db = new AppDbContext())
             {
-                string role = (cmbUserType.SelectedItem as ComboBoxItem)?.Content.ToString();
+                string role = (cmbUserType.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "";
 
                 if (role == "Étudiant")
                 {
-                    db.Students.Add(new Student { Nom = txtName.Text, Prenom = txtFirstName.Text, DA = txtDA.Text, Password = txtPassword.Password, AverageGrade = 75.0 });
+                    db.Students.Add(new Student
+                    {
+                        Nom = txtName.Text,
+                        Prenom = txtFirstName.Text,
+                        DA = txtDA.Text,
+                        Password = txtPassword.Password,
+                        AverageGrade = 75.0,
+                        Role = "Étudiant"
+                    });
                 }
                 else
                 {
-                    db.Tutors.Add(new Tutor { Nom = txtName.Text, Prenom = txtFirstName.Text, DA = txtDA.Text, Password = txtPassword.Password });
+                    db.Tutors.Add(new Tutor
+                    {
+                        Nom = txtName.Text,
+                        Prenom = txtFirstName.Text,
+                        DA = txtDA.Text,
+                        Password = txtPassword.Password,
+                        Subject = "",
+                        Availability = "Monday",
+                        AverageGrade = 0.0,
+                        IsValidated = false,
+                        Role = "Enseignant",
+                        NumberOfRatings = 0,
+                        TotalRatings = 0
+                    });
                 }
+
                 db.SaveChanges();
                 MessageBox.Show("Compte créé !");
                 LoginView login = new LoginView();

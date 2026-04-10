@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System;
 using System.Windows;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.Views;
@@ -14,26 +14,52 @@ namespace Projet_Session_Entreprise
 
         private async void btnConn_Click(object sender, RoutedEventArgs e)
         {
-            var auth = new AuthService();
-            var user = await auth.LoginAsync(txtDA.Text, txtPassword.Password);
+            try
+            {
+                string da = txtDA.Text.Trim();
+                string password = txtPassword.Password.Trim();
 
-            if (user is Student s)
-            {
-                new ProfileView(s).Show();
+                var auth = new AuthService();
+                var user = await auth.LoginAsync(da, password);
+
+                Window? nextWindow = null;
+
+                if (user is Student s)
+                {
+                    nextWindow = new ProfileView(s);
+                }
+                else if (user is Tutor t)
+                {
+                    if (t.IsValidated)
+                    {
+                        nextWindow = new ProfileView(t);
+                    }
+                    else
+                    {
+                        nextWindow = new RequeteRoleTuteurView(t, new AppDbContext());
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Erreur DA/Password");
+                    return;
+                }
+
+                Application.Current.MainWindow = nextWindow;
+                nextWindow.Show();
                 this.Close();
             }
-            else if (user is Tutor t)
+            catch (Exception ex)
             {
-                new RequeteRoleTuteurView(t, new AppDbContext()).Show();
-                this.Close();
+                MessageBox.Show("Erreur lors de la connexion : " + ex.ToString());
             }
-            else MessageBox.Show("Erreur DA/Password");
         }
 
         private void btnReg_Click(object sender, RoutedEventArgs e)
         {
-            var reg = new Views.RegisterView();
-            reg.Show();
+            var roleSel = new RoleSelectionView();
+            // do NOT set roleSel.Owner = this; — closing this would close roleSel too
+            roleSel.Show();
             this.Close();
         }
     }
