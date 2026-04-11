@@ -7,6 +7,7 @@ namespace Projet_Session_Entreprise
         public DbSet<Student> Students { get; set; }
         public DbSet<Tutor> Tutors { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

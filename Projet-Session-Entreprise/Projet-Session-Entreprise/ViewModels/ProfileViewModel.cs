@@ -2,6 +2,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Linq;
+using System;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
@@ -10,7 +12,11 @@ namespace Projet_Session_Entreprise.ViewModels
         private Student? _student;
         private Tutor? _tutor;
 
-        [ObservableProperty] private bool _isTutor;
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(StudentSectionVisibility))]
+        [NotifyPropertyChangedFor(nameof(TutorSectionVisibility))]
+        private bool _isTutor;
+
         [ObservableProperty] private string _dA = "";
         [ObservableProperty] private string _nom = "";
         [ObservableProperty] private string _prenom = "";
@@ -21,13 +27,8 @@ namespace Projet_Session_Entreprise.ViewModels
         public Visibility TutorSectionVisibility => IsTutor ? Visibility.Visible : Visibility.Collapsed;
 
         public ObservableCollection<Tutor> Tutors { get; set; } = new ObservableCollection<Tutor>();
-        public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
-        public ObservableCollection<int> RatingChoices { get; } = new ObservableCollection<int> { 1, 2, 3, 4, 5 };
-        public ObservableCollection<string> AvailabilityChoices { get; } = new ObservableCollection<string> { "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" };
-
-        [ObservableProperty] private Tutor? _selectedTutor;
-        [ObservableProperty] private int _selectedRating = 5;
-        [ObservableProperty] private string _selectedAvailability = "Lundi";
+        public ObservableCollection<Appointment> MyAppointments { get; set; } = new ObservableCollection<Appointment>();
+        public ObservableCollection<string> AvailabilityChoices { get; } = new ObservableCollection<string> { "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche" };
 
         public ProfileViewModel(Student student)
         {
@@ -36,6 +37,7 @@ namespace Projet_Session_Entreprise.ViewModels
             DA = student.DA;
             Nom = student.Nom;
             Prenom = student.Prenom;
+            LoadData();
         }
 
         public ProfileViewModel(Tutor tutor)
@@ -46,21 +48,46 @@ namespace Projet_Session_Entreprise.ViewModels
             Nom = tutor.Nom;
             Prenom = tutor.Prenom;
             Availability = tutor.Availability;
+            LoadData();
         }
 
-        [RelayCommand]
-        private void AddRating()
+        private void LoadData()
         {
-            if (SelectedTutor == null) return;
-            StatusMessage = "Note ajoutée.";
+            using (var db = new AppDbContext())
+            {
+                if (!IsTutor && _student != null)
+                {
+                    var tutorsList = db.Tutors.Where(t => t.IsValidated).ToList();
+                    Tutors.Clear();
+                    foreach (var t in tutorsList) Tutors.Add(t);
+
+                    var appts = db.Appointments.Where(a => a.StudentId == _student.Id).ToList();
+                    MyAppointments.Clear();
+                    foreach (var a in appts) MyAppointments.Add(a);
+                }
+                else if (IsTutor && _tutor != null)
+                {
+                    var appts = db.Appointments.Where(a => a.TutorId == _tutor.Id).ToList();
+                    MyAppointments.Clear();
+                    foreach (var a in appts) MyAppointments.Add(a);
+                }
+            }
         }
 
         [RelayCommand]
         private void SaveAvailability()
         {
             if (_tutor == null) return;
-            Availability = SelectedAvailability;
-            StatusMessage = "Dispos mises à jour.";
+            using (var db = new AppDbContext())
+            {
+                var t = db.Tutors.FirstOrDefault(x => x.Id == _tutor.Id);
+                if (t != null)
+                {
+                    t.Availability = Availability;
+                    db.SaveChanges();
+                    StatusMessage = "Disponibilités mises à jour.";
+                }
+            }
         }
     }
 }
