@@ -7,6 +7,6 @@ namespace Projet_Session_Entreprise
         public int Note { get; set; }
 
         public int TutorId { get; set; }
-        public Tutor Tutor { get; set; }
+        public Tutor? Tutor { get; set; }
     }
 }

@@ -13,6 +13,12 @@ namespace Projet_Session_Entreprise.Views
 
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
+            if (!double.TryParse(txtGPA.Text, out double gpa))
+            {
+                MessageBox.Show("Moyenne invalide.");
+                return;
+            }
+
             using (var db = new AppDbContext())
             {
                 string role = (cmbUserType.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "";
@@ -25,32 +31,33 @@ namespace Projet_Session_Entreprise.Views
                         Prenom = txtFirstName.Text,
                         DA = txtDA.Text,
                         Password = txtPassword.Password,
-                        AverageGrade = 75.0,
+                        AverageGrade = gpa,
                         Role = "Étudiant"
                     });
                 }
                 else
                 {
+                    if (gpa < 80)
+                    {
+                        MessageBox.Show("Moyenne de 80% requise pour être tuteur.");
+                        return;
+                    }
+
                     db.Tutors.Add(new Tutor
                     {
                         Nom = txtName.Text,
                         Prenom = txtFirstName.Text,
                         DA = txtDA.Text,
                         Password = txtPassword.Password,
-                        Subject = "",
-                        Availability = "Monday",
-                        AverageGrade = 0.0,
-                        IsValidated = false,
-                        Role = "Enseignant",
-                        NumberOfRatings = 0,
-                        TotalRatings = 0
+                        AverageGrade = gpa,
+                        IsValidated = true,
+                        Role = "Enseignant"
                     });
                 }
 
                 db.SaveChanges();
                 MessageBox.Show("Compte créé !");
-                LoginView login = new LoginView();
-                login.Show();
+                new LoginView().Show();
                 this.Close();
             }
         }

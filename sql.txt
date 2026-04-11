@@ -27,9 +27,20 @@ CREATE TABLE Tutors (
     TotalRatings INT NOT NULL DEFAULT 0
 );
 
-INSERT INTO Students (DA, Nom, Prenom, Password, AverageGrade, Role) VALUES
-('7654321', 'phil', 'pierre', 'student123', 80.0, 'Étudiant');
+CREATE TABLE Reviews (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    TutorId INT,
+    Comment VARCHAR(255),
+    Rating INT,
+    FOREIGN KEY (TutorId) REFERENCES Tutors(Id)
+);
 
-INSERT INTO Tutors (Nom, Prenom, DA, Password, Subject, Availability, AverageGrade, IsValidated, Role, NumberOfRatings, TotalRatings) VALUES
-('Smith', 'John', '1234567', 'admin123', 'Math', 'Monday', 85.0, 1, 'Enseignant', 0, 0),
-('Tutor', 'Pending', '9999999', 'pending123', 'History', 'Friday', 70.0, 0, 'Enseignant', 0, 0);
+CREATE TABLE Appointments (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    StudentId INT,
+    TutorId INT,
+    DateRDV DATETIME,
+    Status VARCHAR(50) DEFAULT 'Pending',
+    FOREIGN KEY (StudentId) REFERENCES Students(Id),
+    FOREIGN KEY (TutorId) REFERENCES Tutors(Id)
+);
