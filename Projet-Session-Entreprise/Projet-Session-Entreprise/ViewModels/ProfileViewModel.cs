@@ -1,9 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Projet_Session_Entreprise.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Linq;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
@@ -24,10 +22,8 @@ namespace Projet_Session_Entreprise.ViewModels
 
         public ObservableCollection<Tutor> Tutors { get; set; } = new ObservableCollection<Tutor>();
         public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
-
         public ObservableCollection<int> RatingChoices { get; } = new ObservableCollection<int> { 1, 2, 3, 4, 5 };
-        public ObservableCollection<string> AvailabilityChoices { get; } =
-            new ObservableCollection<string> { "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" };
+        public ObservableCollection<string> AvailabilityChoices { get; } = new ObservableCollection<string> { "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi" };
 
         [ObservableProperty] private Tutor? _selectedTutor;
         [ObservableProperty] private int _selectedRating = 5;
