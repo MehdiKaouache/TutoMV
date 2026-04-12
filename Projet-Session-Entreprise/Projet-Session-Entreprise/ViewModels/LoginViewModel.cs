@@ -38,9 +38,9 @@ namespace Projet_Session_Entreprise.ViewModels
                 return;
             }
 
-            bool success = await _authService.LoginAsync(NoDa, MotDePasse);
+            CurrentSession.CurrentUser = await _authService.LoginAsync(NoDa, MotDePasse);
 
-            if (success)
+            if (CurrentSession.CurrentUser != null)
                 StatusMessage = $"Connexion réussie";
             else
                 StatusMessage = "Veuillez réessayer";

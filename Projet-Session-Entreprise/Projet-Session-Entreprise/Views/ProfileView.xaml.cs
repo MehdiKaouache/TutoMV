@@ -1,10 +1,12 @@
-﻿using System.Windows;
+﻿using System.Collections;
+using System.Windows;
 using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
 {
     public partial class ProfileView : Window
     {
+
         public ProfileView(Student student)
         {
             InitializeComponent();
@@ -16,5 +18,6 @@ namespace Projet_Session_Entreprise.Views
             InitializeComponent();
             this.DataContext = new ProfileViewModel(tutor);
         }
+   
     }
 }

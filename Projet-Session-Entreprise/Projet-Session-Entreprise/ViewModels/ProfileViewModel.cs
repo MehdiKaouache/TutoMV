@@ -15,6 +15,8 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private string _availability;
         [ObservableProperty] private string _statusMessage;
         [ObservableProperty] private bool _isTutor;
+        [ObservableProperty] private List<Avis> _reviewList;
+
 
         public ProfileViewModel(Student student)
         {
@@ -23,6 +25,7 @@ namespace Projet_Session_Entreprise.ViewModels
             DA = student.DA;
             Nom = student.Nom;
             Prenom = student.Prenom;
+            ReviewList = new List<Avis>();
         }
 
         public ProfileViewModel(Tutor tutor)
@@ -33,6 +36,9 @@ namespace Projet_Session_Entreprise.ViewModels
             Nom = tutor.Nom;
             Prenom = tutor.Prenom;
             Availability = tutor.Availability;
+            ReviewList = new List<Avis>() { 
+                new Avis {NomEleve = "John Doe", Note = 5, Commentaire = "Excellent tuteur!" }
+            }; //review en template vu que y a pas encore de sessions de tutoring
         }
 
         [RelayCommand]

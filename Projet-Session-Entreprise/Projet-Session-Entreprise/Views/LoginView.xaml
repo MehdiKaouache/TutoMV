@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Projet_Session_Entreprise.LoginView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="Authentification" Height="450" Width="450"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:viewmodels="clr-namespace:Projet_Session_Entreprise.ViewModels" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d:DataContext="{d:DesignInstance Type=viewmodels:LoginViewModel}"
+        Title="Authentification" Height="450" Width="450"
       WindowStartupLocation="CenterScreen" Background="#F4F6F8" ResizeMode="NoResize">
 
     <Window.Resources>
@@ -37,7 +37,6 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- faut encore le data binding, les passwordBoxes marchent pas comme les TextBoxes normales -->
             <StackPanel Grid.Row="0" Margin="10">
                 <TextBlock Text="Numéro DA" FontWeight="SemiBold"/>
                 <TextBox x:Name="txtDA" Text="{Binding NoDa, UpdateSourceTrigger=PropertyChanged}"/>
@@ -51,7 +50,8 @@
             <StackPanel Grid.Row="2">
                 <Button x:Name="btnConn" Width="120" Height="30" Content="Se connecter" 
                         Margin="0 5" Background="#2ECC71" Foreground="White" 
-                        FontWeight="Bold" Click="btnConn_Click"/>
+                        FontWeight="Bold"
+                        Command="{Binding SendRequestCommand}"/>
 
                 <Button x:Name="btnReg" Width="120" Height="30" Content="S'inscrire" 
                         Margin="0 5" Background="Transparent" Foreground="#3498DB" 

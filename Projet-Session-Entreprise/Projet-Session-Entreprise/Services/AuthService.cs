@@ -24,8 +24,8 @@ namespace Projet_Session_Entreprise.Services
         {
             using (var db = new AppDbContext())
             {
-                bool compteExiste = await db.Users
-                    .AnyAsync(u => u.DA == da);
+                bool compteExiste = await db.Students.AnyAsync(u => u.DA == da)
+                         || await db.Tutors.AnyAsync(u => u.DA == da);
 
                 if (compteExiste)
                 {
@@ -34,20 +34,7 @@ namespace Projet_Session_Entreprise.Services
 
                 if (role == "Etudiant")
                 {
-                    var newUser = new AppUser
-                    {
-                        Nom = nom,
-                        Prenom = prenom,
-                        DA = da,
-                        Password = password,
-                    };
-
-                    db.Users.Add(newUser);
-                } /* else if (role == "Enseignant") il faut changer la classe teacher et la view 
-                                                    register pour les teacher ou bien add un code
-                                                    comme les da pour les teachers
-                {
-                    var newUser = new Teacher
+                    var newUser = new Student
                     {
                         Nom = nom,
                         Prenom = prenom,
@@ -56,7 +43,18 @@ namespace Projet_Session_Entreprise.Services
                     };
 
                     db.Add(newUser);
-                } */
+                } else if (role == "Enseignant")
+                {
+                    var newUser = new Tutor
+                    {
+                        Nom = nom,
+                        Prenom = prenom,
+                        DA = da,
+                        Password = password,
+                    };
+
+                    db.Add(newUser);
+                }
 
                 await db.SaveChangesAsync();
                 return true;

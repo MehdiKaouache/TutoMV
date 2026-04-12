@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.ViewModels;
 using Projet_Session_Entreprise.Views;
 
 namespace Projet_Session_Entreprise
@@ -10,29 +12,16 @@ namespace Projet_Session_Entreprise
         public LoginView()
         {
             InitializeComponent();
+            var viewModel = new LoginViewModel(new AuthService());
+            DataContext = viewModel;
+            txtPassword.PasswordChanged += (s, e) => viewModel.MotDePasse = txtPassword.Password;
         }
 
-        private async void btnConn_Click(object sender, RoutedEventArgs e)
-        {
-            var auth = new AuthService();
-            var user = await auth.LoginAsync(txtDA.Text, txtPassword.Password);
-
-            if (user is Student s)
-            {
-                new ProfileView(s).Show();
-                this.Close();
-            }
-            else if (user is Tutor t)
-            {
-                new RequeteRoleTuteurView(t, new AppDbContext()).Show();
-                this.Close();
-            }
-            else MessageBox.Show("Erreur DA/Password");
-        }
+        //la logique de ce btn devrait être géré par le ViewModel
 
         private void btnReg_Click(object sender, RoutedEventArgs e)
         {
-            var reg = new Views.RegisterView();
+            var reg = new RegisterView();
             reg.Show();
             this.Close();
         }

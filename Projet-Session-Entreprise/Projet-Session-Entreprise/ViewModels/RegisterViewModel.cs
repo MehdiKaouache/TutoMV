@@ -42,7 +42,7 @@ namespace Projet_Session_Entreprise.ViewModels
                 return;
             }
 
-            bool success = await _authService.LoginAsync(NoDa, MotDePasse);
+            bool success = await _authService.RegisterAsync(Nom, Prenom, NoDa, RoleSelectionne, MotDePasse);
 
             if (success)
                 StatusMessage = $"Création de compte réussie";

@@ -2,21 +2,21 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <SolidColorBrush x:Key="MainBG" Color="#F4F6F8"/>
-    <SolidColorBrush x:Key="SecondBG" Color="#WhiteSmoke"/>
+    <SolidColorBrush x:Key="SecondBG" Color="WhiteSmoke"/>
     <SolidColorBrush x:Key="MainText" Color="#2C3E50"/>
 
     <Style x:Key="ConfirmButton" TargetType="Button">
-        <Setter Property="Background" Value="2ECC71"/>
+        <Setter Property="Background" Value="#2ECC71"/>
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
     <Style x:Key="CancelButton" TargetType="Button">
-        <Setter Property="Background" Value="E74C3C"/>
+        <Setter Property="Background" Value="#E74C3C"/>
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
     <Style x:Key="NeutralButton" TargetType="Button">
-        <Setter Property="Background" Value="3498DB"/>
+        <Setter Property="Background" Value="#3498DB"/>
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
