@@ -1,11 +1,10 @@
-﻿using System.Linq;
+﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.ViewModels;
-using Projet_Session_Entreprise.Views;
+using Projet_Session_Entreprise.Models;
 
-namespace Projet_Session_Entreprise
+namespace Projet_Session_Entreprise.Views
 {
     public partial class LoginView : Window
     {
@@ -17,12 +16,40 @@ namespace Projet_Session_Entreprise
             txtPassword.PasswordChanged += (s, e) => viewModel.MotDePasse = txtPassword.Password;
         }
 
-        //la logique de ce btn devrait être géré par le ViewModel
+        private async void btnConn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string da = txtDA.Text.Trim();
+                string password = txtPassword.Password.Trim();
+
+                var auth = new AuthService();
+                var user = await auth.LoginAsync(da, password);
+
+                if (user is Student s)
+                {
+                    new ProfileView(s).Show();
+                    this.Close();
+                }
+                else if (user is Tutor t)
+                {
+                    new RequeteRoleTuteurView(t, new AppDbContext()).Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Erreur DA/Password");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur de connexion : " + ex.Message);
+            }
+        }
 
         private void btnReg_Click(object sender, RoutedEventArgs e)
         {
-            var reg = new RegisterView();
-            reg.Show();
+            new RoleSelectionView().Show();
             this.Close();
         }
     }

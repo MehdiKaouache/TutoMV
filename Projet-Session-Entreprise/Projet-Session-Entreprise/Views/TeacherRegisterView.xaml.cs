@@ -1,39 +1,25 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
-using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.ViewModels;
+using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class RegisterView : Window
+    public partial class TeacherRegisterView : Window
     {
-        private RegisterViewModel _viewModel;
-
-        public RegisterView(string role)
+        public TeacherRegisterView()
         {
             InitializeComponent();
-            _viewModel = new RegisterViewModel(new AuthService());
-            _viewModel.RoleSelectionne = role;
-            DataContext = _viewModel;
-
-            if (role == "Etudiant")
-            {
-                this.Title = "Inscription Étudiant - TutoMV";
-            }
-            else
-            {
-                this.Title = "Inscription Enseignant - TutoMV";
-            }
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            new LoginView().Show();
+            new RoleSelectionView().Show();
             this.Close();
         }
 
-        private void btnSignUp_Click(object sender, RoutedEventArgs e)
+        private void BtnSignUp_Click(object sender, RoutedEventArgs e)
         {
             string da = txtDA.Text.Trim();
             string password = txtPassword.Password;
@@ -63,23 +49,46 @@ namespace Projet_Session_Entreprise.Views
                 return;
             }
 
+            if (gpa < 80)
+            {
+                MessageBox.Show("Une moyenne de 80% est requise pour devenir tuteur.");
+                return;
+            }
+
+            var selected = lstSubjects.SelectedItems.Cast<ListBoxItem>()
+                .Select(i => i.Content?.ToString())
+                .ToList();
+
+            if (selected.Count == 0)
+            {
+                MessageBox.Show("Veuillez sélectionner au moins une matière.");
+                return;
+            }
+
+            string subjectString = string.Join(", ", selected);
+            string availability = (cmbAvailability.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Lundi";
+
             using (var db = new AppDbContext())
             {
-                db.Students.Add(new Student
+                db.Tutors.Add(new Tutor
                 {
                     Nom = txtName.Text,
                     Prenom = txtFirstName.Text,
                     DA = da,
                     Password = password,
+                    Subject = subjectString,
+                    Availability = availability,
                     AverageGrade = gpa,
-                    Role = "Étudiant"
+                    IsValidated = true,
+                    Role = "Tuteur"
                 });
 
                 db.SaveChanges();
-                MessageBox.Show("Compte étudiant créé !");
-                new LoginView().Show();
-                this.Close();
             }
+
+            MessageBox.Show("Compte tuteur créé avec succès !");
+            new LoginView().Show();
+            this.Close();
         }
     }
 }

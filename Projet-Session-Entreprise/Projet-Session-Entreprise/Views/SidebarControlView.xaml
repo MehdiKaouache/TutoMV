@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel Background="{StaticResource MainText}">
+        <StackPanel Background="#2C3E50">
             <Button Content="Profil" HorizontalAlignment="Stretch"/>
             <Button Content="Accueil" HorizontalAlignment="Stretch"/>
             <Button Content="Créer un compte" HorizontalAlignment="Stretch"/>

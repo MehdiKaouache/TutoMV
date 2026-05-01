@@ -1,0 +1,64 @@
+﻿<Window x:Class="Projet_Session_Entreprise.Views.TeacherRegisterView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Inscription Enseignant - TutoMV" 
+        Height="750" Width="500" 
+        WindowStartupLocation="CenterScreen" 
+        Background="#F4F6F8">
+    <Grid>
+        <Border Background="White" CornerRadius="15" Width="450" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="2" Opacity="0.1"/>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="TutoMV" FontSize="36" FontWeight="Bold" Foreground="#2C3E50" TextAlignment="Center" Margin="0,0,0,5"/>
+                <TextBlock Text="Portail Enseignant" FontSize="18" Foreground="#2ECC71" TextAlignment="Center" Margin="0,0,0,25"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                        <TextBlock Text="Nom" FontWeight="SemiBold" Foreground="#34495E" Margin="5,0,0,5"/>
+                        <TextBox x:Name="txtName" Height="35" Padding="5"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                        <TextBlock Text="Prénom" FontWeight="SemiBold" Foreground="#34495E" Margin="5,0,0,5"/>
+                        <TextBox x:Name="txtFirstName" Height="35" Padding="5"/>
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="no. DA (7 chiffres)" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <TextBox x:Name="txtDA" Height="35" Padding="5"/>
+
+                <TextBlock Text="Moyenne générale (%)" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <TextBox x:Name="txtGPA" Height="35" Padding="5"/>
+
+                <TextBlock Text="Mot de passe (min. 8 car.)" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <PasswordBox x:Name="txtPassword" Height="35" Padding="5"/>
+
+                <TextBlock Text="Disponibilité" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <ComboBox x:Name="cmbAvailability" Height="35">
+                    <ComboBoxItem Content="Lundi" IsSelected="True"/>
+                    <ComboBoxItem Content="Mardi"/>
+                    <ComboBoxItem Content="Mercredi"/>
+                    <ComboBoxItem Content="Jeudi"/>
+                    <ComboBoxItem Content="Vendredi"/>
+                </ComboBox>
+
+                <TextBlock Text="Matières" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <ListBox x:Name="lstSubjects" SelectionMode="Multiple" Height="100">
+                    <ListBoxItem Content="Mathématiques"/>
+                    <ListBoxItem Content="Informatique"/>
+                    <ListBoxItem Content="Français"/>
+                    <ListBoxItem Content="Anglais"/>
+                    <ListBoxItem Content="Physique"/>
+                </ListBox>
+
+                <Button x:Name="btnSignUp" Height="45" Content="Créer mon compte" Background="#2ECC71" Foreground="White" FontSize="16" FontWeight="Bold" Margin="0,25,0,0" Click="BtnSignUp_Click" Cursor="Hand"/>
+                <Button x:Name="btnCancel" Content="Annuler" Background="Transparent" Foreground="#7F8C8D" Margin="0,10,0,0" BorderThickness="0" Click="BtnCancel_Click" Cursor="Hand"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

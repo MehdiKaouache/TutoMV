@@ -1,6 +1,7 @@
-﻿using System.Windows;
-using Projet_Session_Entreprise.ViewModels;
+using System.Windows;
 using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -11,16 +12,16 @@ namespace Projet_Session_Entreprise.Views
             InitializeComponent();
 
             var vm = new RequeteRoleTuteurViewModel(new TutorService(db), tutor);
-            this.DataContext = vm;
+            DataContext = vm;
 
             vm.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == "StatusMessage" && vm.StatusMessage == "Demande acceptée !")
+                if (e.PropertyName == nameof(vm.StatusMessage) &&
+                    vm.StatusMessage == "Demande acceptée !")
                 {
                     MessageBox.Show("Promotion réussie !");
-
                     new ProfileView(tutor).Show();
-                    this.Close();
+                    Close();
                 }
             };
         }

@@ -3,103 +3,65 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Projet_Session_Entreprise" xmlns:viewmodels="clr-namespace:Projet_Session_Entreprise.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:RegisterViewModel}"
-        Title="Register"
+        xmlns:viewmodels="clr-namespace:Projet_Session_Entreprise.ViewModels"
         mc:Ignorable="d"
-        Height="450" Width="450">
-
-    <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="Height" Value="30"/>
-        </Style>
-    </Window.Resources>
-
+        Title="Inscription - TutoMV" 
+        Height="650" Width="500"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6F8">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="4*"/>
-        </Grid.RowDefinitions>
+        <Border Background="White" 
+                CornerRadius="15" 
+                Width="450" 
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center" 
+                Padding="30">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="20" Direction="-90" RenderingBias="Quality" ShadowDepth="2" Opacity="0.1"/>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="TutoMV" FontSize="36" FontWeight="Bold" Foreground="#2C3E50" TextAlignment="Center" Margin="0,0,0,5"/>
+                <TextBlock Text="Créer un compte" FontSize="18" Foreground="#7F8C8D" TextAlignment="Center" Margin="0,0,0,30"/>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                        <TextBlock Text="Nom" FontWeight="SemiBold" Foreground="#34495E" Margin="5,0,0,5"/>
+                        <TextBox x:Name="txtName" Text="{Binding Nom, UpdateSourceTrigger=PropertyChanged}" Height="35" Padding="5"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                        <TextBlock Text="Prénom" FontWeight="SemiBold" Foreground="#34495E" Margin="5,0,0,5"/>
+                        <TextBox x:Name="txtFirstName" Text="{Binding Prenom, UpdateSourceTrigger=PropertyChanged}" Height="35" Padding="5"/>
+                    </StackPanel>
+                </Grid>
 
-        <TextBlock Text="TutoMV"
-            FontSize="26"
-            FontWeight="Bold"
-            Foreground="#2C3E50"
-            Grid.Column="1"
-            TextAlignment="Center"/>
+                <TextBlock Text="no. DA" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <TextBox x:Name="txtDA" Text="{Binding NoDa, UpdateSourceTrigger=PropertyChanged}" Height="35" Padding="5"/>
 
-        <TextBlock Margin="0,43,0,289"
-            Text="Créer un compte"
-            FontSize="20"
-            FontWeight="Medium"
-            Foreground="#2C3E50"
-            Grid.Column="1"
-            TextAlignment="Center" Grid.RowSpan="2"/>
+                <TextBlock Text="Type d'utilisateur" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <ComboBox x:Name="cmbUserType" Height="35" 
+                          ItemsSource="{Binding Roles}" 
+                          SelectedItem="{Binding RoleSelectionne}"/>
 
-        <!-- faut encore le data binding -->
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <TextBlock Text="Moyenne générale (%)" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <TextBox x:Name="txtGPA" Height="35" Padding="5"/>
 
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
-                <StackPanel Grid.Column="0" Width="100">
-                    <TextBlock Text="Nom" FontWeight="SemiBold"/>
-                    <TextBox x:Name="txtName" Text="{Binding Nom}"/>
-                </StackPanel>
+                <TextBlock Text="Mot de passe" FontWeight="SemiBold" Foreground="#34495E" Margin="5,15,0,5"/>
+                <PasswordBox x:Name="txtPassword" Height="35" Padding="5"/>
 
-                <StackPanel Grid.Column="1" Width="100">
-                    <TextBlock Text="Prénom" FontWeight="SemiBold"/>
-                    <TextBox x:Name="txtFirstName" Text="{Binding Prenom}"/>
-                </StackPanel>
-            </Grid>
+                <Button x:Name="btnSignUp" Height="45" Content="S'inscrire" 
+                        Background="#2ECC71" Foreground="White" FontSize="16" 
+                        FontWeight="Bold" Margin="0,30,0,0" 
+                        Click="btnSignUp_Click" Cursor="Hand"/>
 
-            <StackPanel Grid.Row="1" Margin="10">
-                <TextBlock Text="no. DA" FontWeight="SemiBold"/>
-                <TextBox x:Name="txtDA" Text="{Binding NoDa}"/>
+                <Button x:Name="btnCancel" Content="Retour à la connexion" 
+                        Background="Transparent" Foreground="#3498DB" 
+                        Margin="0,10,0,0" BorderThickness="0" 
+                        Click="btnCancel_Click" Cursor="Hand"/>
             </StackPanel>
-
-            <StackPanel Grid.Row="2" Margin="10">
-                <TextBlock Text="Type" FontWeight="SemiBold"/>
-                <ComboBox x:Name="cmbUserType" Height="30" Margin="5" SelectedItem="{Binding RoleSelectionne}">
-                    <ComboBoxItem Content="Étudiant"/>
-                    <ComboBoxItem Content="Enseignant"/>
-                </ComboBox>
-            </StackPanel>
-
-            <StackPanel Grid.Row="3" Margin="10">
-                <TextBlock Text="Mot de passe" FontWeight="SemiBold"/>
-                <PasswordBox x:Name="txtPassword" Height="30" Margin="5" Padding="5"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="4">
-                <Button x:Name="btnSignUp" 
-                    Width="120" Height="30" 
-                    Margin="5"
-                    Content="Créer un compte" 
-                    Background="#2ECC71"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    Command="{Binding SendRequestCommand}"/>
-            </StackPanel>
-
-        </Grid>
+        </Border>
     </Grid>
 </Window>

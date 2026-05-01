@@ -1,0 +1,46 @@
+<Window x:Class="Projet_Session_Entreprise.Views.RoleSelectionView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Choisir votre portail - TutoMV"
+        Height="500" Width="900"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6F8">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Bienvenue sur TutoMV" FontSize="32" FontWeight="Bold" Foreground="#2C3E50" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+            <TextBlock Text="Sélectionnez le portail que vous souhaitez rejoindre" FontSize="18" Foreground="#7F8C8D" HorizontalAlignment="Center" Margin="0,0,0,40"/>
+
+            <StackPanel Orientation="Horizontal">
+                <Border x:Name="CardStudent" Background="White" Width="350" Height="250" CornerRadius="12" Margin="20" Cursor="Hand" MouseLeftButtonDown="SelectStudent_Click">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2" Opacity="0.1"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Border Background="#3498DB" Height="8" VerticalAlignment="Top" CornerRadius="12,12,0,0"/>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="ÉTUDIANT" FontSize="12" FontWeight="Black" Foreground="#3498DB" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Portail Apprenant" FontSize="24" FontWeight="Bold" Foreground="#2C3E50" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Accéder aux ressources et trouver un tuteur" FontSize="14" Foreground="#95A5A6" HorizontalAlignment="Center" Margin="0,15,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border x:Name="CardTutor" Background="White" Width="350" Height="250" CornerRadius="12" Margin="20" Cursor="Hand" MouseLeftButtonDown="SelectTutor_Click">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2" Opacity="0.1"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Border Background="#2ECC71" Height="8" VerticalAlignment="Top" CornerRadius="12,12,0,0"/>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="ENSEIGNANT" FontSize="12" FontWeight="Black" Foreground="#2ECC71" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Portail Tuteur" FontSize="24" FontWeight="Bold" Foreground="#2C3E50" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Gérer vos séances et accompagner vos élèves" FontSize="14" Foreground="#95A5A6" HorizontalAlignment="Center" Margin="0,15,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <Button Content="Retour à la connexion" Background="Transparent" BorderThickness="0" Foreground="#7F8C8D" Margin="0,30,0,0" Click="BackToLogin_Click" Cursor="Hand"/>
+        </StackPanel>
+    </Grid>
+</Window>

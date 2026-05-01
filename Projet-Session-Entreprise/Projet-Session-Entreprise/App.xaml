@@ -3,5 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="Views/LoginView.xaml">
     <Application.Resources>
+        <Style TargetType="Window">
+            <Setter Property="WindowState" Value="Maximized"/>
+        </Style>
     </Application.Resources>
 </Application>
