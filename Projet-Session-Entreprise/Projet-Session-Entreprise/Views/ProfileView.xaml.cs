@@ -1,34 +1,33 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using Projet_Session_Entreprise.ViewModels;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Services;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class ProfileView : Window
+    public partial class ProfileView : UserControl
     {
-        private Student? _currentStudent;
-
-
-        public ProfileView(Student student)
+        public ProfileView(object user)
         {
             InitializeComponent();
-            _currentStudent = student;
-            DataContext = new ProfileViewModel(student);
-        }
 
-        public ProfileView(Tutor tutor)
-        {
-            InitializeComponent();
-            DataContext = new ProfileViewModel(tutor);
+            if (user is Student s)
+            {
+                DataContext = new ProfileViewModel(s);
+            }
+            else if (user is Tutor t)
+            {
+                DataContext = new ProfileViewModel(t);
+            }
         }
 
         private void SearchTutor_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentStudent != null)
+            if (CurrentSessionService.CurrentUser is Student s)
             {
-                new TutorListView(_currentStudent).Show();
+                MainView.Instance.NavigateTo(new TutorListView(s));
             }
         }
-   
     }
 }

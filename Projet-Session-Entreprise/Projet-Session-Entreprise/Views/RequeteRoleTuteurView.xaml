@@ -1,80 +1,38 @@
-﻿<Window x:Class="Projet_Session_Entreprise.Views.RequeteRoleTuteurView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Projet_Session_Entreprise" xmlns:viewmodels="clr-namespace:Projet_Session_Entreprise.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:RequeteRoleTuteurViewModel}"
-        mc:Ignorable="d"
-        Title="RequeteRoleTuteur" Height="500" Width="450"
-        WindowStartupLocation="CenterScreen">
-
-    <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="Height" Value="30"/>
-        </Style>
-    </Window.Resources>
-
+﻿<UserControl x:Class="Projet_Session_Entreprise.Views.RequeteRoleTuteurView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource MainBG}">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Border Style="{StaticResource CardStyle}" Width="500" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel>
+                <TextBlock Text="Détails du profil Tuteur" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                <TextBlock Text="Configurez vos matières et disponibilités" Foreground="{StaticResource SubText}" HorizontalAlignment="Center" Margin="0,0,0,30"/>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+                <TextBlock Text="Matières d'expertise" Foreground="{StaticResource SubText}" Margin="5,0,0,5"/>
+                <ListBox x:Name="lstSubjects" SelectionMode="Multiple" Height="80" Background="#1A1A1A" Foreground="White" BorderBrush="{StaticResource BorderColor}">
+                    <ListBoxItem Content="Mathématiques"/>
+                    <ListBoxItem Content="Informatique"/>
+                    <ListBoxItem Content="Français"/>
+                    <ListBoxItem Content="Anglais"/>
+                </ListBox>
 
-        <TextBlock Text="TutoMV"
-            FontSize="26"
-            FontWeight="Bold"
-            Foreground="#2C3E50"
-            Grid.Column="1"
-            TextAlignment="Center"
-            Margin="0,20,0,0"/>
+                <TextBlock Text="Disponibilité principale" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <ComboBox x:Name="cmbAvailability" Height="40">
+                    <ComboBoxItem Content="Lundi" IsSelected="True"/>
+                    <ComboBoxItem Content="Mardi"/>
+                    <ComboBoxItem Content="Mercredi"/>
+                    <ComboBoxItem Content="Jeudi"/>
+                    <ComboBoxItem Content="Vendredi"/>
+                </ComboBox>
 
-        <TextBlock Margin="0,55,0,15"
-            Text="Devenir tuteur"
-            FontSize="20"
-            FontWeight="Medium"
-            Foreground="#2C3E50"
-            Grid.Column="1"
-            TextAlignment="Center"/>
+                <TextBlock Text="Cours spécifique visé" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <TextBox x:Name="txtCourseTargeted" Text="{Binding SelectedCourse}"/>
 
-        <Grid Grid.Column="1" Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <TextBlock Text="Note obtenue (%)" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <TextBox x:Name="txtGradeCourse" Text="{Binding EnteredGrade}"/>
 
-            <StackPanel Grid.Row="0" Margin="10,5">
-                <TextBlock Text="Cours choisi" FontWeight="SemiBold"/>
-                <TextBox Text="{Binding SelectedCourse, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Content="Finaliser mon inscription" Style="{StaticResource ActionButton}" Margin="0,30,0,15" Click="BtnFinalize_Click"/>
             </StackPanel>
-
-            <StackPanel Grid.Row="1" Margin="10,5">
-                <TextBlock Text="Note obtenue (%)" FontWeight="SemiBold"/>
-                <TextBox Text="{Binding EnteredGrade, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="2">
-                <Button x:Name="btnSendRequest"
-						Command="{Binding SendRequestCommand}"
-						Width="150" Height="35"
-						Content="Vérifier et postuler"
-						Margin="0,20,0,10"
-						Background="#2ECC71" Foreground="White" FontWeight="Bold"/>
-                <TextBlock Text="{Binding StatusMessage}" 
-                           TextAlignment="Center" 
-                           Foreground="#E74C3C" 
-                           FontWeight="Bold"
-                           Margin="5"/>
-            </StackPanel>
-        </Grid>
+        </Border>
     </Grid>
-</Window>
+</UserControl>

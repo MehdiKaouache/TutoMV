@@ -4,7 +4,7 @@ using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class TutorListView : Window
+    public partial class TutorListView : UserControl
     {
         private Student _student;
 

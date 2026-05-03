@@ -6,89 +6,79 @@ using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class TeacherRegisterView : Window
+    public partial class TeacherRegisterView : UserControl
     {
         public TeacherRegisterView()
         {
             InitializeComponent();
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            new RoleSelectionView().Show();
-            this.Close();
-        }
+        private void BtnCancel_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new RoleSelectionView());
 
         private void BtnSignUp_Click(object sender, RoutedEventArgs e)
         {
+            string nom = txtName.Text.Trim();
+            string prenom = txtFirstName.Text.Trim();
             string da = txtDA.Text.Trim();
+            string gpaInput = txtGPA.Text.Trim();
             string password = txtPassword.Password;
 
-            if (string.IsNullOrWhiteSpace(txtName.Text) || string.IsNullOrWhiteSpace(txtFirstName.Text) ||
-                string.IsNullOrWhiteSpace(da) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(txtGPA.Text))
+            if (string.IsNullOrEmpty(nom) || string.IsNullOrEmpty(prenom) || string.IsNullOrEmpty(da) || string.IsNullOrEmpty(gpaInput) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Tous les champs sont requis.");
+                MessageBox.Show("Erreur : Tous les champs sont obligatoires.");
                 return;
             }
 
             if (da.Length != 7 || !da.All(char.IsDigit))
             {
-                MessageBox.Show("Le numéro de DA doit contenir exactement 7 chiffres.");
+                MessageBox.Show("Erreur : Le DA doit contenir exactement 7 chiffres.");
                 return;
             }
 
             if (password.Length < 8)
             {
-                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères.");
+                MessageBox.Show("Erreur : Le mot de passe doit contenir au moins 8 caractères.");
                 return;
             }
 
-            if (!double.TryParse(txtGPA.Text, out double gpa))
+            if (!double.TryParse(gpaInput, out double gpa) || gpa < 80)
             {
-                MessageBox.Show("Veuillez saisir une moyenne valide.");
+                MessageBox.Show("Erreur : Une moyenne de 80% est requise pour devenir tuteur.");
                 return;
             }
 
-            if (gpa < 80)
+            try
             {
-                MessageBox.Show("Une moyenne de 80% est requise pour devenir tuteur.");
-                return;
-            }
-
-            var selected = lstSubjects.SelectedItems.Cast<ListBoxItem>()
-                .Select(i => i.Content?.ToString())
-                .ToList();
-
-            if (selected.Count == 0)
-            {
-                MessageBox.Show("Veuillez sélectionner au moins une matière.");
-                return;
-            }
-
-            string subjectString = string.Join(", ", selected);
-            string availability = (cmbAvailability.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Lundi";
-
-            using (var db = new AppDbContext())
-            {
-                db.Tutors.Add(new Tutor
+                using (var db = new AppDbContext())
                 {
-                    Nom = txtName.Text,
-                    Prenom = txtFirstName.Text,
-                    DA = da,
-                    Password = password,
-                    Subject = subjectString,
-                    Availability = availability,
-                    AverageGrade = gpa,
-                    IsValidated = true,
-                    Role = "Tuteur"
-                });
+                    bool alreadyExists = db.Students.Any(s => s.DA == da) || db.Tutors.Any(t => t.DA == da);
+                    if (alreadyExists)
+                    {
+                        MessageBox.Show("Ce numéro de DA est déjà associé à un compte.");
+                        return;
+                    }
 
-                db.SaveChanges();
+                    var newTutor = new Tutor
+                    {
+                        Nom = nom,
+                        Prenom = prenom,
+                        DA = da,
+                        Password = password,
+                        AverageGrade = gpa,
+                        Role = "Tuteur",
+                        IsValidated = false
+                    };
+
+                    db.Tutors.Add(newTutor);
+                    db.SaveChanges();
+
+                    MainView.Instance.NavigateTo(new RequeteRoleTuteurView(newTutor));
+                }
             }
-
-            MessageBox.Show("Compte tuteur créé avec succès !");
-            new LoginView().Show();
-            this.Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur : " + ex.Message);
+            }
         }
     }
 }

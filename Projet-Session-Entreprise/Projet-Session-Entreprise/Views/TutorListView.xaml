@@ -1,25 +1,28 @@
-<Window x:Class="Projet_Session_Entreprise.Views.TutorListView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Liste des Tuteurs" Height="500" Width="800"
-        WindowStartupLocation="CenterScreen" Background="#F4F6F8">
-    <Grid Margin="20">
+<UserControl x:Class="Projet_Session_Entreprise.Views.TutorListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Réserver une séance" FontSize="24" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,20"/>
-        <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="10">
-            <DataGrid x:Name="dgTutors" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="None">
+
+        <StackPanel Margin="0,0,0,25">
+            <TextBlock Text="Trouver un tuteur" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}"/>
+            <TextBlock Text="Parcourez la liste des experts disponibles pour vous aider." Foreground="{StaticResource SubText}" Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="0">
+            <DataGrid x:Name="dgTutors" ItemsSource="{Binding Tuteurs}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Nom" Binding="{Binding Nom}" Width="*"/>
-                    <DataGridTextColumn Header="Prénom" Binding="{Binding Prenom}" Width="*"/>
-                    <DataGridTextColumn Header="Matière" Binding="{Binding Subject}" Width="*"/>
-                    <DataGridTextColumn Header="Dispo" Binding="{Binding Availability}" Width="*"/>
-                    <DataGridTemplateColumn Header="Action" Width="120">
+                    <DataGridTextColumn Header="PRÉNOM" Binding="{Binding Prenom}" Width="*"/>
+                    <DataGridTextColumn Header="NOM" Binding="{Binding Nom}" Width="*"/>
+                    <DataGridTextColumn Header="SPÉCIALITÉ" Binding="{Binding Subject}" Width="*"/>
+                    <DataGridTemplateColumn Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Réserver" Click="Reserve_Click" Background="#3498DB" Foreground="White" FontWeight="Bold"/>
+                                <Button Content="Prendre RDV" Style="{StaticResource ActionButton}" 
+                                        Height="32" Margin="10,0" Click="Reserve_Click"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -27,4 +30,4 @@
             </DataGrid>
         </Border>
     </Grid>
-</Window>
+</UserControl>

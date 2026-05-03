@@ -7,5 +7,6 @@ namespace Projet_Session_Entreprise.Services
         public static object? CurrentUser { get; set; }
         public static bool IsTutor => CurrentUser is Tutor;
         public static bool IsStudent => CurrentUser is Student;
+        public static bool IsConnected => CurrentUser != null;
     }
 }

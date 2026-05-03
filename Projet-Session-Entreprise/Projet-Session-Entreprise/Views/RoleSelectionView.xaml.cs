@@ -1,9 +1,10 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class RoleSelectionView : Window
+    public partial class RoleSelectionView : UserControl
     {
         public RoleSelectionView()
         {
@@ -12,20 +13,17 @@ namespace Projet_Session_Entreprise.Views
 
         private void SelectStudent_Click(object sender, MouseButtonEventArgs e)
         {
-            new RegisterView("Etudiant").Show();
-            this.Close();
+            MainView.Instance.NavigateTo(new RegisterView("Etudiant"));
         }
 
         private void SelectTutor_Click(object sender, MouseButtonEventArgs e)
         {
-            new TeacherRegisterView().Show();
-            this.Close();
+            MainView.Instance.NavigateTo(new TeacherRegisterView());
         }
 
         private void BackToLogin_Click(object sender, RoutedEventArgs e)
         {
-            new LoginView().Show();
-            this.Close();
+            MainView.Instance.NavigateTo(new LoginView());
         }
     }
 }

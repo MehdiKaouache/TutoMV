@@ -1,0 +1,78 @@
+<UserControl x:Class="Projet_Session_Entreprise.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <StackPanel x:Name="GuestPanel" Visibility="Collapsed">
+            <TextBlock Text="Bienvenue sur TutoMV" FontSize="42" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,10"/>
+            <TextBlock Text="La plateforme de tutorat n°1 pour réussir vos examens." FontSize="18" Foreground="{StaticResource SubText}" Margin="0,0,0,40"/>
+            <Border Style="{StaticResource CardStyle}" Padding="40">
+                <StackPanel>
+                    <TextBlock Text="Pourquoi choisir TutoMV ?" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+                    <TextBlock Text="• Tuteurs certifiés par l'école" Foreground="White" FontSize="16" Margin="0,0,0,10"/>
+                    <TextBlock Text="• Réservation simple et rapide" Foreground="White" FontSize="16" Margin="0,0,0,10"/>
+                    <Button Content="Créer un compte maintenant" Style="{StaticResource ActionButton}" Width="250" HorizontalAlignment="Left" Click="btnRegisterGuest_Click" Margin="0,20,0,0"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <StackPanel x:Name="StudentPanel" Visibility="Collapsed">
+            <TextBlock Text="Tableau de bord - Étudiant" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}"/>
+            <UniformGrid Columns="3" Margin="0,20,0,30">
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,15,0">
+                    <StackPanel>
+                        <TextBlock Text="Séances suivies" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="4" FontSize="28" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,8"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,15,0">
+                    <StackPanel>
+                        <TextBlock Text="Heures complétées" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="12.5h" FontSize="28" FontWeight="Bold" Foreground="{StaticResource SuccessGreen}" Margin="0,8"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Moyenne" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="4.9/5" FontSize="28" FontWeight="Bold" Foreground="#FBC531" Margin="0,8"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+            <Border Background="{StaticResource PrimaryMauve}" CornerRadius="15" Padding="35">
+                <StackPanel>
+                    <TextBlock Text="Prêt pour votre prochaine réussite ?" FontSize="22" FontWeight="Bold" Foreground="#000000"/>
+                    <Button Content="Explorer les tuteurs" Width="200" HorizontalAlignment="Left" Style="{StaticResource ActionButton}" Background="Black" Foreground="White" Click="btnExplore_Click" Margin="0,20,0,0"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <StackPanel x:Name="TutorPanel" Visibility="Collapsed">
+            <TextBlock Text="Tableau de bord - Enseignant" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}"/>
+            <UniformGrid Columns="3" Margin="0,20,0,30">
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,15,0">
+                    <StackPanel>
+                        <TextBlock Text="Étudiants aidés" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="18" FontSize="28" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,8"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource CardStyle}" Margin="0,0,15,0">
+                    <StackPanel>
+                        <TextBlock Text="Revenus" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="245$" FontSize="28" FontWeight="Bold" Foreground="{StaticResource SuccessGreen}" Margin="0,8"/>
+                    </StackPanel>
+                </Border>
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Note" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="4.9/5" FontSize="28" FontWeight="Bold" Foreground="#FBC531" Margin="0,8"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+            <Border Style="{StaticResource CardStyle}" BorderBrush="{StaticResource PrimaryMauve}" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="Demandes en attente" FontSize="20" FontWeight="Bold" Foreground="White"/>
+                    <Button Content="Gérer mes séances" Style="{StaticResource ActionButton}" Width="200" Margin="0,20,0,0"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</UserControl>
