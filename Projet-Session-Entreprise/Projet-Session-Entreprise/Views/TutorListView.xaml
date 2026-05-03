@@ -9,7 +9,7 @@
 
         <StackPanel Margin="0,0,0,25">
             <TextBlock Text="Trouver un tuteur" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}"/>
-            <TextBlock Text="Parcourez la liste des experts disponibles pour vous aider." Foreground="{StaticResource SubText}" Margin="0,5,0,0"/>
+            <TextBlock Text="Parcourez la liste des experts disponibles." Foreground="{StaticResource SubText}" Margin="0,5,0,0"/>
         </StackPanel>
 
         <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="0">
@@ -17,11 +17,11 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="PRÉNOM" Binding="{Binding Prenom}" Width="*"/>
                     <DataGridTextColumn Header="NOM" Binding="{Binding Nom}" Width="*"/>
-                    <DataGridTextColumn Header="SPÉCIALITÉ" Binding="{Binding Subject}" Width="*"/>
+                    <DataGridTextColumn Header="SPÉCIALITÉ" Binding="{Binding Subject}" Width="2*"/>
                     <DataGridTemplateColumn Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Prendre RDV" Style="{StaticResource ActionButton}" 
+                                <Button Content="Voir dispo" Style="{StaticResource ActionButton}" 
                                         Height="32" Margin="10,0" Click="Reserve_Click"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

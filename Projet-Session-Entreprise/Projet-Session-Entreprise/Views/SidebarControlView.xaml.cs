@@ -38,19 +38,24 @@ namespace Projet_Session_Entreprise.Views
 
         private void btnBecomeTutor_Click(object sender, RoutedEventArgs e)
         {
-            MainView.Instance.NavigateTo(new RequeteRoleTuteurView(null!));
+            if (CurrentSessionService.CurrentUser is Student s)
+            {
+                var tempTutor = new Tutor { DA = s.DA, Nom = s.Nom, Prenom = s.Prenom, Password = s.Password };
+                MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
+            }
         }
 
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
             var user = CurrentSessionService.CurrentUser;
             if (user != null)
-            {
                 MainView.Instance.NavigateTo(new ProfileView(user));
-            }
         }
 
-        private void btnAppointments_Click(object sender, RoutedEventArgs e) => MessageBox.Show("Chargement...");
+        private void btnAppointments_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Disponible bientôt.");
+        }
 
         private void btnLogInOrOut(object sender, RoutedEventArgs e)
         {

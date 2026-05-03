@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
-using Projet_Session_Entreprise.ViewModels;
 using Projet_Session_Entreprise.Models;
 using Projet_Session_Entreprise.Services;
 
@@ -8,26 +10,94 @@ namespace Projet_Session_Entreprise.Views
 {
     public partial class ProfileView : UserControl
     {
+        private Tutor? _currentTutor;
+        private Student? _currentStudent;
+        private Dictionary<string, DayOfWeek> _dayMap = new Dictionary<string, DayOfWeek> {
+            { "Lundi", DayOfWeek.Monday }, { "Mardi", DayOfWeek.Tuesday }, { "Mercredi", DayOfWeek.Wednesday },
+            { "Jeudi", DayOfWeek.Thursday }, { "Vendredi", DayOfWeek.Friday }
+        };
+
         public ProfileView(object user)
         {
             InitializeComponent();
 
-            if (user is Student s)
+            if (user is Tutor t)
             {
-                DataContext = new ProfileViewModel(s);
+                _currentTutor = t;
+                this.DataContext = t;
+                sectionTuteur.Visibility = Visibility.Visible;
+                colDispos.Width = new GridLength(350);
+                LoadAppointments(t.Id, true);
+                LoadTutorSlots();
             }
-            else if (user is Tutor t)
+            else if (user is Student s)
             {
-                DataContext = new ProfileViewModel(t);
+                _currentStudent = s;
+                this.DataContext = s;
+                sectionTuteur.Visibility = Visibility.Collapsed;
+                colDispos.Width = new GridLength(0);
+                LoadAppointments(s.Id, false);
             }
         }
 
-        private void SearchTutor_Click(object sender, RoutedEventArgs e)
+        private void LoadAppointments(int userId, bool isTutor)
         {
-            if (CurrentSessionService.CurrentUser is Student s)
+            using (var db = new AppDbContext())
             {
-                MainView.Instance.NavigateTo(new TutorListView(s));
+                if (isTutor)
+                    dgAppointments.ItemsSource = db.Appointments.Where(a => a.TutorId == userId).OrderByDescending(a => a.DateRDV).ToList();
+                else
+                    dgAppointments.ItemsSource = db.Appointments.Where(a => a.StudentId == userId).OrderByDescending(a => a.DateRDV).ToList();
             }
+        }
+
+        private void LoadTutorSlots()
+        {
+            if (_currentTutor == null) return;
+            using (var db = new AppDbContext())
+            {
+                lstCurrentSlots.ItemsSource = db.TutorSlots.Where(s => s.TutorId == _currentTutor.Id).ToList();
+            }
+        }
+
+        private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
+        {
+            AjouterSlotArea.Visibility = Visibility.Visible;
+            btnShowAdd.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnSaveNewSlot_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentTutor == null) return;
+            string dayStr = (cmbDay.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+            string timeStr = (cmbTime.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+
+            using (var db = new AppDbContext())
+            {
+                db.TutorSlots.Add(new TutorSlot
+                {
+                    TutorId = _currentTutor.Id,
+                    Day = _dayMap[dayStr],
+                    StartTime = TimeSpan.Parse(timeStr),
+                    IsBooked = false
+                });
+                db.SaveChanges();
+            }
+            AjouterSlotArea.Visibility = Visibility.Collapsed;
+            btnShowAdd.Visibility = Visibility.Visible;
+            LoadTutorSlots();
+        }
+
+        private void BtnDeleteSlot_Click(object sender, RoutedEventArgs e)
+        {
+            var slot = (sender as Button)?.DataContext as TutorSlot;
+            if (slot == null) return;
+            using (var db = new AppDbContext())
+            {
+                var s = db.TutorSlots.Find(slot.Id);
+                if (s != null) { db.TutorSlots.Remove(s); db.SaveChanges(); }
+            }
+            LoadTutorSlots();
         }
     }
 }

@@ -46,7 +46,7 @@
         </StackPanel>
 
         <StackPanel x:Name="TutorPanel" Visibility="Collapsed">
-            <TextBlock Text="Tableau de bord - Enseignant" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}"/>
+            <TextBlock Text="Tableau de bord - Tuteur" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}"/>
             <UniformGrid Columns="3" Margin="0,20,0,30">
                 <Border Style="{StaticResource CardStyle}" Margin="0,0,15,0">
                     <StackPanel>
@@ -56,8 +56,8 @@
                 </Border>
                 <Border Style="{StaticResource CardStyle}" Margin="0,0,15,0">
                     <StackPanel>
-                        <TextBlock Text="Revenus" Foreground="{StaticResource SubText}" FontSize="12"/>
-                        <TextBlock Text="245$" FontSize="28" FontWeight="Bold" Foreground="{StaticResource SuccessGreen}" Margin="0,8"/>
+                        <TextBlock Text="Heures de tutorat" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="24h" FontSize="28" FontWeight="Bold" Foreground="{StaticResource SuccessGreen}" Margin="0,8"/>
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource CardStyle}">
@@ -70,7 +70,7 @@
             <Border Style="{StaticResource CardStyle}" BorderBrush="{StaticResource PrimaryMauve}" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="Demandes en attente" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                    <Button Content="Gérer mes séances" Style="{StaticResource ActionButton}" Width="200" Margin="0,20,0,0"/>
+                    <Button Content="Gérer mes séances" Style="{StaticResource ActionButton}" Width="200" Margin="0,20,0,0" Click="btnAppointments_Click"/>
                 </StackPanel>
             </Border>
         </StackPanel>

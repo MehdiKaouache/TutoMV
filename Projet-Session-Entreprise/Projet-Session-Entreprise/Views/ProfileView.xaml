@@ -1,65 +1,119 @@
 ﻿<UserControl x:Class="Projet_Session_Entreprise.Views.ProfileView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-    </UserControl.Resources>
-
-    <Grid>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource MainBG}">
+    <Grid Margin="30">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding DA, StringFormat='Profil : {0}'}" FontSize="28" FontWeight="Bold" Foreground="{StaticResource MainText}" Margin="0,0,0,20"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,30">
+            <TextBlock Text="Mon Profil" FontSize="36" FontWeight="ExtraBold" Foreground="{StaticResource PrimaryMauve}"/>
+            <Border Height="3" Background="{StaticResource PrimaryMauve}" Width="60" HorizontalAlignment="Left" Margin="2,5,0,0"/>
+        </StackPanel>
 
-        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="20" Margin="0,0,0,15">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Bienvenue, " FontSize="18" Foreground="{StaticResource SubText}"/>
-                <TextBlock Text="{Binding Prenom}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="5,0,0,0"/>
-                <TextBlock Text="{Binding Nom}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="5,0,0,0"/>
-            </StackPanel>
-        </Border>
-
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="350"/>
+                <ColumnDefinition x:Name="colDispos" Width="350"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="0,0,15,0">
-                <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
-                    <StackPanel>
-                        <TextBlock Text="Mes Rendez-vous" FontSize="18" FontWeight="Bold" Margin="0,0,0,10" Foreground="{StaticResource PrimaryMauve}"/>
-                        <DataGrid ItemsSource="{Binding MyAppointments}" AutoGenerateColumns="False" IsReadOnly="True" Height="200"
-                                  Background="Transparent" BorderThickness="0" Foreground="{StaticResource MainText}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Date" Binding="{Binding DateRDV, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="*"/>
-                                <DataGridTextColumn Header="Statut" Binding="{Binding Status}" Width="100"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-
-            <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+            <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,20,0" VerticalAlignment="Top">
                 <StackPanel>
-                    <TextBlock Text="Informations" FontSize="18" FontWeight="Bold" Margin="0,0,0,15" Foreground="{StaticResource MainText}"/>
+                    <TextBlock Text="Informations" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,20"/>
 
-                    <TextBlock Text="DA" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
-                    <TextBox Text="{Binding DA}" IsReadOnly="True" Opacity="0.6" Margin="0,0,0,15"/>
+                    <TextBlock Text="Numéro de DA" Foreground="{StaticResource SubText}" FontSize="12"/>
+                    <TextBlock Text="{Binding DA}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
 
-                    <TextBlock Text="Nom" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
-                    <TextBox Text="{Binding Nom}" Margin="0,0,0,15"/>
+                    <TextBlock Text="Prénom" Foreground="{StaticResource SubText}" FontSize="12"/>
+                    <TextBlock Text="{Binding Prenom}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
 
-                    <TextBlock Text="Prénom" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
-                    <TextBox Text="{Binding Prenom}" Margin="0,0,0,15"/>
+                    <TextBlock Text="Nom" Foreground="{StaticResource SubText}" FontSize="12"/>
+                    <TextBlock Text="{Binding Nom}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
 
-                    <StackPanel Visibility="{Binding TutorSectionVisibility}">
-                        <TextBlock Text="Disponibilités" Foreground="{StaticResource SubText}" Margin="0,10,0,5"/>
-                        <Button Content="Enregistrer les modifications" Style="{StaticResource ActionButton}"/>
+                    <TextBlock Text="Rôle" Foreground="{StaticResource SubText}" FontSize="12"/>
+                    <Border Background="#2D2D2D" CornerRadius="5" HorizontalAlignment="Left" Padding="10,5">
+                        <TextBlock Text="{Binding Role}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="0,0,20,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Mes Rendez-vous" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,20"/>
+
+                    <DataGrid Grid.Row="1" x:Name="dgAppointments" AutoGenerateColumns="False" IsReadOnly="True" 
+                              Background="Transparent" BorderThickness="0" Foreground="White" RowBackground="Transparent">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date et Heure" Binding="{Binding DateRDV, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="*"/>
+                            <DataGridTemplateColumn Header="Statut" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#333" CornerRadius="10" Padding="8,4">
+                                            <TextBlock Text="{Binding Status}" HorizontalAlignment="Center" FontSize="12"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <Border x:Name="sectionTuteur" Grid.Column="2" Style="{StaticResource CardStyle}" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="Disponibilités" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,15"/>
+
+                    <ListBox x:Name="lstCurrentSlots" Height="250" Background="#1A1A1A" BorderThickness="0" Margin="0,0,0,15">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{StaticResource BorderColor}" BorderThickness="0,0,0,1" Padding="0,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding JourFrancais}" Width="90" Foreground="White" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding StartTime, StringFormat={}{0:hh\\:mm}}" Foreground="{StaticResource PrimaryMauve}"/>
+                                        </StackPanel>
+                                        <Button Content="✕" Click="BtnDeleteSlot_Click" Grid.Column="1" Foreground="#FF5555" Background="Transparent" BorderThickness="0" Cursor="Hand" FontWeight="Bold"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <StackPanel x:Name="AjouterSlotArea" Visibility="Collapsed">
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox x:Name="cmbDay" Grid.Column="0" Margin="2">
+                                <ComboBoxItem Content="Lundi" IsSelected="True"/>
+                                <ComboBoxItem Content="Mardi"/>
+                                <ComboBoxItem Content="Mercredi"/>
+                                <ComboBoxItem Content="Jeudi"/>
+                                <ComboBoxItem Content="Vendredi"/>
+                            </ComboBox>
+                            <ComboBox x:Name="cmbTime" Grid.Column="1" Margin="2">
+                                <ComboBoxItem Content="09:00" IsSelected="True"/>
+                                <ComboBoxItem Content="11:00"/>
+                                <ComboBoxItem Content="14:00"/>
+                                <ComboBoxItem Content="16:00"/>
+                            </ComboBox>
+                        </Grid>
+                        <Button Content="Confirmer" Style="{StaticResource ActionButton}" Height="35" Click="BtnSaveNewSlot_Click"/>
                     </StackPanel>
+
+                    <Button x:Name="btnShowAdd" Content="Ajouter un créneau" Style="{StaticResource ActionButton}" Click="BtnShowAdd_Click"/>
                 </StackPanel>
             </Border>
         </Grid>

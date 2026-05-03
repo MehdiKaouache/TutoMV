@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -22,7 +23,7 @@ namespace Projet_Session_Entreprise.Views
             {
                 GuestPanel.Visibility = Visibility.Visible;
             }
-            else if (CurrentSessionService.IsTutor)
+            else if (CurrentSessionService.CurrentUser is Tutor)
             {
                 TutorPanel.Visibility = Visibility.Visible;
             }
@@ -33,6 +34,22 @@ namespace Projet_Session_Entreprise.Views
         }
 
         private void btnRegisterGuest_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new RoleSelectionView());
-        private void btnExplore_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new TutorListView(null!));
+
+        private void btnExplore_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentSessionService.CurrentUser is Student s)
+            {
+                MainView.Instance.NavigateTo(new TutorListView(s));
+            }
+            else
+            {
+                MainView.Instance.NavigateTo(new LoginView());
+            }
+        }
+
+        private void btnAppointments_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Disponible bientôt.");
+        }
     }
 }

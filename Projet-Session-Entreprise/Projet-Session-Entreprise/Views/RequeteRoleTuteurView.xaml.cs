@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,18 @@ namespace Projet_Session_Entreprise.Views
     public partial class RequeteRoleTuteurView : UserControl
     {
         private Tutor _tutor;
+        private List<SlotDisplay> _tempSlots = new List<SlotDisplay>();
+        private Dictionary<string, DayOfWeek> _dayMap = new Dictionary<string, DayOfWeek> {
+            { "Lundi", DayOfWeek.Monday }, { "Mardi", DayOfWeek.Tuesday }, { "Mercredi", DayOfWeek.Wednesday },
+            { "Jeudi", DayOfWeek.Thursday }, { "Vendredi", DayOfWeek.Friday }
+        };
+
+        public class SlotDisplay
+        {
+            public DayOfWeek Day { get; set; }
+            public string DayDisplay { get; set; } = string.Empty;
+            public TimeSpan StartTime { get; set; }
+        }
 
         public RequeteRoleTuteurView(Tutor tutor)
         {
@@ -17,23 +30,42 @@ namespace Projet_Session_Entreprise.Views
             _tutor = tutor;
         }
 
+        private void BtnAddSlot_Click(object sender, RoutedEventArgs e)
+        {
+            string? dayStr = (cmbDay.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            string? timeStr = (cmbTime.SelectedItem as ComboBoxItem)?.Content?.ToString();
+
+            if (dayStr != null && timeStr != null)
+            {
+                if (!_tempSlots.Any(s => s.DayDisplay == dayStr && s.StartTime == TimeSpan.Parse(timeStr)))
+                {
+                    _tempSlots.Add(new SlotDisplay
+                    {
+                        Day = _dayMap[dayStr],
+                        DayDisplay = dayStr,
+                        StartTime = TimeSpan.Parse(timeStr)
+                    });
+                    lstAddedSlots.ItemsSource = null;
+                    lstAddedSlots.ItemsSource = _tempSlots;
+                }
+            }
+        }
+
         private void BtnFinalize_Click(object sender, RoutedEventArgs e)
         {
-            string courseGradeInput = txtGradeCourse.Text.Trim();
-            var selectedSubjects = lstSubjects.SelectedItems.Cast<ListBoxItem>()
-                .Select(i => i.Content?.ToString() ?? "")
-                .Where(s => !string.IsNullOrEmpty(s))
-                .ToList();
+            string course = txtCourseTargeted.Text.Trim();
+            string gradeStr = txtGradeCourse.Text.Trim();
+            var subjects = lstSubjects.SelectedItems.Cast<ListBoxItem>().Select(i => i.Content.ToString() ?? "").ToList();
 
-            if (selectedSubjects.Count == 0 || string.IsNullOrEmpty(txtCourseTargeted.Text) || string.IsNullOrEmpty(courseGradeInput))
+            if (string.IsNullOrEmpty(course) || !double.TryParse(gradeStr, out double grade) || subjects.Count == 0 || _tempSlots.Count == 0)
             {
-                MessageBox.Show("Veuillez remplir tous les détails.");
+                MessageBox.Show("Veuillez remplir tous les champs et ajouter au moins une disponibilité.");
                 return;
             }
 
-            if (!double.TryParse(courseGradeInput, out double courseGrade) || courseGrade < 80)
+            if (grade < 80)
             {
-                MessageBox.Show("Erreur : Une note de 80% dans le cours est requise.");
+                MessageBox.Show("Une note de 80% est requise pour ce cours.");
                 return;
             }
 
@@ -41,61 +73,23 @@ namespace Projet_Session_Entreprise.Views
             {
                 using (var db = new AppDbContext())
                 {
-                    Tutor tutorToUpdate = null;
-
-                    if (_tutor == null)
+                    var tInDb = db.Tutors.FirstOrDefault(t => t.Id == _tutor.Id);
+                    if (tInDb != null)
                     {
-                        string currentDa = null;
+                        tInDb.Subject = string.Join(", ", subjects) + " (" + course + ")";
+                        tInDb.IsValidated = true;
 
-                        if (CurrentSessionService.CurrentUser is Student s) currentDa = s.DA;
-                        else if (CurrentSessionService.CurrentUser is Tutor t) currentDa = t.DA;
-
-                        if (!string.IsNullOrEmpty(currentDa))
+                        foreach (var s in _tempSlots)
                         {
-                            tutorToUpdate = db.Tutors.FirstOrDefault(t => t.DA == currentDa);
+                            db.TutorSlots.Add(new TutorSlot { TutorId = tInDb.Id, Day = s.Day, StartTime = s.StartTime, IsBooked = false });
                         }
-                    }
-                    else
-                    {
-                        tutorToUpdate = db.Tutors.FirstOrDefault(t => t.Id == _tutor.Id);
-                    }
-
-                    if (tutorToUpdate != null)
-                    {
-                        tutorToUpdate.Subject = string.Join(", ", selectedSubjects);
-                        tutorToUpdate.Availability = (cmbAvailability.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Lundi";
-                        tutorToUpdate.IsValidated = true;
-
                         db.SaveChanges();
-                        CurrentSessionService.CurrentUser = tutorToUpdate;
-                    }
-                    else if (_tutor == null && CurrentSessionService.CurrentUser is Student stud)
-                    {
-                        var newTutor = new Tutor
-                        {
-                            Nom = stud.Nom,
-                            Prenom = stud.Prenom,
-                            DA = stud.DA,
-                            Password = stud.Password,
-                            AverageGrade = courseGrade,
-                            Subject = string.Join(", ", selectedSubjects),
-                            Availability = (cmbAvailability.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "Lundi",
-                            Role = "Tuteur",
-                            IsValidated = true
-                        };
-                        db.Tutors.Add(newTutor);
-                        db.SaveChanges();
-                        CurrentSessionService.CurrentUser = newTutor;
+                        CurrentSessionService.CurrentUser = tInDb;
                     }
                 }
-
-                MessageBox.Show("Inscription terminée avec succès !");
                 MainView.Instance.NavigateTo(new HomeView());
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erreur lors de la finalisation : " + ex.Message);
-            }
+            catch (Exception ex) { MessageBox.Show("Erreur : " + ex.Message); }
         }
     }
 }

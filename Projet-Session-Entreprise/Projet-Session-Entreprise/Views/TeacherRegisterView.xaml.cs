@@ -20,30 +20,29 @@ namespace Projet_Session_Entreprise.Views
             string nom = txtName.Text.Trim();
             string prenom = txtFirstName.Text.Trim();
             string da = txtDA.Text.Trim();
-            string gpaInput = txtGPA.Text.Trim();
             string password = txtPassword.Password;
 
-            if (string.IsNullOrEmpty(nom) || string.IsNullOrEmpty(prenom) || string.IsNullOrEmpty(da) || string.IsNullOrEmpty(gpaInput) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(nom) || string.IsNullOrEmpty(prenom) || string.IsNullOrEmpty(da) || !double.TryParse(txtGPA.Text, out double gpa))
             {
-                MessageBox.Show("Erreur : Tous les champs sont obligatoires.");
+                MessageBox.Show("Tous les champs sont obligatoires.");
                 return;
             }
 
             if (da.Length != 7 || !da.All(char.IsDigit))
             {
-                MessageBox.Show("Erreur : Le DA doit contenir exactement 7 chiffres.");
+                MessageBox.Show("Le DA doit contenir exactement 7 chiffres.");
                 return;
             }
 
             if (password.Length < 8)
             {
-                MessageBox.Show("Erreur : Le mot de passe doit contenir au moins 8 caractères.");
+                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères.");
                 return;
             }
 
-            if (!double.TryParse(gpaInput, out double gpa) || gpa < 80)
+            if (gpa < 80)
             {
-                MessageBox.Show("Erreur : Une moyenne de 80% est requise pour devenir tuteur.");
+                MessageBox.Show("Une moyenne de 80% est requise pour devenir tuteur.");
                 return;
             }
 
@@ -51,10 +50,9 @@ namespace Projet_Session_Entreprise.Views
             {
                 using (var db = new AppDbContext())
                 {
-                    bool alreadyExists = db.Students.Any(s => s.DA == da) || db.Tutors.Any(t => t.DA == da);
-                    if (alreadyExists)
+                    if (db.Students.Any(s => s.DA == da) || db.Tutors.Any(t => t.DA == da))
                     {
-                        MessageBox.Show("Ce numéro de DA est déjà associé à un compte.");
+                        MessageBox.Show("Ce DA est déjà associé à un compte.");
                         return;
                     }
 
@@ -71,7 +69,6 @@ namespace Projet_Session_Entreprise.Views
 
                     db.Tutors.Add(newTutor);
                     db.SaveChanges();
-
                     MainView.Instance.NavigateTo(new RequeteRoleTuteurView(newTutor));
                 }
             }

@@ -14,7 +14,7 @@ namespace Projet_Session_Entreprise.Models
         public string Availability { get; set; } = "";
         public double AverageGrade { get; set; } = 85.0;
         public bool IsValidated { get; set; } = false;
-        public string Role { get; set; } = "Enseignant";
+        public string Role { get; set; } = "Tuteur";
         public List<Review> Reviews { get; set; } = new List<Review>();
         public int NumberOfRatings { get; set; } = 0;
         public int TotalRatings { get; set; } = 0;

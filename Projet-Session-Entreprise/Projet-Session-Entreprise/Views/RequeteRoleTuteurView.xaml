@@ -3,35 +3,63 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="{StaticResource MainBG}">
     <Grid>
-        <Border Style="{StaticResource CardStyle}" Width="500" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border Style="{StaticResource CardStyle}" Width="550" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel>
                 <TextBlock Text="Détails du profil Tuteur" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                <TextBlock Text="Configurez vos matières et disponibilités" Foreground="{StaticResource SubText}" HorizontalAlignment="Center" Margin="0,0,0,30"/>
 
                 <TextBlock Text="Matières d'expertise" Foreground="{StaticResource SubText}" Margin="5,0,0,5"/>
-                <ListBox x:Name="lstSubjects" SelectionMode="Multiple" Height="80" Background="#1A1A1A" Foreground="White" BorderBrush="{StaticResource BorderColor}">
+                <ListBox x:Name="lstSubjects" SelectionMode="Multiple" Height="80" Background="#1A1A1A" Foreground="White">
                     <ListBoxItem Content="Mathématiques"/>
                     <ListBoxItem Content="Informatique"/>
                     <ListBoxItem Content="Français"/>
                     <ListBoxItem Content="Anglais"/>
                 </ListBox>
 
-                <TextBlock Text="Disponibilité principale" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
-                <ComboBox x:Name="cmbAvailability" Height="40">
-                    <ComboBoxItem Content="Lundi" IsSelected="True"/>
-                    <ComboBoxItem Content="Mardi"/>
-                    <ComboBoxItem Content="Mercredi"/>
-                    <ComboBoxItem Content="Jeudi"/>
-                    <ComboBoxItem Content="Vendredi"/>
-                </ComboBox>
+                <TextBlock Text="Cours spécifique visé (ex: Algèbre)" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <TextBox x:Name="txtCourseTargeted" Height="40"/>
 
-                <TextBlock Text="Cours spécifique visé" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
-                <TextBox x:Name="txtCourseTargeted" Text="{Binding SelectedCourse}"/>
+                <TextBlock Text="Note obtenue dans ce cours (%)" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <TextBox x:Name="txtGradeCourse" Height="40"/>
 
-                <TextBlock Text="Note obtenue (%)" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
-                <TextBox x:Name="txtGradeCourse" Text="{Binding EnteredGrade}"/>
+                <Separator Background="{StaticResource BorderColor}" Margin="0,20"/>
 
-                <Button Content="Finaliser mon inscription" Style="{StaticResource ActionButton}" Margin="0,30,0,15" Click="BtnFinalize_Click"/>
+                <TextBlock Text="Ajouter vos disponibilités" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Name="cmbDay" Grid.Column="0" Margin="5">
+                        <ComboBoxItem Content="Lundi" IsSelected="True"/>
+                        <ComboBoxItem Content="Mardi"/>
+                        <ComboBoxItem Content="Mercredi"/>
+                        <ComboBoxItem Content="Jeudi"/>
+                        <ComboBoxItem Content="Vendredi"/>
+                    </ComboBox>
+                    <ComboBox x:Name="cmbTime" Grid.Column="1" Margin="5">
+                        <ComboBoxItem Content="09:00" IsSelected="True"/>
+                        <ComboBoxItem Content="10:00"/>
+                        <ComboBoxItem Content="11:00"/>
+                        <ComboBoxItem Content="13:00"/>
+                        <ComboBoxItem Content="14:00"/>
+                        <ComboBoxItem Content="15:00"/>
+                    </ComboBox>
+                    <Button Content="+" Click="BtnAddSlot_Click" Grid.Column="2" Width="40" Style="{StaticResource ActionButton}" Margin="5"/>
+                </Grid>
+
+                <ListBox x:Name="lstAddedSlots" Height="80" Background="#1A1A1A" Foreground="White" Margin="0,10">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding DayDisplay}" Width="100" FontWeight="Bold"/>
+                                <TextBlock Text="{Binding StartTime, StringFormat={}{0:hh\\:mm}}" Width="100" Foreground="{StaticResource PrimaryMauve}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <Button Content="Finaliser mon inscription" Style="{StaticResource ActionButton}" Margin="0,20,0,15" Click="BtnFinalize_Click"/>
             </StackPanel>
         </Border>
     </Grid>

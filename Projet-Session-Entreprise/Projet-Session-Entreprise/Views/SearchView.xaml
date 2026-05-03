@@ -20,8 +20,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="NOM" Binding="{Binding Nom}" Width="*"/>
                     <DataGridTextColumn Header="PRÉNOM" Binding="{Binding Prenom}" Width="*"/>
-                    <DataGridTextColumn Header="MATIÈRE" Binding="{Binding Subject}" Width="*"/>
-                    <DataGridTextColumn Header="DISPONIBILITÉ" Binding="{Binding Availability}" Width="*"/>
+                    <DataGridTextColumn Header="MATIÈRE" Binding="{Binding Subject}" Width="2*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
