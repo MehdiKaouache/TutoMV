@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Projet_Session_Entreprise.Services;
 
 namespace Projet_Session_Entreprise.ViewModels
@@ -10,6 +11,8 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private string _nom = string.Empty;
         [ObservableProperty] private string _prenom = string.Empty;
         [ObservableProperty] private string _noDa = string.Empty;
+        [ObservableProperty] private string _motDePasse = string.Empty;
+        [ObservableProperty] private double _gpa;
         [ObservableProperty] private string _roleSelectionne = "Etudiant";
         [ObservableProperty] private string _statusMessage = string.Empty;
 
@@ -18,6 +21,23 @@ namespace Projet_Session_Entreprise.ViewModels
         public RegisterViewModel(AuthService authService)
         {
             _authService = authService;
+        }
+
+        [RelayCommand]
+        private async Task RegisterAsync()
+        {
+            if (string.IsNullOrEmpty(Nom) || string.IsNullOrEmpty(Prenom) || string.IsNullOrEmpty(NoDa) || string.IsNullOrEmpty(MotDePasse))
+            {
+                StatusMessage = "Veuillez remplir tous les champs.";
+                return;
+            }
+
+            bool success = await _authService.RegisterAsync(Nom, Prenom, NoDa, RoleSelectionne, MotDePasse, Gpa);
+
+            if (success)
+                StatusMessage = "Compte créé ! Vous pouvez vous connecter.";
+            else
+                StatusMessage = "Erreur : Ce DA existe déjà.";
         }
     }
 }

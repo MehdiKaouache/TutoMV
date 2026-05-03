@@ -1,47 +1,35 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.ViewModels;
 using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class RegisterView : Window
+    public partial class RegisterView : UserControl
     {
-        private RegisterViewModel _viewModel;
+        private string _role;
 
         public RegisterView(string role)
         {
             InitializeComponent();
-            _viewModel = new RegisterViewModel(new AuthService());
-            _viewModel.RoleSelectionne = role;
-            DataContext = _viewModel;
-
-            if (role == "Etudiant")
-            {
-                this.Title = "Inscription Étudiant - TutoMV";
-            }
-            else
-            {
-                this.Title = "Inscription Enseignant - TutoMV";
-            }
+            _role = role;
+            lblTitle.Text = "Inscription Étudiant";
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            new LoginView().Show();
-            this.Close();
-        }
+        private void btnCancel_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new LoginView());
 
-        private void btnSignUp_Click(object sender, RoutedEventArgs e)
+        private async void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
+            string nom = txtName.Text.Trim();
+            string prenom = txtFirstName.Text.Trim();
             string da = txtDA.Text.Trim();
             string password = txtPassword.Password;
 
-            if (string.IsNullOrWhiteSpace(txtName.Text) || string.IsNullOrWhiteSpace(txtFirstName.Text) ||
-                string.IsNullOrWhiteSpace(da) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(txtGPA.Text))
+            if (string.IsNullOrWhiteSpace(nom) || string.IsNullOrWhiteSpace(prenom) || string.IsNullOrWhiteSpace(da) || !double.TryParse(txtGPA.Text, out double gpa))
             {
-                MessageBox.Show("Tous les champs sont requis.");
+                MessageBox.Show("Veuillez remplir tous les champs.");
                 return;
             }
 
@@ -57,28 +45,17 @@ namespace Projet_Session_Entreprise.Views
                 return;
             }
 
-            if (!double.TryParse(txtGPA.Text, out double gpa))
+            var auth = new AuthService();
+            bool success = await auth.RegisterAsync(nom, prenom, da, _role, password, gpa);
+
+            if (success)
             {
-                MessageBox.Show("Veuillez saisir une moyenne valide.");
-                return;
+                MessageBox.Show("Compte étudiant créé avec succès !");
+                MainView.Instance.NavigateTo(new LoginView());
             }
-
-            using (var db = new AppDbContext())
+            else
             {
-                db.Students.Add(new Student
-                {
-                    Nom = txtName.Text,
-                    Prenom = txtFirstName.Text,
-                    DA = da,
-                    Password = password,
-                    AverageGrade = gpa,
-                    Role = "Étudiant"
-                });
-
-                db.SaveChanges();
-                MessageBox.Show("Compte étudiant créé !");
-                new LoginView().Show();
-                this.Close();
+                MessageBox.Show("Ce DA est déjà utilisé.");
             }
         }
     }

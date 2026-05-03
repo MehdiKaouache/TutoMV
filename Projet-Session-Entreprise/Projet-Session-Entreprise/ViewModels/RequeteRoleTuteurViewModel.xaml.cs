@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.Models;
+using System.Collections.ObjectModel;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
@@ -14,6 +15,9 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private string _selectedCourse = string.Empty;
         [ObservableProperty] private double _enteredGrade;
 
+        public ObservableCollection<string> SelectedSubjects { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<TutorSlot> TempSlots { get; set; } = new ObservableCollection<TutorSlot>();
+
         public RequeteRoleTuteurViewModel(TutorService tutorService, Tutor tutor)
         {
             _tutorService = tutorService;
@@ -21,20 +25,32 @@ namespace Projet_Session_Entreprise.ViewModels
         }
 
         [RelayCommand]
-        private async Task SendRequestAsync()
+        private async Task FinaliserDemandeAsync()
         {
-            if (string.IsNullOrEmpty(SelectedCourse))
+            if (string.IsNullOrEmpty(SelectedCourse) || EnteredGrade < 80)
             {
-                StatusMessage = "Entrez un cours.";
+                StatusMessage = "Note insuffisante ou cours non spécifié.";
                 return;
             }
 
-            bool success = await _tutorService.PromoteTutorAsync(_tutor.Id, EnteredGrade);
+            using (var db = new AppDbContext())
+            {
+                var t = db.Tutors.Find(_tutor.Id);
+                if (t != null)
+                {
+                    t.Subject = SelectedCourse;
+                    t.AverageGrade = EnteredGrade;
+                    t.IsValidated = true;
 
-            if (success)
-                StatusMessage = "Demande acceptée !";
-            else
-                StatusMessage = "Moyenne insuffisante (80% requis).";
+                    foreach (var slot in TempSlots)
+                    {
+                        slot.TutorId = t.Id;
+                        db.TutorSlots.Add(slot);
+                    }
+                    await db.SaveChangesAsync();
+                    StatusMessage = "Félicitations, vous êtes tuteur !";
+                }
+            }
         }
     }
 }

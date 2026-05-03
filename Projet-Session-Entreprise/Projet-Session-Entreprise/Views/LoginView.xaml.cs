@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.ViewModels;
 using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class LoginView : Window
+    public partial class LoginView : UserControl
     {
         public LoginView()
         {
             InitializeComponent();
-            var viewModel = new LoginViewModel(new AuthService());
-            DataContext = viewModel;
-            txtPassword.PasswordChanged += (s, e) => viewModel.MotDePasse = txtPassword.Password;
         }
 
-        private async void btnConn_Click(object sender, RoutedEventArgs e)
+        private async void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -26,31 +23,25 @@ namespace Projet_Session_Entreprise.Views
                 var auth = new AuthService();
                 var user = await auth.LoginAsync(da, password);
 
-                if (user is Student s)
+                if (user != null)
                 {
-                    new ProfileView(s).Show();
-                    this.Close();
-                }
-                else if (user is Tutor t)
-                {
-                    new RequeteRoleTuteurView(t, new AppDbContext()).Show();
-                    this.Close();
+                    CurrentSessionService.CurrentUser = user;
+                    MainView.Instance.NavigateTo(new HomeView());
                 }
                 else
                 {
-                    MessageBox.Show("Erreur DA/Password");
+                    MessageBox.Show("DA ou mot de passe invalide.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur de connexion : " + ex.Message);
+                MessageBox.Show("Erreur : " + ex.Message);
             }
         }
 
-        private void btnReg_Click(object sender, RoutedEventArgs e)
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
-            new RoleSelectionView().Show();
-            this.Close();
+            MainView.Instance.NavigateTo(new RoleSelectionView());
         }
     }
 }

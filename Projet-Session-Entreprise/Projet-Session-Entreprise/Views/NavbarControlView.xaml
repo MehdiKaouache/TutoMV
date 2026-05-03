@@ -1,0 +1,14 @@
+<UserControl x:Class="Projet_Session_Entreprise.Views.NavbarControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="70" Background="{StaticResource SurfaceColor}">
+    <Grid Margin="30,0">
+        <TextBlock Text="TutoMV" FontSize="24" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" VerticalAlignment="Center"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Content="Accueil" Style="{StaticResource MenuButton}" Margin="0,0,20,0" Click="BtnHome_Click"/>
+            <Button Content="Se connecter" Style="{StaticResource MenuButton}" Margin="0,0,10,0" Click="BtnLogin_Click"/>
+            <Button Content="S'inscrire" Style="{StaticResource ActionButton}" Width="120" Click="BtnRegister_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
