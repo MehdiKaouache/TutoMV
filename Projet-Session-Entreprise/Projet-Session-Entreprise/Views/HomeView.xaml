@@ -70,7 +70,7 @@
             <Border Style="{StaticResource CardStyle}" BorderBrush="{StaticResource PrimaryMauve}" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="Demandes en attente" FontSize="20" FontWeight="Bold" Foreground="White"/>
-                    <Button Content="Gérer mes séances" Style="{StaticResource ActionButton}" Width="200" Margin="0,20,0,0" Click="btnAppointments_Click"/>
+                    <Button Content="Gérer mes séances" Style="{StaticResource ActionButton}" Width="200" Margin="0,20,0,0" Click="btnManageRequests_Click"/>
                 </StackPanel>
             </Border>
         </StackPanel>

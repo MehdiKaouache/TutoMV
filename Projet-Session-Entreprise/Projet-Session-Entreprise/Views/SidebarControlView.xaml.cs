@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Views;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -46,6 +44,11 @@ namespace Projet_Session_Entreprise.Views
                 MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
             }
         }
+        private void btnManageRequests_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentSessionService.CurrentUser is Tutor t)
+                MainView.Instance.NavigateTo(new ReceivedRequestsView(t));
+        }
 
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
@@ -56,7 +59,7 @@ namespace Projet_Session_Entreprise.Views
 
         private void btnAppointments_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Disponible bientôt.");
+            MessageBox.Show("Le calendrier des rendez-vous sera disponible bientôt.");
         }
 
         private void btnLogInOrOut(object sender, RoutedEventArgs e)

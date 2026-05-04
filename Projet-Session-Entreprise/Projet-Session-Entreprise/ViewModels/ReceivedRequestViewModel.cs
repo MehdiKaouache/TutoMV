@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Windows;
 using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.ViewModels
@@ -27,10 +28,11 @@ namespace Projet_Session_Entreprise.ViewModels
         {
             using (var db = new AppDbContext())
             {
-                var list = db.Appointments.Where(a => a.TutorId == _tutor.Id).ToList();
+                var list = db.Appointments
+                             .Where(a => a.TutorId == _tutor.Id && a.Status == "En attente")
+                             .ToList();
 
                 Appointments.Clear();
-
                 foreach (var a in list)
                 {
                     Appointments.Add(a);
@@ -48,9 +50,9 @@ namespace Projet_Session_Entreprise.ViewModels
                 {
                     a.Status = "Accepté";
                     db.SaveChanges();
+                    MessageBox.Show("Rendez-vous accepté !");
                 }
             }
-
             LoadAppointments();
         }
 
@@ -64,10 +66,10 @@ namespace Projet_Session_Entreprise.ViewModels
                 {
                     a.Status = "Refusé";
                     db.SaveChanges();
+                    MessageBox.Show("Rendez-vous refusé.");
                 }
             }
             LoadAppointments();
         }
-
     }
 }
