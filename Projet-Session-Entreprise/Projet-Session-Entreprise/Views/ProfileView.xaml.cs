@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
 using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -38,6 +39,8 @@ namespace Projet_Session_Entreprise.Views
                 colDispos.Width = new GridLength(0);
                 LoadAppointments(s.Id, false);
             }
+            // Use the centralized notification helper
+            CheckAcceptedAppointmentsAndNotify();
         }
 
         private void LoadAppointments(int userId, bool isTutor)
@@ -98,6 +101,19 @@ namespace Projet_Session_Entreprise.Views
                 if (s != null) { db.TutorSlots.Remove(s); db.SaveChanges(); }
             }
             LoadTutorSlots();
+        }
+
+        private void CheckAcceptedAppointmentsAndNotify()
+        {
+            if (_currentStudent == null) return;
+
+            using (var db = new AppDbContext())
+            {
+                var appts = db.Appointments.ToList();
+                var tutors = db.Tutors.ToList();
+
+                NotificationService.ShowAcceptedAppointmentsForStudent(_currentStudent, appts, tutors);
+            }
         }
     }
 }
