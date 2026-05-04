@@ -47,7 +47,7 @@ namespace Projet_Session_Entreprise.Views
                     MessageBox.Show("Vous avez déjà un rendez-vous à ce moment");
                     return;
                 }
-                new TutorListView(_currentStudent).Show();
+                MainView.Instance.NavigateTo(new TutorListView(_currentStudent)); //tutorListView est un UserControl, pas un window, so .Show() marches pas
             }
         }
 
