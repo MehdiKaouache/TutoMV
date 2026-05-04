@@ -1,8 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Linq;
+using CommunityToolkit.Mvvm.Input;
 using Projet_Session_Entreprise.Models;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
@@ -54,6 +55,25 @@ namespace Projet_Session_Entreprise.ViewModels
                     foreach (var a in appts) MyAppointments.Add(a);
                 }
             }
+        }
+
+        private bool AppointmentExists(DateTime date)
+        {
+            using (var db = new AppDbContext())
+            {
+                if (_student != null)
+                {
+                   if (db.Appointments.Any(a=>a.DateRDV == date && a.StudentId == _student.Id))
+                   {
+                       return true;
+                   }
+                   if (_tutor != null)
+                   {
+                       return db.Appointments.Any(a => a.DateRDV == date && a.TutorId == _tutor.Id);
+                   }
+                }
+            }
+                return false;
         }
     }
 }
