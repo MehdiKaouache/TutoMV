@@ -14,48 +14,55 @@ namespace Projet_Session_Entreprise.Views
             InitializeComponent();
         }
 
-        private void btnProfile_Click(object sender, RoutedEventArgs e)
+        public void UpdateMenu(bool isTutor)
         {
-            // Keep profile behavior so student notification logic runs
-            if (CurrentSessionService.CurrentUser is Student s) new ProfileView(s).Show();
-            else if (CurrentSessionService.CurrentUser is Tutor t) new ProfileView(t).Show();
+            if (isTutor)
+            {
+                btnSearch.Visibility = Visibility.Collapsed;
+                btnBecomeTutor.Visibility = Visibility.Collapsed;
+                btnManageRequests.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnSearch.Visibility = Visibility.Visible;
+                btnBecomeTutor.Visibility = Visibility.Visible;
+                btnManageRequests.Visibility = Visibility.Collapsed;
+            }
         }
 
-        private void btnHome_Click(object sender, RoutedEventArgs e)
+        private void btnHome_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new HomeView());
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            // Do not reference a concrete MainWindow type.
-            // Prefer the application's MainWindow if present, otherwise activate any open window.
-            var appMain = Application.Current?.MainWindow;
-            if (appMain != null)
-            {
-                if (!appMain.IsVisible) appMain.Show();
-                appMain.Activate();
-                return;
-            }
+            if (CurrentSessionService.CurrentUser is Student s)
+                MainView.Instance.NavigateTo(new TutorListView(s));
+        }
 
-            var windows = Application.Current?.Windows;
-            if (windows != null)
+        private void btnBecomeTutor_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentSessionService.CurrentUser is Student s)
             {
-                foreach (Window window in windows)
-                {
-                    if (window != null)
-                    {
-                        if (!window.IsVisible) window.Show();
-                        window.Activate();
-                        return;
-                    }
-                }
+                var tempTutor = new Tutor { DA = s.DA, Nom = s.Nom, Prenom = s.Prenom, Password = s.Password };
+                MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
             }
+        }
 
-            // Fallback: open a safe entry point (login) if no window is available
-            new LoginView().Show();
+        private void btnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            var user = CurrentSessionService.CurrentUser;
+            if (user != null)
+                MainView.Instance.NavigateTo(new ProfileView(user));
+        }
+
+        private void btnAppointments_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Disponible bientôt.");
         }
 
         private void btnLogInOrOut(object sender, RoutedEventArgs e)
         {
             CurrentSessionService.CurrentUser = null;
-            new LoginView().Show();
-            Window.GetWindow(this)?.Close();
+            MainView.Instance.NavigateTo(new LoginView());
         }
     }
 }

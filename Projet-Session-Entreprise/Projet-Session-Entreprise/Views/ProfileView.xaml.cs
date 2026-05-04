@@ -1,38 +1,106 @@
-﻿using System.Text;
-using System.Windows;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using Projet_Session_Entreprise.ViewModels;
+using System.Windows;
+using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
 using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class ProfileView : Window
+    public partial class ProfileView : UserControl
     {
+        private Tutor? _currentTutor;
         private Student? _currentStudent;
+        private Dictionary<string, DayOfWeek> _dayMap = new Dictionary<string, DayOfWeek> {
+            { "Lundi", DayOfWeek.Monday }, { "Mardi", DayOfWeek.Tuesday }, { "Mercredi", DayOfWeek.Wednesday },
+            { "Jeudi", DayOfWeek.Thursday }, { "Vendredi", DayOfWeek.Friday }
+        };
 
-        public ProfileView(Student student)
+        public ProfileView(object user)
         {
             InitializeComponent();
-            _currentStudent = student;
-            DataContext = new ProfileViewModel(student);
 
+            if (user is Tutor t)
+            {
+                _currentTutor = t;
+                this.DataContext = t;
+                sectionTuteur.Visibility = Visibility.Visible;
+                colDispos.Width = new GridLength(350);
+                LoadAppointments(t.Id, true);
+                LoadTutorSlots();
+            }
+            else if (user is Student s)
+            {
+                _currentStudent = s;
+                this.DataContext = s;
+                sectionTuteur.Visibility = Visibility.Collapsed;
+                colDispos.Width = new GridLength(0);
+                LoadAppointments(s.Id, false);
+            }
             // Use the centralized notification helper
             CheckAcceptedAppointmentsAndNotify();
         }
 
-        public ProfileView(Tutor tutor)
+        private void LoadAppointments(int userId, bool isTutor)
         {
-            InitializeComponent();
-            DataContext = new ProfileViewModel(tutor);
+            using (var db = new AppDbContext())
+            {
+                if (isTutor)
+                    dgAppointments.ItemsSource = db.Appointments.Where(a => a.TutorId == userId).OrderByDescending(a => a.DateRDV).ToList();
+                else
+                    dgAppointments.ItemsSource = db.Appointments.Where(a => a.StudentId == userId).OrderByDescending(a => a.DateRDV).ToList();
+            }
         }
 
-        private void SearchTutor_Click(object sender, RoutedEventArgs e)
+        private void LoadTutorSlots()
         {
-            if (_currentStudent != null)
+            if (_currentTutor == null) return;
+            using (var db = new AppDbContext())
             {
-                new TutorListView(_currentStudent).Show();
+                lstCurrentSlots.ItemsSource = db.TutorSlots.Where(s => s.TutorId == _currentTutor.Id).ToList();
             }
+        }
+
+        private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
+        {
+            AjouterSlotArea.Visibility = Visibility.Visible;
+            btnShowAdd.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnSaveNewSlot_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentTutor == null) return;
+            string dayStr = (cmbDay.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+            string timeStr = (cmbTime.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+
+            using (var db = new AppDbContext())
+            {
+                db.TutorSlots.Add(new TutorSlot
+                {
+                    TutorId = _currentTutor.Id,
+                    Day = _dayMap[dayStr],
+                    StartTime = TimeSpan.Parse(timeStr),
+                    IsBooked = false
+                });
+                db.SaveChanges();
+            }
+            AjouterSlotArea.Visibility = Visibility.Collapsed;
+            btnShowAdd.Visibility = Visibility.Visible;
+            LoadTutorSlots();
+        }
+
+        private void BtnDeleteSlot_Click(object sender, RoutedEventArgs e)
+        {
+            var slot = (sender as Button)?.DataContext as TutorSlot;
+            if (slot == null) return;
+            using (var db = new AppDbContext())
+            {
+                var s = db.TutorSlots.Find(slot.Id);
+                if (s != null) { db.TutorSlots.Remove(s); db.SaveChanges(); }
+            }
+            LoadTutorSlots();
         }
 
         private void CheckAcceptedAppointmentsAndNotify()

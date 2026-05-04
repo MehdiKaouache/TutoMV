@@ -1,0 +1,35 @@
+<UserControl x:Class="Projet_Session_Entreprise.Views.BookingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource MainBG}">
+    <Grid>
+        <Border Style="{StaticResource CardStyle}" Width="600" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="30">
+            <StackPanel>
+                <TextBlock x:Name="txtTutorName" FontSize="26" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" TextAlignment="Center" Margin="0,0,0,5"/>
+                <TextBlock Text="Sélectionnez un créneau disponible" Foreground="{StaticResource SubText}" TextAlignment="Center" Margin="0,0,0,25"/>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="400">
+                    <ItemsControl x:Name="icSlots">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Click="Slot_Click" Margin="8" Padding="15" Background="#1A1A1A" BorderBrush="{StaticResource PrimaryMauve}" BorderThickness="1" Cursor="Hand">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Day}" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding StartTime, StringFormat={}{0:hh\\:mm}}" Foreground="{StaticResource PrimaryMauve}" FontSize="20" FontWeight="ExtraBold" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <Button Content="Annuler" Style="{StaticResource LinkButton}" Margin="0,20,0,0" Click="BtnCancel_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

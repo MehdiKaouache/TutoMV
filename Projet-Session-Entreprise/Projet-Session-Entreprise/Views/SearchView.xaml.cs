@@ -1,9 +1,9 @@
+using System.Windows.Controls;
 using Projet_Session_Entreprise.ViewModels;
-using System.Windows;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class SearchView : Window
+    public partial class SearchView : UserControl
     {
         public SearchView()
         {

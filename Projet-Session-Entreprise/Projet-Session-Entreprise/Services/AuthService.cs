@@ -19,13 +19,12 @@ namespace Projet_Session_Entreprise.Services
             }
         }
 
-        public async Task<bool> RegisterAsync(string nom, string prenom, string da, string role, string password)
+        public async Task<bool> RegisterAsync(string nom, string prenom, string da, string role, string password, double gpa)
         {
             using (var db = new AppDbContext())
             {
-                bool compteExiste = await db.Students.AnyAsync(u => u.DA == da) || await db.Tutors.AnyAsync(u => u.DA == da);
-
-                if (compteExiste) return false;
+                bool exists = await db.Students.AnyAsync(u => u.DA == da) || await db.Tutors.AnyAsync(u => u.DA == da);
+                if (exists) return false;
 
                 if (role == "Etudiant")
                 {
@@ -35,10 +34,11 @@ namespace Projet_Session_Entreprise.Services
                         Prenom = prenom,
                         DA = da,
                         Password = password,
+                        AverageGrade = gpa,
                         Role = "Étudiant"
                     });
                 }
-                else if (role == "Enseignant")
+                else
                 {
                     db.Tutors.Add(new Tutor
                     {
@@ -46,8 +46,9 @@ namespace Projet_Session_Entreprise.Services
                         Prenom = prenom,
                         DA = da,
                         Password = password,
-                        Role = "Enseignant",
-                        IsValidated = true
+                        AverageGrade = gpa,
+                        Role = "Tuteur",
+                        IsValidated = false
                     });
                 }
 
