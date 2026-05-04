@@ -1,0 +1,104 @@
+<UserControl x:Class="Projet_Session_Entreprise.Views.TutorAvailabilityControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border Style="{StaticResource CardStyle}">
+        <StackPanel>
+            <StackPanel Margin="0,0,0,20">
+                <TextBlock Text="Disponibilités" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}"/>
+                <TextBlock Text="Vos créneaux hebdomadaires" Foreground="{StaticResource SubText}" FontSize="12" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <ScrollViewer MaxHeight="280" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15">
+                <ItemsControl x:Name="lstCurrentSlots">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#1A1A2E" CornerRadius="8" Margin="0,0,0,8" Padding="12,10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Background="#252545" CornerRadius="6" Padding="8,4" Margin="0,0,12,0">
+                                        <TextBlock Text="{Binding JourFrancais}" Foreground="{StaticResource PrimaryMauve}" FontWeight="Bold" FontSize="13"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding StartTime, StringFormat={}{0:hh\\:mm}}" Foreground="White" FontSize="14"/>
+                                        <TextBlock Text=" → " Foreground="{StaticResource SubText}" FontSize="14"/>
+                                        <TextBlock Text="{Binding EndTime, StringFormat={}{0:hh\\:mm}}" Foreground="White" FontSize="14"/>
+                                    </StackPanel>
+                                    <Button Content="✕" Click="BtnDeleteSlot_Click" Grid.Column="2" Foreground="{StaticResource DangerRed}" Background="Transparent" BorderThickness="0" Cursor="Hand" FontWeight="Bold"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <StackPanel x:Name="AjouterSlotArea" Visibility="Collapsed">
+                <Border Background="#111122" CornerRadius="10" Padding="15" Margin="0,0,0,10">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                <TextBlock Text="Jour" Foreground="{StaticResource SubText}" FontSize="11" Margin="0,0,0,5"/>
+                                <ComboBox x:Name="cmbDay">
+                                    <ComboBoxItem Content="Lundi" IsSelected="True"/>
+                                    <ComboBoxItem Content="Mardi"/>
+                                    <ComboBoxItem Content="Mercredi"/>
+                                    <ComboBoxItem Content="Jeudi"/>
+                                    <ComboBoxItem Content="Vendredi"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="0,0,5,0">
+                                <TextBlock Text="Début" Foreground="{StaticResource SubText}" FontSize="11" Margin="0,0,0,5"/>
+                                <ComboBox x:Name="cmbTime">
+                                    <ComboBoxItem Content="08:00" IsSelected="True"/>
+                                    <ComboBoxItem Content="09:00"/>
+                                    <ComboBoxItem Content="10:00"/>
+                                    <ComboBoxItem Content="11:00"/>
+                                    <ComboBoxItem Content="12:00"/>
+                                    <ComboBoxItem Content="13:00"/>
+                                    <ComboBoxItem Content="14:00"/>
+                                    <ComboBoxItem Content="15:00"/>
+                                    <ComboBoxItem Content="16:00"/>
+                                    <ComboBoxItem Content="17:00"/>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Fin" Foreground="{StaticResource SubText}" FontSize="11" Margin="0,0,0,5"/>
+                                <ComboBox x:Name="cmbEndTime">
+                                    <ComboBoxItem Content="09:00"/>
+                                    <ComboBoxItem Content="10:00" IsSelected="True"/>
+                                    <ComboBoxItem Content="11:00"/>
+                                    <ComboBoxItem Content="12:00"/>
+                                    <ComboBoxItem Content="13:00"/>
+                                    <ComboBoxItem Content="14:00"/>
+                                    <ComboBoxItem Content="15:00"/>
+                                    <ComboBoxItem Content="16:00"/>
+                                    <ComboBoxItem Content="17:00"/>
+                                    <ComboBoxItem Content="18:00"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock x:Name="lblSlotError" Foreground="{StaticResource DangerRed}" FontSize="12" Margin="0,0,0,8" Visibility="Collapsed"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Content="Confirmer" Style="{StaticResource ActionButton}" Height="35" Click="BtnSaveNewSlot_Click"/>
+                            <Button Grid.Column="2" Content="Annuler" Style="{StaticResource ActionButton}" Height="35" Background="#2A2A2A" Click="BtnCancelAdd_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <Button x:Name="btnShowAdd" Content="+ Ajouter un créneau" Style="{StaticResource ActionButton}" Click="BtnShowAdd_Click"/>
+        </StackPanel>
+    </Border>
+</UserControl>

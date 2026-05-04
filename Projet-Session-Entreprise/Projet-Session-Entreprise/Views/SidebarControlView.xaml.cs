@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.Models;
@@ -44,6 +45,7 @@ namespace Projet_Session_Entreprise.Views
                 MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
             }
         }
+
         private void btnManageRequests_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentSessionService.CurrentUser is Tutor t)
@@ -52,9 +54,18 @@ namespace Projet_Session_Entreprise.Views
 
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
-            var user = CurrentSessionService.CurrentUser;
-            if (user != null)
-                MainView.Instance.NavigateTo(new ProfileView(user));
+            try
+            {
+                var user = CurrentSessionService.CurrentUser;
+                if (user != null)
+                {
+                    MainView.Instance.NavigateTo(new ProfileView(user));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur d'ouverture du profil : {ex.Message}");
+            }
         }
 
         private void btnAppointments_Click(object sender, RoutedEventArgs e)
