@@ -1,69 +1,58 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Linq;
+using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
     public partial class ProfileViewModel : ObservableObject
     {
-        private readonly Student _student;
-        private readonly Tutor _tutor;
+        private Student? _student;
+        private Tutor? _tutor;
 
-        [ObservableProperty] private string _dA;
-        [ObservableProperty] private string _nom;
-        [ObservableProperty] private string _prenom;
-        [ObservableProperty] private string _availability;
-        [ObservableProperty] private string _statusMessage;
         [ObservableProperty] private bool _isTutor;
-        [ObservableProperty] private List<Avis> _reviewList;
+        [ObservableProperty] private string _dA = "";
+        [ObservableProperty] private string _nom = "";
+        [ObservableProperty] private string _prenom = "";
 
+        public ObservableCollection<Appointment> MyAppointments { get; set; } = new ObservableCollection<Appointment>();
 
         public ProfileViewModel(Student student)
         {
             _student = student;
-            _isTutor = false;
+            IsTutor = false;
             DA = student.DA;
             Nom = student.Nom;
             Prenom = student.Prenom;
-            ReviewList = new List<Avis>();
+            LoadData();
         }
 
         public ProfileViewModel(Tutor tutor)
         {
             _tutor = tutor;
-            _isTutor = true;
+            IsTutor = true;
             DA = tutor.DA;
             Nom = tutor.Nom;
             Prenom = tutor.Prenom;
-            Availability = tutor.Availability;
-            ReviewList = new List<Avis>() { 
-                new Avis {NomEleve = "John Doe", Note = 5, Commentaire = "Excellent tuteur!" }
-            }; //review en template vu que y a pas encore de sessions de tutoring
+            LoadData();
         }
 
-        [RelayCommand]
-        private async Task SauvegarderAsync()
+        public void LoadData()
         {
             using (var db = new AppDbContext())
             {
-                if (_student != null)
+                MyAppointments.Clear();
+                if (IsTutor && _tutor != null)
                 {
-                    var s = await db.Students.FindAsync(_student.Id);
-                    if (s != null) { s.Nom = Nom; s.Prenom = Prenom; }
+                    var appts = db.Appointments.Where(a => a.TutorId == _tutor.Id).ToList();
+                    foreach (var a in appts) MyAppointments.Add(a);
                 }
-                else if (_tutor != null)
+                else if (_student != null)
                 {
-                    var t = await db.Tutors.FindAsync(_tutor.Id);
-                    if (t != null)
-                    {
-                        t.Nom = Nom;
-                        t.Prenom = Prenom;
-                        t.Availability = Availability;
-                    }
+                    var appts = db.Appointments.Where(a => a.StudentId == _student.Id).ToList();
+                    foreach (var a in appts) MyAppointments.Add(a);
                 }
-
-                await db.SaveChangesAsync();
-                StatusMessage = "Profil mis à jour !";
             }
         }
     }

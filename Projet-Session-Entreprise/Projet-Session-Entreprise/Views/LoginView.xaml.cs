@@ -1,29 +1,47 @@
-﻿using System.Linq;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.ViewModels;
-using Projet_Session_Entreprise.Views;
+using Projet_Session_Entreprise.Models;
 
-namespace Projet_Session_Entreprise
+namespace Projet_Session_Entreprise.Views
 {
-    public partial class LoginView : Window
+    public partial class LoginView : UserControl
     {
         public LoginView()
         {
             InitializeComponent();
-            var viewModel = new LoginViewModel(new AuthService());
-            DataContext = viewModel;
-            txtPassword.PasswordChanged += (s, e) => viewModel.MotDePasse = txtPassword.Password;
         }
 
-        //la logique de ce btn devrait être géré par le ViewModel
-
-        private void btnReg_Click(object sender, RoutedEventArgs e)
+        private async void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
-            var reg = new RegisterView();
-            reg.Show();
-            this.Close();
+            try
+            {
+                string da = txtDA.Text.Trim();
+                string password = txtPassword.Password.Trim();
+
+                var auth = new AuthService();
+                var user = await auth.LoginAsync(da, password);
+
+                if (user != null)
+                {
+                    CurrentSessionService.CurrentUser = user;
+                    MainView.Instance.NavigateTo(new HomeView());
+                }
+                else
+                {
+                    MessageBox.Show("DA ou mot de passe invalide.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur : " + ex.Message);
+            }
+        }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            MainView.Instance.NavigateTo(new RoleSelectionView());
         }
     }
 }

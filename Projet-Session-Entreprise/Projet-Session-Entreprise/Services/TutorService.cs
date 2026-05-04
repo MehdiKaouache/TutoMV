@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-
 namespace Projet_Session_Entreprise.Services
 {
     public class TutorService

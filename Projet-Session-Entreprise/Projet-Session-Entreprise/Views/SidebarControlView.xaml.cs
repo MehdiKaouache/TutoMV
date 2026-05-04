@@ -1,76 +1,66 @@
-﻿using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
-    /// <summary>
-    /// Interaction logic for SidebarControlView.xaml
-    /// </summary>
     public partial class SidebarControlView : UserControl
     {
         public SidebarControlView()
         {
             InitializeComponent();
         }
+
+        public void UpdateMenu(bool isTutor)
+        {
+            if (isTutor)
+            {
+                btnSearch.Visibility = Visibility.Collapsed;
+                btnBecomeTutor.Visibility = Visibility.Collapsed;
+                btnManageRequests.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnSearch.Visibility = Visibility.Visible;
+                btnBecomeTutor.Visibility = Visibility.Visible;
+                btnManageRequests.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void btnHome_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new HomeView());
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentSessionService.CurrentUser is Student s)
+                MainView.Instance.NavigateTo(new TutorListView(s));
+        }
+
+        private void btnBecomeTutor_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentSessionService.CurrentUser is Student s)
+            {
+                var tempTutor = new Tutor { DA = s.DA, Nom = s.Nom, Prenom = s.Prenom, Password = s.Password };
+                MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
+            }
+        }
+
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentSession.IsStudent) {
-                new ProfileView((Student)CurrentSession.CurrentUser).Show();
-            } else if (CurrentSession.IsTutor)
-            {
-                new ProfileView((Tutor)CurrentSession.CurrentUser).Show();
-            } else
-            {
-                Console.WriteLine("Vous devez être connecté");
-            }
+            var user = CurrentSessionService.CurrentUser;
+            if (user != null)
+                MainView.Instance.NavigateTo(new ProfileView(user));
         }
 
-        private void btnHome_Click(object sender, RoutedEventArgs e)
+        private void btnAppointments_Click(object sender, RoutedEventArgs e)
         {
-            new MainWindow().Show();
+            MessageBox.Show("Disponible bientôt.");
         }
 
-        private void btnRegister_Click (object sender, RoutedEventArgs e)
+        private void btnLogInOrOut(object sender, RoutedEventArgs e)
         {
-            new RegisterView().Show();
-        }
-
-        private void btnPromoteTutor_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurrentSession.IsTutor)
-            {
-                new RequeteRoleTuteurView((Tutor)CurrentSession.CurrentUser, new AppDbContext()).Show();
-            } else
-            {
-                Console.WriteLine("Vous devez être tuteur");
-            }
-        }
-
-        private void btnLogInOrOut (object sender, RoutedEventArgs e)
-        {
-            if (CurrentSession.CurrentUser != null)
-            {
-                CurrentSession.CurrentUser = null;
-                new MainWindow().Show();
-            } else
-            {
-                new LoginView().Show();
-            }
+            CurrentSessionService.CurrentUser = null;
+            MainView.Instance.NavigateTo(new LoginView());
         }
     }
 }
-

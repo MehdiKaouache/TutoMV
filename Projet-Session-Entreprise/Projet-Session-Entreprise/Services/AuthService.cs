@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Services
 {
@@ -19,41 +19,37 @@ namespace Projet_Session_Entreprise.Services
             }
         }
 
-        public async Task<bool> RegisterAsync(string nom, 
-            string prenom, string da, string role, string password)
+        public async Task<bool> RegisterAsync(string nom, string prenom, string da, string role, string password, double gpa)
         {
             using (var db = new AppDbContext())
             {
-                bool compteExiste = await db.Students.AnyAsync(u => u.DA == da)
-                         || await db.Tutors.AnyAsync(u => u.DA == da);
-
-                if (compteExiste)
-                {
-                    return false;
-                }
+                bool exists = await db.Students.AnyAsync(u => u.DA == da) || await db.Tutors.AnyAsync(u => u.DA == da);
+                if (exists) return false;
 
                 if (role == "Etudiant")
                 {
-                    var newUser = new Student
+                    db.Students.Add(new Student
                     {
                         Nom = nom,
                         Prenom = prenom,
                         DA = da,
                         Password = password,
-                    };
-
-                    db.Add(newUser);
-                } else if (role == "Enseignant")
+                        AverageGrade = gpa,
+                        Role = "Étudiant"
+                    });
+                }
+                else
                 {
-                    var newUser = new Tutor
+                    db.Tutors.Add(new Tutor
                     {
                         Nom = nom,
                         Prenom = prenom,
                         DA = da,
                         Password = password,
-                    };
-
-                    db.Add(newUser);
+                        AverageGrade = gpa,
+                        Role = "Tuteur",
+                        IsValidated = false
+                    });
                 }
 
                 await db.SaveChangesAsync();

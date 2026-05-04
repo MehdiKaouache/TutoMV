@@ -1,23 +1,62 @@
-﻿using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.ViewModels;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Models;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class RegisterView : Window
+    public partial class RegisterView : UserControl
     {
-        public RegisterView()
+        private string _role;
+
+        public RegisterView(string role)
         {
             InitializeComponent();
-            var viewModel = new RegisterViewModel(new AuthService());
-            DataContext = viewModel;
-
-            //les password box databind pas bien so
-            //s = sender, e = event
-            txtPassword.PasswordChanged += (s, e) => viewModel.MotDePasse = txtPassword.Password;
+            _role = role;
+            lblTitle.Text = "Inscription Étudiant";
         }
 
-        //le ViewModel devrait s'occuper du click
+        private void btnCancel_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new LoginView());
+
+        private async void btnSignUp_Click(object sender, RoutedEventArgs e)
+        {
+            string nom = txtName.Text.Trim();
+            string prenom = txtFirstName.Text.Trim();
+            string da = txtDA.Text.Trim();
+            string password = txtPassword.Password;
+
+            if (string.IsNullOrWhiteSpace(nom) || string.IsNullOrWhiteSpace(prenom) || string.IsNullOrWhiteSpace(da) || !double.TryParse(txtGPA.Text, out double gpa))
+            {
+                MessageBox.Show("Veuillez remplir tous les champs.");
+                return;
+            }
+
+            if (da.Length != 7 || !da.All(char.IsDigit))
+            {
+                MessageBox.Show("Le numéro de DA doit contenir exactement 7 chiffres.");
+                return;
+            }
+
+            if (password.Length < 8)
+            {
+                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères.");
+                return;
+            }
+
+            var auth = new AuthService();
+            bool success = await auth.RegisterAsync(nom, prenom, da, _role, password, gpa);
+
+            if (success)
+            {
+                MessageBox.Show("Compte étudiant créé avec succès !");
+                MainView.Instance.NavigateTo(new LoginView());
+            }
+            else
+            {
+                MessageBox.Show("Ce DA est déjà utilisé.");
+            }
+        }
     }
 }
