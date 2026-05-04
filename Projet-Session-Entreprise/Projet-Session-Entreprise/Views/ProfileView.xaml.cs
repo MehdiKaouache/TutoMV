@@ -62,27 +62,59 @@ namespace Projet_Session_Entreprise.Views
 
         private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
         {
+            lblSlotError.Visibility = Visibility.Collapsed;
             AjouterSlotArea.Visibility = Visibility.Visible;
             btnShowAdd.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnCancelAdd_Click(object sender, RoutedEventArgs e)
+        {
+            lblSlotError.Visibility = Visibility.Collapsed;
+            AjouterSlotArea.Visibility = Visibility.Collapsed;
+            btnShowAdd.Visibility = Visibility.Visible;
         }
 
         private void BtnSaveNewSlot_Click(object sender, RoutedEventArgs e)
         {
             if (_currentTutor == null) return;
+
             string dayStr = (cmbDay.SelectedItem as ComboBoxItem)?.Content.ToString()!;
-            string timeStr = (cmbTime.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+            string startStr = (cmbTime.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+            string endStr = (cmbEndTime.SelectedItem as ComboBoxItem)?.Content.ToString()!;
+
+            var day = _dayMap[dayStr];
+            var start = TimeSpan.Parse(startStr);
+            var end = TimeSpan.Parse(endStr);
+
+            if (end <= start)
+            {
+                lblSlotError.Text = "L'heure de fin doit être après l'heure de début.";
+                lblSlotError.Visibility = Visibility.Visible;
+                return;
+            }
 
             using (var db = new AppDbContext())
             {
+                bool existe = db.TutorSlots.Any(s => s.TutorId == _currentTutor.Id && s.Day == day && s.StartTime == start);
+                if (existe)
+                {
+                    lblSlotError.Text = "Ce créneau existe déjà.";
+                    lblSlotError.Visibility = Visibility.Visible;
+                    return;
+                }
+
                 db.TutorSlots.Add(new TutorSlot
                 {
                     TutorId = _currentTutor.Id,
-                    Day = _dayMap[dayStr],
-                    StartTime = TimeSpan.Parse(timeStr),
+                    Day = day,
+                    StartTime = start,
+                    EndTime = end,
                     IsBooked = false
                 });
                 db.SaveChanges();
             }
+
+            lblSlotError.Visibility = Visibility.Collapsed;
             AjouterSlotArea.Visibility = Visibility.Collapsed;
             btnShowAdd.Visibility = Visibility.Visible;
             LoadTutorSlots();
