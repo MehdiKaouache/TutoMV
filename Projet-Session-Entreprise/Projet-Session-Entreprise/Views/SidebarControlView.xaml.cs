@@ -66,7 +66,7 @@ namespace Projet_Session_Entreprise.Views
             }
 
             // Fallback: open a safe entry point (login) if no window is available
-            new LoginView().Show();
+            MainView.Instance.NavigateTo(new LoginView());
         }
 
         private void btnLogInOrOut(object sender, RoutedEventArgs e)
