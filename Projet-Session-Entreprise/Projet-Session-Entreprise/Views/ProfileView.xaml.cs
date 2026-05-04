@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System.Text;
+using System.Windows;
+using System.Linq;
 using Projet_Session_Entreprise.ViewModels;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Services;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -8,12 +11,14 @@ namespace Projet_Session_Entreprise.Views
     {
         private Student? _currentStudent;
 
-
         public ProfileView(Student student)
         {
             InitializeComponent();
             _currentStudent = student;
             DataContext = new ProfileViewModel(student);
+
+            // Use the centralized notification helper
+            CheckAcceptedAppointmentsAndNotify();
         }
 
         public ProfileView(Tutor tutor)
@@ -29,6 +34,18 @@ namespace Projet_Session_Entreprise.Views
                 new TutorListView(_currentStudent).Show();
             }
         }
-   
+
+        private void CheckAcceptedAppointmentsAndNotify()
+        {
+            if (_currentStudent == null) return;
+
+            using (var db = new AppDbContext())
+            {
+                var appts = db.Appointments.ToList();
+                var tutors = db.Tutors.ToList();
+
+                NotificationService.ShowAcceptedAppointmentsForStudent(_currentStudent, appts, tutors);
+            }
+        }
     }
 }

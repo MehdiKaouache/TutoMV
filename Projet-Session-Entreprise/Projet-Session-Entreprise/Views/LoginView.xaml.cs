@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.ViewModels;
@@ -28,6 +29,7 @@ namespace Projet_Session_Entreprise.Views
 
                 if (user is Student s)
                 {
+                    // Directly open the student profile so notification logic runs without test prompt
                     new ProfileView(s).Show();
                     this.Close();
                 }
