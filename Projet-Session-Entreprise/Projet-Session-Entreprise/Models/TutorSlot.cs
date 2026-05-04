@@ -8,6 +8,7 @@ namespace Projet_Session_Entreprise.Models
         public int TutorId { get; set; }
         public DayOfWeek Day { get; set; }
         public TimeSpan StartTime { get; set; }
+        public TimeSpan EndTime { get; set; }
         public bool IsBooked { get; set; } = false;
         public string JourFrancais => Day switch
         {
