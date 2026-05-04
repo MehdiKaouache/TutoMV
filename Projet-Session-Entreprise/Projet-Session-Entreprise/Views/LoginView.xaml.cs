@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
@@ -26,14 +25,8 @@ namespace Projet_Session_Entreprise.Views
 
                 if (user != null)
                 {
-                    // Directly open the student profile so notification logic runs without test prompt
-                    new ProfileView(s).Show();
-                    this.Close();
-                }
-                else if (user is Tutor t)
-                {
-                    new RequeteRoleTuteurView(t, new AppDbContext()).Show();
-                    this.Close();
+                    CurrentSessionService.CurrentUser = user;
+                    MainView.Instance.NavigateTo(new HomeView());
                 }
                 else
                 {

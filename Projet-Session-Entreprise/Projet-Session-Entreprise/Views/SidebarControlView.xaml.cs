@@ -74,5 +74,19 @@ namespace Projet_Session_Entreprise.Views
             CurrentSessionService.CurrentUser = null;
             MainView.Instance.NavigateTo(new LoginView());
         }
+
+        private void btnAppointments_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Disponible bientôt.");
+        }
+
+        private void btnBecomeTutor_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentSessionService.CurrentUser is Student s)
+            {
+                var tempTutor = new Tutor { DA = s.DA, Nom = s.Nom, Prenom = s.Prenom, Password = s.Password };
+                MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
+            }
+        }
     }
 }

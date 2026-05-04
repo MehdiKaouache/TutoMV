@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class ProfileView : UserControl
+    public partial class ProfileView : Window
     {
         private Tutor? _currentTutor;
         private Student? _currentStudent;
@@ -33,6 +33,15 @@ namespace Projet_Session_Entreprise.Views
         {
             AjouterSlotArea.Visibility = Visibility.Visible;
             btnShowAdd.Visibility = Visibility.Collapsed;
+        }
+
+        private void LoadTutorSlots()
+        {
+            if (_currentTutor == null) return;
+            using (var db = new AppDbContext())
+            {
+                lstCurrentSlots.ItemsSource = db.TutorSlots.Where(s => s.TutorId == _currentTutor.Id).ToList();
+            }
         }
 
         private void BtnSaveNewSlot_Click(object sender, RoutedEventArgs e)
@@ -64,6 +73,17 @@ namespace Projet_Session_Entreprise.Views
             }
         }
 
+        private void BtnDeleteSlot_Click(object sender, RoutedEventArgs e)
+        {
+            var slot = (sender as Button)?.DataContext as TutorSlot;
+            if (slot == null) return;
+            using (var db = new AppDbContext())
+            {
+                var s = db.TutorSlots.Find(slot.Id);
+                if (s != null) { db.TutorSlots.Remove(s); db.SaveChanges(); }
+            }
+            LoadTutorSlots();
+        }
 
         private DateTime GetDateTimeAppointment() //pour retourner les dates en DateTime pour comparer les appointments avec leurs daates
         {
