@@ -57,7 +57,7 @@ namespace Projet_Session_Entreprise.ViewModels
             }
         }
 
-        private bool AppointmentExists(DateTime date)
+        public bool AppointmentExists(DateTime date)
         {
             using (var db = new AppDbContext())
             {

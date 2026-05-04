@@ -1,4 +1,4 @@
-<UserControl x:Class="Projet_Session_Entreprise.Views.TutorListView"
+<Window x:Class="Projet_Session_Entreprise.Views.TutorListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
@@ -30,4 +30,4 @@
             </DataGrid>
         </Border>
     </Grid>
-</UserControl>
+</Window>
