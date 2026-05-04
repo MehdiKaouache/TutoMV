@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Views;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -32,29 +34,39 @@ namespace Projet_Session_Entreprise.Views
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentSessionService.CurrentUser is Student s)
-                MainView.Instance.NavigateTo(new TutorListView(s));
-        }
-
-        private void btnBecomeTutor_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurrentSessionService.CurrentUser is Student s)
-            {
-                var tempTutor = new Tutor { DA = s.DA, Nom = s.Nom, Prenom = s.Prenom, Password = s.Password };
-                MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
-            }
+            // Keep profile behavior so student notification logic runs
+            if (CurrentSessionService.CurrentUser is Student s) new ProfileView(s).Show();
+            else if (CurrentSessionService.CurrentUser is Tutor t) new ProfileView(t).Show();
         }
 
         private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
-            var user = CurrentSessionService.CurrentUser;
-            if (user != null)
-                MainView.Instance.NavigateTo(new ProfileView(user));
-        }
+            // Do not reference a concrete MainWindow type.
+            // Prefer the application's MainWindow if present, otherwise activate any open window.
+            var appMain = Application.Current?.MainWindow;
+            if (appMain != null)
+            {
+                if (!appMain.IsVisible) appMain.Show();
+                appMain.Activate();
+                return;
+            }
 
-        private void btnAppointments_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Disponible bientôt.");
+            var windows = Application.Current?.Windows;
+            if (windows != null)
+            {
+                foreach (Window window in windows)
+                {
+                    if (window != null)
+                    {
+                        if (!window.IsVisible) window.Show();
+                        window.Activate();
+                        return;
+                    }
+                }
+            }
+
+            // Fallback: open a safe entry point (login) if no window is available
+            new LoginView().Show();
         }
 
         private void btnLogInOrOut(object sender, RoutedEventArgs e)
