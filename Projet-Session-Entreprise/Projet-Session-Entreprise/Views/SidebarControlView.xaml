@@ -17,7 +17,7 @@
             <Button Content="Tableau de bord" Click="btnHome_Click" Style="{StaticResource MenuButton}"/>
             <Button x:Name="btnSearch" Content="Rechercher un tuteur" Click="btnSearch_Click" Style="{StaticResource MenuButton}"/>
             <Button x:Name="btnBecomeTutor" Content="Devenir Tuteur" Click="btnBecomeTutor_Click" Style="{StaticResource MenuButton}"/>
-            <Button x:Name="btnManageRequests" Content="Gérer les demandes" Click="btnAppointments_Click" Style="{StaticResource MenuButton}" Visibility="Collapsed"/>
+            <Button x:Name="btnManageRequests" Content="Gérer les demandes" Click="btnManageRequests_Click" Style="{StaticResource MenuButton}" Visibility="Collapsed"/>
             <Button Content="Mes rendez-vous" Click="btnAppointments_Click" Style="{StaticResource MenuButton}"/>
             <Button Content="Mon Profil" Click="btnProfile_Click" Style="{StaticResource MenuButton}"/>
         </StackPanel>

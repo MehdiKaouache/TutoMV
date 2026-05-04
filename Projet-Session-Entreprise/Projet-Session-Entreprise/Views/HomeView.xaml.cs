@@ -47,9 +47,10 @@ namespace Projet_Session_Entreprise.Views
             }
         }
 
-        private void btnAppointments_Click(object sender, RoutedEventArgs e)
+        private void btnManageRequests_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Disponible bientôt.");
+            if (CurrentSessionService.CurrentUser is Tutor t)
+                MainView.Instance.NavigateTo(new ReceivedRequestsView(t));
         }
     }
 }

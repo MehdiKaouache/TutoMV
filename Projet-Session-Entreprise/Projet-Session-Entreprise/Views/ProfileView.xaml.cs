@@ -1,16 +1,15 @@
-﻿using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.ViewModels;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
 {
     public partial class ProfileView : Window
     {
-        private Tutor? _currentTutor;
         private Student? _currentStudent;
 
         public ProfileView(Student student)
@@ -19,8 +18,26 @@ namespace Projet_Session_Entreprise.Views
             _currentStudent = student;
             DataContext = new ProfileViewModel(student);
 
-            // Use the centralized notification helper
-            CheckAcceptedAppointmentsAndNotify();
+            if (user is Tutor t)
+            {
+                this.DataContext = t;
+                AvailabilityContainer.Visibility = Visibility.Visible;
+                colDispos.Width = new GridLength(350);
+                ctrlAvailability.Initialize(t);
+                LoadAppointments(t.Id, true);
+            }
+            else if (user is Student s)
+            {
+                _currentStudent = s;
+                this.DataContext = s;
+                AvailabilityContainer.Visibility = Visibility.Collapsed;
+                colDispos.Width = new GridLength(0);
+                LoadAppointments(s.Id, false);
+            }
+
+            this.Loaded += (sender, e) => {
+                if (_currentStudent != null) CheckAcceptedAppointmentsAndNotify();
+            };
         }
 
         public ProfileView(Tutor tutor)
@@ -35,54 +52,19 @@ namespace Projet_Session_Entreprise.Views
             btnShowAdd.Visibility = Visibility.Collapsed;
         }
 
-        private void LoadTutorSlots()
-        {
-            if (_currentTutor == null) return;
-            using (var db = new AppDbContext())
-            {
-                lstCurrentSlots.ItemsSource = db.TutorSlots.Where(s => s.TutorId == _currentTutor.Id).ToList();
-            }
-        }
-
-        private void BtnSaveNewSlot_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentStudent != null)
-            {
-                DateTime date = GetDateTimeAppointment();
-                var vm = DataContext as ProfileViewModel;
-
-                if (vm != null && vm.AppointmentExists(date))
-                {
-                    MessageBox.Show("Vous avez déjà un rendez-vous à ce moment");
-                    return;
-                }
-                MainView.Instance.NavigateTo(new TutorListView(_currentStudent)); //tutorListView est un UserControl, pas un window, so .Show() marches pas
-            }
-        }
-
         private void CheckAcceptedAppointmentsAndNotify()
         {
             if (_currentStudent == null) return;
-
-            using (var db = new AppDbContext())
+            try
             {
-                var appts = db.Appointments.ToList();
-                var tutors = db.Tutors.ToList();
-
-                NotificationService.ShowAcceptedAppointmentsForStudent(_currentStudent, appts, tutors);
+                using (var db = new AppDbContext())
+                {
+                    var appts = db.Appointments.ToList();
+                    var tutors = db.Tutors.ToList();
+                    NotificationService.ShowAcceptedAppointmentsForStudent(_currentStudent, appts, tutors);
+                }
             }
-        }
-
-        private void BtnDeleteSlot_Click(object sender, RoutedEventArgs e)
-        {
-            var slot = (sender as Button)?.DataContext as TutorSlot;
-            if (slot == null) return;
-            using (var db = new AppDbContext())
-            {
-                var s = db.TutorSlots.Find(slot.Id);
-                if (s != null) { db.TutorSlots.Remove(s); db.SaveChanges(); }
-            }
-            LoadTutorSlots();
+            catch { }
         }
 
         private DateTime GetDateTimeAppointment() //pour retourner les dates en DateTime pour comparer les appointments avec leurs daates
