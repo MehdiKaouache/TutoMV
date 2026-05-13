@@ -1,5 +1,4 @@
-using System.Linq;
-using System.Text;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
@@ -8,80 +7,42 @@ using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class ProfileView : Window
+    public partial class ProfileView : UserControl
     {
-        private Student? _currentStudent;
+        private ProfileViewModel? _viewModel;
 
-        public ProfileView(Student student)
+        public ProfileView(object user)
         {
             InitializeComponent();
-            _currentStudent = student;
-            DataContext = new ProfileViewModel(student);
 
-            if (user is Tutor t)
+            if (user is Student s)
             {
-                this.DataContext = t;
+                _viewModel = new ProfileViewModel(s);
+                AvailabilityContainer.Visibility = Visibility.Collapsed;
+                colDispos.Width = new GridLength(0);
+            }
+            else if (user is Tutor t)
+            {
+                _viewModel = new ProfileViewModel(t);
                 AvailabilityContainer.Visibility = Visibility.Visible;
                 colDispos.Width = new GridLength(350);
                 ctrlAvailability.Initialize(t);
-                LoadAppointments(t.Id, true);
             }
-            else if (user is Student s)
+
+            if (_viewModel != null)
             {
-                _currentStudent = s;
-                this.DataContext = s;
-                AvailabilityContainer.Visibility = Visibility.Collapsed;
-                colDispos.Width = new GridLength(0);
-                LoadAppointments(s.Id, false);
+                this.DataContext = _viewModel;
+                if (dgAppointments != null)
+                {
+                    dgAppointments.ItemsSource = _viewModel.MyAppointments;
+                }
             }
-
-            this.Loaded += (sender, e) => {
-                if (_currentStudent != null) CheckAcceptedAppointmentsAndNotify();
-            };
-        }
-
-        public ProfileView(Tutor tutor)
-        {
-            InitializeComponent();
-            DataContext = new ProfileViewModel(tutor);
         }
 
         private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
         {
             AjouterSlotArea.Visibility = Visibility.Visible;
             btnShowAdd.Visibility = Visibility.Collapsed;
-        }
-
-        private void CheckAcceptedAppointmentsAndNotify()
-        {
-            if (_currentStudent == null) return;
-            try
-            {
-                using (var db = new AppDbContext())
-                {
-                    var appts = db.Appointments.ToList();
-                    var tutors = db.Tutors.ToList();
-                    NotificationService.ShowAcceptedAppointmentsForStudent(_currentStudent, appts, tutors);
-                }
-            }
-            catch { }
-        }
-
-        private DateTime GetDateTimeAppointment() //pour retourner les dates en DateTime pour comparer les appointments avec leurs daates
-        {
-            string day = (cmbDay.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string time = (cmbTime.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-            //prends la date de today, check si c'est le même jours que l'user à choisi, sinon, va au next day et recommence.
-            //Ex: je pick mercredi prochain et on est jeudi, ça va parse les jours jusqu'a hit mercredi (donc +6 jours)
-            DateTime date = DateTime.Today;
-            while (date.ToString("dddd", new System.Globalization.CultureInfo("fr-CA")).ToLower() != day.ToLower())
-            {
-                date = date.AddDays(1);
-            }
-
-            TimeSpan ts = TimeSpan.Parse(time);
-            return date.Date.Add(ts);
         }
     }
 }

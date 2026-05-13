@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Data;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -37,7 +38,7 @@ namespace Projet_Session_Entreprise.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur BDD : " + ex.Message + "\n\nVérifiez que la table 'TutorSlots' existe dans MySQL.");
+                MessageBox.Show("Erreur BDD : " + ex.Message);
             }
         }
 
@@ -93,6 +94,6 @@ namespace Projet_Session_Entreprise.Views
             return start.AddDays(daysUntil);
         }
 
-        private void BtnCancel_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new TutorListView(_student));
+        private void BtnCancel_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new TutorListView());
     }
 }

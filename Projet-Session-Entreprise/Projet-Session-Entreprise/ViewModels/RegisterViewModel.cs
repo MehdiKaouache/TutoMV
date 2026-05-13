@@ -1,13 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Projet_Session_Entreprise.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
     public partial class RegisterViewModel : ObservableObject
     {
-        private readonly AuthService _authService;
-
         [ObservableProperty] private string _nom = string.Empty;
         [ObservableProperty] private string _prenom = string.Empty;
         [ObservableProperty] private string _noDa = string.Empty;
@@ -18,26 +17,21 @@ namespace Projet_Session_Entreprise.ViewModels
 
         public List<string> Roles { get; } = new List<string> { "Etudiant", "Enseignant" };
 
-        public RegisterViewModel(AuthService authService)
-        {
-            _authService = authService;
-        }
-
         [RelayCommand]
         private async Task RegisterAsync()
         {
-            if (string.IsNullOrEmpty(Nom) || string.IsNullOrEmpty(Prenom) || string.IsNullOrEmpty(NoDa) || string.IsNullOrEmpty(MotDePasse))
+            if (string.IsNullOrEmpty(Nom) || string.IsNullOrEmpty(Prenom) || string.IsNullOrEmpty(NoDa))
             {
                 StatusMessage = "Veuillez remplir tous les champs.";
                 return;
             }
 
-            bool success = await _authService.RegisterAsync(Nom, Prenom, NoDa, RoleSelectionne, MotDePasse, Gpa);
+            bool success = await App.AuthService.RegisterAsync(Nom, Prenom, NoDa, RoleSelectionne, MotDePasse, Gpa);
 
             if (success)
-                StatusMessage = "Compte créé ! Vous pouvez vous connecter.";
+                StatusMessage = "Compte créé avec succès !";
             else
-                StatusMessage = "Erreur : Ce DA existe déjà.";
+                StatusMessage = "Erreur : Ce DA est déjà utilisé.";
         }
     }
 }

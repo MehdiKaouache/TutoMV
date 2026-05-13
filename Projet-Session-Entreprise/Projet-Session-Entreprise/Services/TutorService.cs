@@ -1,20 +1,28 @@
+using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Repositories.Interfaces;
+using System.Threading.Tasks;
+
 namespace Projet_Session_Entreprise.Services
 {
     public class TutorService
     {
-        private readonly AppDbContext _db;
+        private readonly ITutorRepository _tutorRepo;
 
-        public TutorService(AppDbContext db) => _db = db;
+        public TutorService(ITutorRepository tutorRepo)
+        {
+            _tutorRepo = tutorRepo;
+        }
 
         public async Task<bool> PromoteTutorAsync(int tutorId, double gradeSaisie)
         {
-            var tutor = await _db.Tutors.FindAsync(tutorId);
+            var tutor = await _tutorRepo.GetByIdAsync(tutorId);
 
             if (tutor != null && gradeSaisie >= 80)
             {
                 tutor.AverageGrade = gradeSaisie;
                 tutor.IsValidated = true;
-                await _db.SaveChangesAsync();
+                _tutorRepo.Update(tutor);
+                await _tutorRepo.SaveChangesAsync();
                 return true;
             }
 

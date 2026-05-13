@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
 using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Data;
 
 namespace Projet_Session_Entreprise.Views
 {

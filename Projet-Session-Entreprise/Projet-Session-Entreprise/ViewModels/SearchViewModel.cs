@@ -1,15 +1,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
     public partial class SearchViewModel : ObservableObject
     {
-        private readonly SearchService _searchService;
-
         [ObservableProperty] private string _searchText = "";
         [ObservableProperty] private string _selectedFilter = "Nom";
 
@@ -17,20 +16,31 @@ namespace Projet_Session_Entreprise.ViewModels
 
         public SearchViewModel()
         {
-            _searchService = new SearchService(new AppDbContext());
+            _ = InitialLoadAsync();
+        }
+
+        private async Task InitialLoadAsync()
+        {
+            var tuteurs = await App.TutorRepo.GetAllAsync();
+            Results.Clear();
+            foreach (var t in tuteurs) Results.Add(t);
         }
 
         [RelayCommand]
         private async Task RechercherAsync()
         {
-            if (string.IsNullOrWhiteSpace(SearchText)) return;
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                await InitialLoadAsync();
+                return;
+            }
 
-            var tuteurs = SelectedFilter == "Matière"
-                ? await _searchService.SearchBySubjectAsync(SearchText)
-                : await _searchService.SearchByNameAsync(SearchText);
+            var results = SelectedFilter == "Matière"
+                ? await App.TutorRepo.GetBySubjectAsync(SearchText)
+                : await App.TutorRepo.SearchTutorsAsync(SearchText);
 
             Results.Clear();
-            foreach (var t in tuteurs) Results.Add(t);
+            foreach (var t in results) Results.Add(t);
         }
     }
 }

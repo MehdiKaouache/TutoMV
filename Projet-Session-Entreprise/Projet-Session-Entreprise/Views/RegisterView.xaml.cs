@@ -15,7 +15,7 @@ namespace Projet_Session_Entreprise.Views
         {
             InitializeComponent();
             _role = role;
-            lblTitle.Text = "Inscription Étudiant";
+            lblTitle.Text = _role == "Etudiant" ? "Inscription Étudiant" : "Inscription Enseignant";
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new LoginView());
@@ -45,12 +45,11 @@ namespace Projet_Session_Entreprise.Views
                 return;
             }
 
-            var auth = new AuthService();
-            bool success = await auth.RegisterAsync(nom, prenom, da, _role, password, gpa);
+            bool success = await App.AuthService.RegisterAsync(nom, prenom, da, _role, password, gpa);
 
             if (success)
             {
-                MessageBox.Show("Compte étudiant créé avec succès !");
+                MessageBox.Show("Compte créé avec succès !");
                 MainView.Instance.NavigateTo(new LoginView());
             }
             else

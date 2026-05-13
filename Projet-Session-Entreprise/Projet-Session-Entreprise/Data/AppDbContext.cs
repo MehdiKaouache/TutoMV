@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projet_Session_Entreprise.Models;
 
-namespace Projet_Session_Entreprise
+namespace Projet_Session_Entreprise.Data
 {
     public class AppDbContext : DbContext
     {
