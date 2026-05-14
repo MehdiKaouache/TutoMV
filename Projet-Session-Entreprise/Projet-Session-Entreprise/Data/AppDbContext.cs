@@ -10,6 +10,7 @@ namespace Projet_Session_Entreprise
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<TutorSlot> TutorSlots { get; set; }
+        public DbSet<ArchivedAppointment> ArchivedAppointments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

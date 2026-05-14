@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.Models;
 using Projet_Session_Entreprise.Views;
+using Projet_Session_Entreprise.Themes;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -103,6 +104,10 @@ namespace Projet_Session_Entreprise.Views
                 var tempTutor = new Tutor { DA = s.DA, Nom = s.Nom, Prenom = s.Prenom, Password = s.Password };
                 MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
             }
+        }
+        private void ChangerTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeManager.ToggleTheme();
         }
     }
 }

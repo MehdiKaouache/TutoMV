@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="MainBG" Color="#0F172A"/>
+    <SolidColorBrush x:Key="SurfaceColor" Color="#1E293B"/>
+    <SolidColorBrush x:Key="MainText" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="SubText" Color="#94A3B8"/>
+    <SolidColorBrush x:Key="BorderColor" Color="#334155"/>
+    <SolidColorBrush x:Key="PrimaryMauve" Color="#8B5CF6"/>
+    <SolidColorBrush x:Key="SuccessGreen" Color="#22C55E"/>
+    <SolidColorBrush x:Key="DangerRed" Color="#EF4444"/>
+    <SolidColorBrush x:Key="HoverColor" Color="#334155"/>
+</ResourceDictionary>

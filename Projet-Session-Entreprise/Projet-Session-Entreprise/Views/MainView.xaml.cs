@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Themes;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -39,6 +40,10 @@ namespace Projet_Session_Entreprise.Views
                 LeftSidebar.Visibility = Visibility.Collapsed;
                 SidebarCol.Width = new GridLength(0);
             }
+        }
+        private void ChangerTheme_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeManager.ToggleTheme();
         }
     }
 }
