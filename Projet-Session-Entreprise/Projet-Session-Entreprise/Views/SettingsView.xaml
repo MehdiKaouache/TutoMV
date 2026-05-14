@@ -1,0 +1,68 @@
+<UserControl x:Class="Projet_Session_Entreprise.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource MainBG}">
+    <Grid>
+        <StackPanel Width="420" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <TextBlock Text="Paramètres du compte"
+                       Foreground="{StaticResource PrimaryMauve}"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,30"/>
+
+            <!-- CHANGER LE DA -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Changer le numéro DA"
+                               Foreground="{StaticResource MainText}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Nouveau DA" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txtNouveauDA"/>
+
+                    <Button Content="Mettre à jour le DA"
+                            Style="{StaticResource ActionButton}"
+                            Margin="0,15,0,0"
+                            Click="BtnUpdateDA_Click"/>
+                </StackPanel>
+            </Border>
+
+            <!-- CHANGER LE MOT DE PASSE -->
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Changer le mot de passe"
+                               Foreground="{StaticResource MainText}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0,0,0,15"/>
+
+                    <TextBlock Text="Mot de passe actuel" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
+                    <PasswordBox x:Name="txtMotDePasseActuel"/>
+
+                    <TextBlock Text="Nouveau mot de passe" Foreground="{StaticResource SubText}" Margin="0,15,0,5"/>
+                    <PasswordBox x:Name="txtNouveauMotDePasse"/>
+
+                    <TextBlock Text="Confirmer le nouveau mot de passe" Foreground="{StaticResource SubText}" Margin="0,15,0,5"/>
+                    <PasswordBox x:Name="txtConfirmMotDePasse"/>
+
+                    <Button Content="Mettre à jour le mot de passe"
+                            Style="{StaticResource ActionButton}"
+                            Margin="0,15,0,0"
+                            Click="BtnUpdatePassword_Click"/>
+                </StackPanel>
+            </Border>
+
+            <!-- MESSAGE DE STATUT -->
+            <TextBlock x:Name="txtStatut"
+                       Foreground="{StaticResource PrimaryMauve}"
+                       FontSize="14"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -66,6 +66,11 @@ namespace Projet_Session_Entreprise.Views
             }
         }
 
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            MainView.Instance.NavigateTo(new SettingsView());
+        }
+
         private void btnLogInOrOut(object sender, RoutedEventArgs e)
         {
             CurrentSessionService.CurrentUser = null;
