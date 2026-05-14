@@ -69,15 +69,31 @@ namespace Projet_Session_Entreprise.Views
             MainView.Instance.NavigateTo(new LoginView());
         }
 
-        private void btnLogInOrOut(object sender, RoutedEventArgs e)
+        private void btnManageRequests_Click(object sender, RoutedEventArgs e)
         {
-            CurrentSessionService.CurrentUser = null;
-            MainView.Instance.NavigateTo(new LoginView());
+            if (CurrentSessionService.CurrentUser is Tutor t)
+                MainView.Instance.NavigateTo(new ReceivedRequestsView(t));
+        }
+
+        private void btnProfile_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var user = CurrentSessionService.CurrentUser;
+                if (user != null)
+                {
+                    MainView.Instance.NavigateTo(new ProfileView(user));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur d'ouverture du profil : {ex.Message}");
+            }
         }
 
         private void btnAppointments_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Disponible bientôt.");
+            MessageBox.Show("Le calendrier des rendez-vous sera disponible bientôt.");
         }
 
         private void btnBecomeTutor_Click(object sender, RoutedEventArgs e)
