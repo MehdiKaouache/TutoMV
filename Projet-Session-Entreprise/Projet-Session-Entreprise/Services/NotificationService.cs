@@ -8,7 +8,7 @@ namespace Projet_Session_Entreprise.Services
 {
     public static class NotificationService
     {
-        // Show a MessageBox summarizing accepted appointments for a student
+        
         public static void ShowAcceptedAppointmentsForStudent(Student student, IEnumerable<Appointment> appointments, IEnumerable<Tutor> tutors)
         {
             if (student == null) return;
