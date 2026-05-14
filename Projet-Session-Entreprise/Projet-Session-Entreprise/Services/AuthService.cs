@@ -9,11 +9,14 @@ namespace Projet_Session_Entreprise.Services
         {
             using (var db = new AppDbContext())
             {
-                var student = await db.Students.FirstOrDefaultAsync(s => s.DA == da && s.Password == password);
-                if (student != null) return student;
+                // On cherche par DA seulement, puis on vérifie le mot de passe avec BCrypt
+                var student = await db.Students.FirstOrDefaultAsync(s => s.DA == da);
+                if (student != null && BCrypt.Net.BCrypt.Verify(password, student.Password))
+                    return student;
 
-                var tutor = await db.Tutors.FirstOrDefaultAsync(t => t.DA == da && t.Password == password);
-                if (tutor != null) return tutor;
+                var tutor = await db.Tutors.FirstOrDefaultAsync(t => t.DA == da);
+                if (tutor != null && BCrypt.Net.BCrypt.Verify(password, tutor.Password))
+                    return tutor;
 
                 return null;
             }
@@ -26,6 +29,8 @@ namespace Projet_Session_Entreprise.Services
                 bool exists = await db.Students.AnyAsync(u => u.DA == da) || await db.Tutors.AnyAsync(u => u.DA == da);
                 if (exists) return false;
 
+                string motDePasseHashe = BCrypt.Net.BCrypt.HashPassword(password);
+
                 if (role == "Etudiant")
                 {
                     db.Students.Add(new Student
@@ -33,7 +38,7 @@ namespace Projet_Session_Entreprise.Services
                         Nom = nom,
                         Prenom = prenom,
                         DA = da,
-                        Password = password,
+                        Password = motDePasseHashe,
                         AverageGrade = gpa,
                         Role = "Étudiant"
                     });
@@ -45,7 +50,7 @@ namespace Projet_Session_Entreprise.Services
                         Nom = nom,
                         Prenom = prenom,
                         DA = da,
-                        Password = password,
+                        Password = motDePasseHashe,
                         AverageGrade = gpa,
                         Role = "Tuteur",
                         IsValidated = false

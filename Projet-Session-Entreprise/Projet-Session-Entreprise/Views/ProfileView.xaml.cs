@@ -1,7 +1,4 @@
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.ViewModels;
@@ -18,24 +15,8 @@ namespace Projet_Session_Entreprise.Views
             _currentStudent = student;
             DataContext = new ProfileViewModel(student);
 
-            if (user is Tutor t)
+            this.Loaded += (sender, e) =>
             {
-                this.DataContext = t;
-                AvailabilityContainer.Visibility = Visibility.Visible;
-                colDispos.Width = new GridLength(350);
-                ctrlAvailability.Initialize(t);
-                LoadAppointments(t.Id, true);
-            }
-            else if (user is Student s)
-            {
-                _currentStudent = s;
-                this.DataContext = s;
-                AvailabilityContainer.Visibility = Visibility.Collapsed;
-                colDispos.Width = new GridLength(0);
-                LoadAppointments(s.Id, false);
-            }
-
-            this.Loaded += (sender, e) => {
                 if (_currentStudent != null) CheckAcceptedAppointmentsAndNotify();
             };
         }
@@ -46,10 +27,10 @@ namespace Projet_Session_Entreprise.Views
             DataContext = new ProfileViewModel(tutor);
         }
 
-        private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
+        private void SearchTutor_Click(object sender, RoutedEventArgs e)
         {
-            AjouterSlotArea.Visibility = Visibility.Visible;
-            btnShowAdd.Visibility = Visibility.Collapsed;
+            if (_currentStudent != null)
+                MainView.Instance.NavigateTo(new TutorListView(_currentStudent));
         }
 
         private void CheckAcceptedAppointmentsAndNotify()
@@ -65,23 +46,6 @@ namespace Projet_Session_Entreprise.Views
                 }
             }
             catch { }
-        }
-
-        private DateTime GetDateTimeAppointment() //pour retourner les dates en DateTime pour comparer les appointments avec leurs daates
-        {
-            string day = (cmbDay.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string time = (cmbTime.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-            //prends la date de today, check si c'est le même jours que l'user à choisi, sinon, va au next day et recommence.
-            //Ex: je pick mercredi prochain et on est jeudi, ça va parse les jours jusqu'a hit mercredi (donc +6 jours)
-            DateTime date = DateTime.Today;
-            while (date.ToString("dddd", new System.Globalization.CultureInfo("fr-CA")).ToLower() != day.ToLower())
-            {
-                date = date.AddDays(1);
-            }
-
-            TimeSpan ts = TimeSpan.Parse(time);
-            return date.Date.Add(ts);
         }
     }
 }
