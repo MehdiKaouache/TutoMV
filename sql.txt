@@ -27,50 +27,70 @@ CREATE TABLE Tutors (
     TotalRatings INT NOT NULL DEFAULT 0
 );
 
-CREATE TABLE Reviews (
-    Id INT AUTO_INCREMENT PRIMARY KEY,
-    TutorId INT,
-    Comment VARCHAR(255),
-    Rating INT,
-    FOREIGN KEY (TutorId) REFERENCES Tutors(Id)
-);
-
 CREATE TABLE Appointments (
     Id INT AUTO_INCREMENT PRIMARY KEY,
-    StudentId INT,
-    TutorId INT,
-    DateRDV DATETIME,
+    StudentId INT NOT NULL,
+    TutorId INT NOT NULL,
+    DateRDV DATETIME NOT NULL,
     Status VARCHAR(50) DEFAULT 'Pending',
     FOREIGN KEY (StudentId) REFERENCES Students(Id),
     FOREIGN KEY (TutorId) REFERENCES Tutors(Id)
 );
 
--- Fake students (DA fields numeric-only)
+CREATE TABLE CompletedAppointments (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    AppointmentId INT NOT NULL,
+    StudentId INT NOT NULL,
+    TutorId INT NOT NULL,
+    CompletedDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (AppointmentId) REFERENCES Appointments(Id),
+    FOREIGN KEY (StudentId) REFERENCES Students(Id),
+    FOREIGN KEY (TutorId) REFERENCES Tutors(Id),
+    UNIQUE (AppointmentId)
+);
+
+CREATE TABLE Reviews (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    CompletedAppointmentId INT NOT NULL,
+    TutorId INT NOT NULL,
+    StudentId INT NOT NULL,
+    Comment VARCHAR(255),
+    Rating INT NOT NULL,
+    FOREIGN KEY (CompletedAppointmentId) REFERENCES CompletedAppointments(Id),
+    FOREIGN KEY (TutorId) REFERENCES Tutors(Id),
+    FOREIGN KEY (StudentId) REFERENCES Students(Id),
+    CHECK (Rating >= 1 AND Rating <= 5),
+    UNIQUE (CompletedAppointmentId, StudentId)
+);
+
 INSERT INTO Students (DA, Nom, Prenom, Password, AverageGrade, Role) VALUES
 ('1001', 'Dupont', 'Alice', 'Password!23', 85.5, 'Student'),
 ('1002', 'Martin', 'Benoit', 'LetMeIn42', 72.3, 'Student'),
 ('1003', 'Nguyen', 'Clara', 'Clara2024#', 91.0, 'Student');
 
--- Fake tutors (DA fields numeric-only)
 INSERT INTO Tutors (Nom, Prenom, DA, Password, Subject, Availability, AverageGrade, IsValidated, Role, NumberOfRatings, TotalRatings) VALUES
 ('Leblanc', 'Sophie', '2001', 'TutorPass1', 'Mathematiques', 'Lundi,Mardi,Jeudi', 88.4, 1, 'Tutor', 10, 44),
 ('Rousseau', 'Marc', '2002', 'TutorPass2', 'Physique', 'Mercredi,Vendredi', 79.2, 1, 'Tutor', 5, 18),
 ('Khan', 'Amina', '2003', 'TutorPass3', 'Informatique', 'Mardi,Jeudi', 94.0, 0, 'Tutor', 0, 0);
 
--- Sample reviews (linked to tutors)
-INSERT INTO Reviews (TutorId, Comment, Rating) VALUES
-(1, 'Tres clair et patient.', 5),
-(1, 'Bonne explication des concepts.', 4),
-(2, 'Utile mais parfois presse.', 3);
-
--- Sample appointments (linked to students and tutors)
 INSERT INTO Appointments (StudentId, TutorId, DateRDV, Status) VALUES
 (1, 1, '2026-04-15 14:00:00', 'Accepté'),
 (2, 2, '2026-05-10 10:30:00', 'Pending'),
 (3, 1, '2026-06-01 09:00:00', 'Refusé');
 
--- Advance AUTO_INCREMENT counters
+INSERT INTO CompletedAppointments (AppointmentId, StudentId, TutorId) VALUES
+(1, 1, 1);
+
+INSERT INTO Reviews (CompletedAppointmentId, TutorId, StudentId, Comment, Rating) VALUES
+(1, 1, 1, 'Tres clair et patient.', 5);
+
+UPDATE Tutors
+SET NumberOfRatings = NumberOfRatings + 1,
+    TotalRatings = TotalRatings + 5
+WHERE Id = 1;
+
 ALTER TABLE Students AUTO_INCREMENT = 4;
 ALTER TABLE Tutors AUTO_INCREMENT = 4;
-ALTER TABLE Reviews AUTO_INCREMENT = 4;
 ALTER TABLE Appointments AUTO_INCREMENT = 4;
+ALTER TABLE CompletedAppointments AUTO_INCREMENT = 2;
+ALTER TABLE Reviews AUTO_INCREMENT = 2;

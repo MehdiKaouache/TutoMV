@@ -11,6 +11,10 @@ namespace Projet_Session_Entreprise
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<TutorSlot> TutorSlots { get; set; }
 
+        public DbSet<CompletedAppointment> CompletedAppointments { get; set; }
+        
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectionString = "Server=127.0.0.1;Port=3306;Database=schooldb;User=root;Password=1234;";
