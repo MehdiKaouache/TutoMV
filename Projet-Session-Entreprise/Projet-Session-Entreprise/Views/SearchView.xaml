@@ -11,6 +11,7 @@
         <TextBlock Text="Recherche de tuteurs" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}" Margin="0,0,0,20"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,25">
+            <ComboBox Width="120" ItemsSource="{Binding FilterChoices}" SelectedItem="{Binding SelectedFilter}" Margin="0,0,15,0"/>
             <TextBox Width="400" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,15,0"/>
             <Button Content="Rechercher" Style="{StaticResource ActionButton}" Width="150" Command="{Binding RechercherCommand}"/>
         </StackPanel>
