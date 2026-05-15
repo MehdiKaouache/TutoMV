@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Projet_Session_Entreprise.Tests.ViewModels
 {
-    public class SearchViewModelTests
+    public class TutorListViewModelTests
     {
         [Fact]
         public async Task RechercherAsync_TexteRecherche_AppelleRepositoryEtRemplitResultats()
@@ -16,7 +16,7 @@ namespace Projet_Session_Entreprise.Tests.ViewModels
             var mockRepo = new Mock<ITutorRepository>();
             var tutors = new List<Tutor> { new Tutor { Nom = "John" } };
             mockRepo.Setup(r => r.SearchTutorsAsync("John")).ReturnsAsync(tutors);
-            var vm = new SearchViewModel(mockRepo.Object);
+            var vm = new TutorListViewModel(null, mockRepo.Object);
             vm.SearchText = "John";
             vm.SelectedFilter = "Nom";
 

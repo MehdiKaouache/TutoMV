@@ -36,7 +36,9 @@ namespace Projet_Session_Entreprise.Views
         private void btnManageRequests_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentSessionService.CurrentUser is Tutor t)
+            {
                 MainView.Instance.NavigateTo(new ReceivedRequestsView(t));
+            }
         }
 
         private void btnAppointments_Click(object sender, RoutedEventArgs e)
@@ -48,14 +50,26 @@ namespace Projet_Session_Entreprise.Views
         {
             if (CurrentSessionService.CurrentUser is Student s)
             {
-                var tempTutor = new Tutor { DA = s.DA, Nom = s.Nom, Prenom = s.Prenom, Password = s.Password };
+                var tempTutor = new Tutor
+                {
+                    DA = s.DA,
+                    Nom = s.Nom,
+                    Prenom = s.Prenom,
+                    Password = s.Password
+                };
                 MainView.Instance.NavigateTo(new RequeteRoleTuteurView(tempTutor));
             }
+        }
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            MainView.Instance.NavigateTo(new SettingsView());
         }
 
         private void btnLogInOrOut(object sender, RoutedEventArgs e)
         {
             CurrentSessionService.CurrentUser = null;
+            MainView.Instance.UpdateNavigationMode();
             MainView.Instance.NavigateTo(new LoginView());
         }
     }

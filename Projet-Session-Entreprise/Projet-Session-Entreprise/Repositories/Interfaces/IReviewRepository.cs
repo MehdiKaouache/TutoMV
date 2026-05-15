@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 
 namespace Projet_Session_Entreprise.Repositories.Interfaces
 {
-    public interface IReviewRepository : IRepository<Review>
+    public interface IReviewRepository
     {
         Task<IEnumerable<Review>> GetByTutorIdAsync(int tutorId);
+        Task AddAsync(Review review);
+        Task SaveChangesAsync();
     }
 }

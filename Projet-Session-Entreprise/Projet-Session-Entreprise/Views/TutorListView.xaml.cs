@@ -1,57 +1,33 @@
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
-using System.Threading.Tasks;
+using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Services;
 
 namespace Projet_Session_Entreprise.Views
 {
     public partial class TutorListView : UserControl
     {
+        private readonly Student? _currentStudent;
+
         public TutorListView()
         {
             InitializeComponent();
-            _ = LoadTutorsAsync();
+            this.DataContext = new TutorListViewModel();
         }
 
-        private async Task LoadTutorsAsync()
+        public TutorListView(Student student)
         {
-            try
-            {
-                if (App.TutorRepo == null) return;
-
-                var tutors = await App.TutorRepo.GetAllAsync();
-                dgTutors.ItemsSource = tutors.ToList();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erreur de chargement : " + ex.Message);
-            }
-        }
-
-        private async void BtnSearch_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                string query = txtSearch.Text.Trim();
-
-                var results = string.IsNullOrWhiteSpace(query)
-                    ? await App.TutorRepo.GetAllAsync()
-                    : await App.TutorRepo.SearchTutorsAsync(query);
-
-                dgTutors.ItemsSource = results.ToList();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erreur recherche : " + ex.Message);
-            }
+            InitializeComponent();
+            _currentStudent = student;
+            this.DataContext = new TutorListViewModel(student);
         }
 
         private void Reserve_Click(object sender, RoutedEventArgs e)
         {
             var tutor = (sender as Button)?.DataContext as Tutor;
-            var student = Projet_Session_Entreprise.Services.CurrentSessionService.CurrentUser as Student;
+            var student = _currentStudent ?? CurrentSessionService.CurrentUser as Student;
 
             if (tutor != null && student != null)
             {
@@ -59,7 +35,7 @@ namespace Projet_Session_Entreprise.Views
             }
             else if (student == null)
             {
-                MessageBox.Show("Veuillez vous connecter en tant qu'étudiant.");
+                MessageBox.Show("Veuillez vous connecter en tant qu'étudiant pour réserver.");
             }
         }
     }

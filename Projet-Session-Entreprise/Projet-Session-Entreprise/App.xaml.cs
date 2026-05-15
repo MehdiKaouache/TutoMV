@@ -15,6 +15,7 @@ namespace Projet_Session_Entreprise
         public static ITutorRepository TutorRepo { get; private set; } = null!;
         public static IStudentRepository StudentRepo { get; private set; } = null!;
         public static IAppointmentRepository AppointmentRepo { get; private set; } = null!;
+        public static IReviewRepository ReviewRepo { get; private set; } = null!;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -24,6 +25,7 @@ namespace Projet_Session_Entreprise
             TutorRepo = new TutorRepository(context);
             StudentRepo = new StudentRepository(context);
             AppointmentRepo = new AppointmentRepository(context);
+            ReviewRepo = new ReviewRepository(context); 
 
             AuthService = new AuthService(StudentRepo, TutorRepo);
             TutorService = new TutorService(TutorRepo);

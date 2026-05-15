@@ -8,6 +8,7 @@ namespace Projet_Session_Entreprise.Views
     public partial class ProfileView : UserControl
     {
         private ProfileViewModel? _viewModel;
+        private Student? _currentStudent;
 
         public ProfileView(object user)
         {
@@ -15,9 +16,15 @@ namespace Projet_Session_Entreprise.Views
 
             if (user is Student s)
             {
+                _currentStudent = s;
                 _viewModel = new ProfileViewModel(s);
                 AvailabilityContainer.Visibility = Visibility.Collapsed;
                 colDispos.Width = new GridLength(0);
+
+                this.Loaded += (sender, e) =>
+                {
+                    _ = App.NotificationService.CheckAndShowAcceptedAppointmentsAsync(s);
+                };
             }
             else if (user is Tutor t)
             {
@@ -34,6 +41,14 @@ namespace Projet_Session_Entreprise.Views
                 {
                     dgAppointments.ItemsSource = _viewModel.MyAppointments;
                 }
+            }
+        }
+
+        private void SearchTutor_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentStudent != null)
+            {
+                MainView.Instance.NavigateTo(new TutorListView(_currentStudent));
             }
         }
     }

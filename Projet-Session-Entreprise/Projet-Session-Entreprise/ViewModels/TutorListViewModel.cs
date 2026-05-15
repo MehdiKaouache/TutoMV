@@ -8,26 +8,36 @@ using System.Threading.Tasks;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
-    public partial class SearchViewModel : ObservableObject
+    public partial class TutorListViewModel : ObservableObject
     {
         private readonly ITutorRepository _tutorRepo;
+        private Student? _currentStudent;
 
         [ObservableProperty] private string _searchText = "";
         [ObservableProperty] private string _selectedFilter = "Nom";
 
-        public ObservableCollection<Tutor> Results { get; set; } = new ObservableCollection<Tutor>();
+        public ObservableCollection<string> FilterChoices { get; } = new() { "Nom", "Matière" };
+        public ObservableCollection<Tutor> Results { get; set; } = new();
 
-        public SearchViewModel(ITutorRepository tutorRepo)
+        public TutorListViewModel() : this(null, App.TutorRepo) { }
+
+        public TutorListViewModel(Student? student) : this(student, App.TutorRepo) { }
+
+        public TutorListViewModel(Student? student, ITutorRepository tutorRepo)
         {
+            _currentStudent = student;
             _tutorRepo = tutorRepo;
             _ = InitialLoadAsync();
         }
 
         private async Task InitialLoadAsync()
         {
-            var tuteurs = await _tutorRepo.GetAllAsync();
+            var tutors = await _tutorRepo.GetAllAsync();
             Results.Clear();
-            foreach (var t in tuteurs) Results.Add(t);
+            foreach (var t in tutors)
+            {
+                Results.Add(t);
+            }
         }
 
         [RelayCommand]
@@ -44,7 +54,10 @@ namespace Projet_Session_Entreprise.ViewModels
                 : await _tutorRepo.SearchTutorsAsync(SearchText);
 
             Results.Clear();
-            foreach (var t in results) Results.Add(t);
+            foreach (var t in results)
+            {
+                Results.Add(t);
+            }
         }
     }
 }
