@@ -5,17 +5,30 @@ namespace Projet_Session_Entreprise.Services
 {
     public class AuthService
     {
+        private bool MotDePasseValide(string password, string hash)
+        {
+            try
+            {
+                return BCrypt.Net.BCrypt.Verify(password, hash);
+            }
+            catch (BCrypt.Net.SaltParseException)
+            {
+                // Ancien mot de passe non hashé ou invalide en BD.
+                return false;
+            }
+        }
+
         public async Task<object?> LoginAsync(string da, string password)
         {
             using (var db = new AppDbContext())
             {
                 // On cherche par DA seulement, puis on vérifie le mot de passe avec BCrypt
                 var student = await db.Students.FirstOrDefaultAsync(s => s.DA == da);
-                if (student != null && BCrypt.Net.BCrypt.Verify(password, student.Password))
+                if (student != null && MotDePasseValide(password, student.Password))
                     return student;
 
                 var tutor = await db.Tutors.FirstOrDefaultAsync(t => t.DA == da);
-                if (tutor != null && BCrypt.Net.BCrypt.Verify(password, tutor.Password))
+                if (tutor != null && MotDePasseValide(password, tutor.Password))
                     return tutor;
 
                 return null;
