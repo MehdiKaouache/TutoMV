@@ -17,7 +17,9 @@ namespace Projet_Session_Entreprise.Views
         {
             InitializeComponent();
             _currentStudent = student;
-            DataContext = new ProfileViewModel(student);
+            var dc = new ProfileViewModel(student);
+            DataContext = dc;
+            dgAppointments.ItemsSource = dc.MyAppointments;
 
             this.Loaded += (sender, e) => {
                 if (_currentStudent != null) CheckAcceptedAppointmentsAndNotify();
@@ -28,7 +30,9 @@ namespace Projet_Session_Entreprise.Views
         {
             InitializeComponent();
             _currentTutor = tutor;
-            DataContext = new ProfileViewModel(tutor);
+            var dc = new ProfileViewModel(tutor);
+            DataContext = dc;
+            dgAppointments.ItemsSource = dc.MyAppointments;
 
             this.Loaded += (sender, e) => {
                 if (_currentTutor != null) CheckAcceptedAppointmentsAndNotify();
