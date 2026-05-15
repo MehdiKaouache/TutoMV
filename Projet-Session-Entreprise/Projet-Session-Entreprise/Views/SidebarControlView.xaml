@@ -14,18 +14,18 @@
         </StackPanel>
         
         <StackPanel Grid.Row="1" Margin="15,0" VerticalAlignment="Top">
-            <Button Content="Tableau de bord" Click="btnHome_Click" Style="{StaticResource MenuButton}"/>
-            <Button x:Name="btnSearch" Content="Rechercher un tuteur" Click="btnSearch_Click" Style="{StaticResource MenuButton}"/>
-            <Button x:Name="btnBecomeTutor" Content="Devenir Tuteur" Click="btnBecomeTutor_Click" Style="{StaticResource MenuButton}"/>
-            <Button x:Name="btnManageRequests" Content="Gérer les demandes" Click="btnManageRequests_Click" Style="{StaticResource MenuButton}" Visibility="Collapsed"/>
-            <Button Content="Mes rendez-vous" Click="btnAppointments_Click" Style="{StaticResource MenuButton}"/>
-            <Button Content="Mon Profil" Click="btnProfile_Click" Style="{StaticResource MenuButton}"/>
+            <Button Content="Tableau de bord" Click="btnHome_Click" Style="{DynamicResource MenuButton}"/>
+            <Button x:Name="btnSearch" Content="Rechercher un tuteur" Click="btnSearch_Click" Style="{DynamicResource MenuButton}"/>
+            <Button x:Name="btnBecomeTutor" Content="Devenir Tuteur" Click="btnBecomeTutor_Click" Style="{DynamicResource MenuButton}"/>
+            <Button x:Name="btnManageRequests" Content="Gérer les demandes" Click="btnManageRequests_Click" Style="{DynamicResource MenuButton}" Visibility="Collapsed"/>
+            <Button Content="Mes rendez-vous" Click="btnAppointments_Click" Style="{DynamicResource MenuButton}"/>
+            <Button Content="Mon Profil" Click="btnProfile_Click" Style="{DynamicResource MenuButton}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Margin="15,0,15,30" VerticalAlignment="Bottom">
 
             <Button Content="Changer de thème"
-                    Style="{StaticResource ActionButton}"
+                    Style="{DynamicResource ActionButton}"
                     Width="200"
                     Height="40"
                     Margin="0,0,0,10"
@@ -33,7 +33,7 @@
 
             <Separator Background="{DynamicResource BorderColor}" Margin="0,0,0,20"/>
 
-            <Button Content="Déconnexion" Click="btnLogInOrOut" Style="{StaticResource MenuButton}" Foreground="{DynamicResource DangerRed}"/>
+            <Button Content="Déconnexion" Click="btnLogInOrOut" Style="{DynamicResource MenuButton}" Foreground="{DynamicResource DangerRed}"/>
         </StackPanel>
 
     </Grid>

@@ -43,10 +43,10 @@
                  ItemsSource="{Binding Appointments}" 
                  Background="Transparent" 
                  BorderThickness="0"
-                 ItemContainerStyle="{StaticResource NoSelectionVisualsStyle}">
+                 ItemContainerStyle="{DynamicResource NoSelectionVisualsStyle}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15" Width="600" HorizontalAlignment="Left">
+                    <Border Style="{DynamicResource CardStyle}" Margin="0,0,0,15" Width="600" HorizontalAlignment="Left">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -59,10 +59,10 @@
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                <Button Content="Accepter" Style="{StaticResource ActionButton}" Width="100" Height="35" Margin="0,0,10,0"
+                                <Button Content="Accepter" Style="{DynamicResource ActionButton}" Width="100" Height="35" Margin="0,0,10,0"
                                         Command="{Binding DataContext.AccepterCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}"/>
-                                <Button Content="Refuser" Style="{StaticResource ActionButton}" Background="{DynamicResource DangerRed}" Width="100" Height="35"
+                                <Button Content="Refuser" Style="{DynamicResource ActionButton}" Background="{DynamicResource DangerRed}" Width="100" Height="35"
                                         Command="{Binding DataContext.RefuserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}"/>
                             </StackPanel>

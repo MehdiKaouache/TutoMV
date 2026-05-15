@@ -1,11 +1,11 @@
 <UserControl x:Class="Projet_Session_Entreprise.Views.TutorAvailabilityControlView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Border Style="{StaticResource CardStyle}">
+    <Border Style="{DynamicResource CardStyle}">
         <StackPanel>
             <StackPanel Margin="0,0,0,20">
-                <TextBlock Text="Disponibilités" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}"/>
-                <TextBlock Text="Vos créneaux hebdomadaires" Foreground="{StaticResource SubText}" FontSize="12" Margin="0,4,0,0"/>
+                <TextBlock Text="Disponibilités" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource PrimaryMauve}"/>
+                <TextBlock Text="Vos créneaux hebdomadaires" Foreground="{DynamicResource SubText}" FontSize="12" Margin="0,4,0,0"/>
             </StackPanel>
 
             <ScrollViewer MaxHeight="280" VerticalScrollBarVisibility="Auto" Margin="0,0,0,15">
@@ -20,14 +20,14 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Background="#252545" CornerRadius="6" Padding="8,4" Margin="0,0,12,0">
-                                        <TextBlock Text="{Binding JourFrancais}" Foreground="{StaticResource PrimaryMauve}" FontWeight="Bold" FontSize="13"/>
+                                        <TextBlock Text="{Binding JourFrancais}" Foreground="{DynamicResource PrimaryMauve}" FontWeight="Bold" FontSize="13"/>
                                     </Border>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                         <TextBlock Text="{Binding StartTime, StringFormat={}{0:hh\\:mm}}" Foreground="White" FontSize="14"/>
                                         <TextBlock Text=" → " Foreground="{StaticResource SubText}" FontSize="14"/>
                                         <TextBlock Text="{Binding EndTime, StringFormat={}{0:hh\\:mm}}" Foreground="White" FontSize="14"/>
                                     </StackPanel>
-                                    <Button Content="✕" Click="BtnDeleteSlot_Click" Grid.Column="2" Foreground="{StaticResource DangerRed}" Background="Transparent" BorderThickness="0" Cursor="Hand" FontWeight="Bold"/>
+                                    <Button Content="✕" Click="BtnDeleteSlot_Click" Grid.Column="2" Foreground="{DynamicResource DangerRed}" Background="Transparent" BorderThickness="0" Cursor="Hand" FontWeight="Bold"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>
@@ -45,7 +45,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0" Margin="0,0,5,0">
-                                <TextBlock Text="Jour" Foreground="{StaticResource SubText}" FontSize="11" Margin="0,0,0,5"/>
+                                <TextBlock Text="Jour" Foreground="{DynamicResource SubText}" FontSize="11" Margin="0,0,0,5"/>
                                 <ComboBox x:Name="cmbDay">
                                     <ComboBoxItem Content="Lundi" IsSelected="True"/>
                                     <ComboBoxItem Content="Mardi"/>
@@ -55,7 +55,7 @@
                                 </ComboBox>
                             </StackPanel>
                             <StackPanel Grid.Column="1" Margin="0,0,5,0">
-                                <TextBlock Text="Début" Foreground="{StaticResource SubText}" FontSize="11" Margin="0,0,0,5"/>
+                                <TextBlock Text="Début" Foreground="{DynamicResource SubText}" FontSize="11" Margin="0,0,0,5"/>
                                 <ComboBox x:Name="cmbTime">
                                     <ComboBoxItem Content="08:00" IsSelected="True"/>
                                     <ComboBoxItem Content="09:00"/>
@@ -70,7 +70,7 @@
                                 </ComboBox>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Fin" Foreground="{StaticResource SubText}" FontSize="11" Margin="0,0,0,5"/>
+                                <TextBlock Text="Fin" Foreground="{DynamicResource SubText}" FontSize="11" Margin="0,0,0,5"/>
                                 <ComboBox x:Name="cmbEndTime">
                                     <ComboBoxItem Content="09:00"/>
                                     <ComboBoxItem Content="10:00" IsSelected="True"/>
@@ -85,20 +85,20 @@
                                 </ComboBox>
                             </StackPanel>
                         </Grid>
-                        <TextBlock x:Name="lblSlotError" Foreground="{StaticResource DangerRed}" FontSize="12" Margin="0,0,0,8" Visibility="Collapsed"/>
+                        <TextBlock x:Name="lblSlotError" Foreground="{DynamicResource DangerRed}" FontSize="12" Margin="0,0,0,8" Visibility="Collapsed"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="10"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="Confirmer" Style="{StaticResource ActionButton}" Height="35" Click="BtnSaveNewSlot_Click"/>
-                            <Button Grid.Column="2" Content="Annuler" Style="{StaticResource ActionButton}" Height="35" Background="#2A2A2A" Click="BtnCancelAdd_Click"/>
+                            <Button Grid.Column="0" Content="Confirmer" Style="{DynamicResource ActionButton}" Height="35" Click="BtnSaveNewSlot_Click"/>
+                            <Button Grid.Column="2" Content="Annuler" Style="{DynamicResource ActionButton}" Height="35" Background="#2A2A2A" Click="BtnCancelAdd_Click"/>
                         </Grid>
                     </StackPanel>
                 </Border>
             </StackPanel>
-            <Button x:Name="btnShowAdd" Content="+ Ajouter un créneau" Style="{StaticResource ActionButton}" Click="BtnShowAdd_Click"/>
+            <Button x:Name="btnShowAdd" Content="+ Ajouter un créneau" Style="{DynamicResource ActionButton}" Click="BtnShowAdd_Click"/>
         </StackPanel>
     </Border>
 </UserControl>

@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="{StaticResource MainBG}">
     <Grid>
-        <Border Style="{StaticResource CardStyle}" Width="480" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Border Style="{DynamicResource CardStyle}" Width="480" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel>
-                <TextBlock x:Name="lblTitle" Text="Inscription" FontSize="30" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                <TextBlock Text="Remplissez vos informations pour continuer" Foreground="{StaticResource SubText}" HorizontalAlignment="Center" Margin="0,0,0,30"/>
+                <TextBlock x:Name="lblTitle" Text="Inscription" FontSize="30" FontWeight="Bold" Foreground="{DynamicResource PrimaryMauve}" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                <TextBlock Text="Remplissez vos informations pour continuer" Foreground="{DynamicResource SubText}" HorizontalAlignment="Center" Margin="0,0,0,30"/>
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -14,26 +14,26 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                        <TextBlock Text="Nom" Foreground="{StaticResource SubText}" Margin="5,0,0,5"/>
+                        <TextBlock Text="Nom" Foreground="{DynamicResource SubText}" Margin="5,0,0,5"/>
                         <TextBox x:Name="txtName"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
-                        <TextBlock Text="Prénom" Foreground="{StaticResource SubText}" Margin="5,0,0,5"/>
+                        <TextBlock Text="Prénom" Foreground="{DynamicResource SubText}" Margin="5,0,0,5"/>
                         <TextBox x:Name="txtFirstName"/>
                     </StackPanel>
                 </Grid>
 
-                <TextBlock Text="Numéro de DA (7 chiffres)" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <TextBlock Text="Numéro de DA (7 chiffres)" Foreground="{DynamicResource SubText}" Margin="5,15,0,5"/>
                 <TextBox x:Name="txtDA"/>
 
-                <TextBlock Text="Moyenne générale (%)" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <TextBlock Text="Moyenne générale (%)" Foreground="{DynamicResource SubText}" Margin="5,15,0,5"/>
                 <TextBox x:Name="txtGPA"/>
 
-                <TextBlock Text="Mot de passe" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <TextBlock Text="Mot de passe" Foreground="{DynamicResource SubText}" Margin="5,15,0,5"/>
                 <PasswordBox x:Name="txtPassword"/>
 
-                <Button Content="Créer mon compte" Style="{StaticResource ActionButton}" Margin="0,30,0,10" Click="btnSignUp_Click"/>
-                <Button Content="Annuler" Style="{StaticResource LinkButton}" Click="btnCancel_Click"/>
+                <Button Content="Créer mon compte" Style="{DynamicResource ActionButton}" Margin="0,30,0,10" Click="btnSignUp_Click"/>
+                <Button Content="Annuler" Style="{DynamicResource LinkButton}" Click="btnCancel_Click"/>
             </StackPanel>
         </Border>
     </Grid>
