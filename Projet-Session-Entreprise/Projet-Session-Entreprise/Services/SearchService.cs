@@ -1,27 +1,35 @@
-using Microsoft.EntityFrameworkCore;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Repositories.Interfaces;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Projet_Session_Entreprise.Services
 {
     public class SearchService
     {
-        private readonly AppDbContext _db;
+        private readonly ITutorRepository _tutorRepo;
 
-        public SearchService(AppDbContext db) => _db = db;
-
-        public async Task<List<Tutor>> SearchByNameAsync(string nom)
+        public SearchService(ITutorRepository tutorRepo)
         {
-            return await _db.Tutors
-                .Where(t => t.IsValidated &&
-                       (t.Nom.ToLower().Contains(nom.ToLower()) || t.Prenom.ToLower().Contains(nom.ToLower())))
-                .ToListAsync();
+            _tutorRepo = tutorRepo;
         }
 
-        public async Task<List<Tutor>> SearchBySubjectAsync(string matiere)
+        public async Task<IEnumerable<Tutor>> SearchByNameAsync(string nom)
         {
-            return await _db.Tutors
-                .Where(t => t.IsValidated && t.Subject.ToLower().Contains(matiere.ToLower()))
-                .ToListAsync();
+            var tutors = await _tutorRepo.SearchTutorsAsync(nom);
+            return tutors;
+        }
+
+        public async Task<IEnumerable<Tutor>> SearchBySubjectAsync(string matiere)
+        {
+            var tutors = await _tutorRepo.GetBySubjectAsync(matiere);
+            return tutors;
+        }
+
+        public async Task<IEnumerable<Tutor>> GetAllTutorsAsync()
+        {
+            return await _tutorRepo.GetAllAsync();
         }
     }
 }

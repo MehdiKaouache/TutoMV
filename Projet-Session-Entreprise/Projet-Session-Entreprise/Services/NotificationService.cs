@@ -2,27 +2,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Threading.Tasks;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Repositories.Interfaces;
 
 namespace Projet_Session_Entreprise.Services
 {
-    public static class NotificationService
+    public class NotificationService
     {
-        
-        public static void ShowAcceptedAppointmentsForStudent(Student student, IEnumerable<Appointment> appointments, IEnumerable<Tutor> tutors)
+        private readonly IAppointmentRepository _appointmentRepo;
+        private readonly ITutorRepository _tutorRepo;
+
+        public NotificationService(IAppointmentRepository appointmentRepo, ITutorRepository tutorRepo)
+        {
+            _appointmentRepo = appointmentRepo;
+            _tutorRepo = tutorRepo;
+        }
+
+        public async Task CheckAndShowAcceptedAppointmentsAsync(Student student)
         {
             if (student == null) return;
 
-            var acceptedStatuses = new[] { "Accepté", "Acceptée", "Accepted", "Accept", "Accepte", "Approved", "Approuvé" };
+            var appointments = await _appointmentRepo.GetByStudentIdAsync(student.Id);
+            var acceptedStatuses = new[] { "Accepté", "Acceptée", "Accepted", "Approuvé" };
 
-            var accepted = appointments.Where(a => a.StudentId == student.Id && acceptedStatuses.Contains(a.Status)).ToList();
+            var accepted = appointments.Where(a => acceptedStatuses.Contains(a.Status)).ToList();
             if (!accepted.Any()) return;
 
             var sb = new StringBuilder();
             sb.AppendLine("Vous avez des rendez-vous acceptés :");
+
             foreach (var a in accepted)
             {
-                var tutor = tutors.FirstOrDefault(t => t.Id == a.TutorId);
+                var tutor = await _tutorRepo.GetByIdAsync(a.TutorId);
                 string tutorName = tutor != null ? $"{tutor.Nom} {tutor.Prenom}" : "Enseignant inconnu";
                 sb.AppendLine($"- {a.DateRDV:g} avec {tutorName}");
             }

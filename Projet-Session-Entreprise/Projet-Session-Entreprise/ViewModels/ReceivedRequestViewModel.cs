@@ -1,75 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
-using System.Windows;
 using Projet_Session_Entreprise.Models;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Windows;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
     public partial class ReceivedRequestViewModel : ObservableObject
     {
         private readonly Tutor _tutor;
-
         public ObservableCollection<Appointment> Appointments { get; set; } = new();
 
         public ReceivedRequestViewModel(Tutor tutor)
         {
             _tutor = tutor;
-            LoadAppointments();
+            _ = LoadAppointmentsAsync();
         }
 
-        private void LoadAppointments()
+        private async Task LoadAppointmentsAsync()
         {
-            using (var db = new AppDbContext())
-            {
-                var list = db.Appointments
-                             .Where(a => a.TutorId == _tutor.Id && a.Status == "En attente")
-                             .ToList();
+            Appointments.Clear();
+            var requests = await App.AppointmentRepo.GetByTutorIdAsync(_tutor.Id);
 
-                Appointments.Clear();
-                foreach (var a in list)
+            if (requests != null)
+            {
+                foreach (var req in requests.Where(a => a.Status == "En attente"))
                 {
-                    Appointments.Add(a);
+                    Appointments.Add(req);
                 }
             }
         }
 
         [RelayCommand]
-        private void Accepter(Appointment appointment)
+        private async Task Accepter(Appointment appointment)
         {
-            using (var db = new AppDbContext())
-            {
-                var a = db.Appointments.Find(appointment.Id);
-                if (a != null)
-                {
-                    a.Status = "Accepté";
-                    db.SaveChanges();
-                    MessageBox.Show("Rendez-vous accepté !");
-                }
-            }
-            LoadAppointments();
+            appointment.Status = "Accepté";
+            App.AppointmentRepo.Update(appointment);
+            await App.AppointmentRepo.SaveChangesAsync();
+            Appointments.Remove(appointment);
+            MessageBox.Show("Rendez-vous accepté !");
         }
 
         [RelayCommand]
-        private void Refuser(Appointment appointment)
+        private async Task Refuser(Appointment appointment)
         {
-            using (var db = new AppDbContext())
-            {
-                var a = db.Appointments.Find(appointment.Id);
-                if (a != null)
-                {
-                    a.Status = "Refusé";
-                    db.SaveChanges();
-                    MessageBox.Show("Rendez-vous refusé.");
-                }
-            }
-            LoadAppointments();
+            appointment.Status = "Refusé";
+            App.AppointmentRepo.Update(appointment);
+            await App.AppointmentRepo.SaveChangesAsync();
+            Appointments.Remove(appointment);
+            MessageBox.Show("Rendez-vous refusé.");
         }
     }
 }

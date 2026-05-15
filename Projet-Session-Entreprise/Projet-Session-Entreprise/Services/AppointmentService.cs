@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Data;
 
 namespace Projet_Session_Entreprise.Services
 {

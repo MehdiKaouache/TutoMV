@@ -37,9 +37,9 @@ namespace Projet_Session_Entreprise.Views
 
         private void btnExplore_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentSessionService.CurrentUser is Student s)
+            if (CurrentSessionService.CurrentUser is Student)
             {
-                MainView.Instance.NavigateTo(new TutorListView(s));
+                MainView.Instance.NavigateTo(new TutorListView());
             }
             else
             {

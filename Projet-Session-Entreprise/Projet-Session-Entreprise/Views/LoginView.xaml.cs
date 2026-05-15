@@ -21,8 +21,7 @@ namespace Projet_Session_Entreprise.Views
                 string da = txtDA.Text.Trim();
                 string password = txtPassword.Password.Trim();
 
-                var auth = new AuthService();
-                var user = await auth.LoginAsync(da, password);
+                var user = await App.AuthService.LoginAsync(da, password);
 
                 if (user != null)
                 {

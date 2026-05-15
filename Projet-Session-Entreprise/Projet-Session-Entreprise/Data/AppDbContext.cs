@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Projet_Session_Entreprise.Models;
 
-namespace Projet_Session_Entreprise
+namespace Projet_Session_Entreprise.Data
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext() { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
         public DbSet<Student> Students { get; set; }
         public DbSet<Tutor> Tutors { get; set; }
         public DbSet<Review> Reviews { get; set; }

@@ -1,10 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Projet_Session_Entreprise.Models;
+﻿using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Repositories.Interfaces;
+using Projet_Session_Entreprise.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace Projet_Session_Entreprise.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
+        private readonly IStudentRepository _studentRepo;
+        private readonly ITutorRepository _tutorRepo;
+
+        public AuthService(IStudentRepository studentRepo, ITutorRepository tutorRepo)
+        {
+            _studentRepo = studentRepo;
+            _tutorRepo = tutorRepo;
+        }
+
         private bool MotDePasseValide(string password, string hash)
         {
             try
@@ -13,66 +24,60 @@ namespace Projet_Session_Entreprise.Services
             }
             catch (BCrypt.Net.SaltParseException)
             {
-                // Ancien mot de passe non hashé ou invalide en BD.
                 return false;
             }
         }
 
-        public async Task<object?> LoginAsync(string da, string password)
+        public async Task<User?> LoginAsync(string da, string password)
         {
-            using (var db = new AppDbContext())
-            {
-                // On cherche par DA seulement, puis on vérifie le mot de passe avec BCrypt
-                var student = await db.Students.FirstOrDefaultAsync(s => s.DA == da);
-                if (student != null && MotDePasseValide(password, student.Password))
-                    return student;
+            var student = await _studentRepo.GetByDAAsync(da);
+            if (student != null && MotDePasseValide(password, student.Password))
+                return student;
 
-                var tutor = await db.Tutors.FirstOrDefaultAsync(t => t.DA == da);
-                if (tutor != null && MotDePasseValide(password, tutor.Password))
-                    return tutor;
+            var tutor = await _tutorRepo.GetByDAAsync(da);
+            if (tutor != null && MotDePasseValide(password, tutor.Password))
+                return tutor;
 
-                return null;
-            }
+            return null;
         }
 
         public async Task<bool> RegisterAsync(string nom, string prenom, string da, string role, string password, double gpa)
         {
-            using (var db = new AppDbContext())
+            var exists = await _studentRepo.GetByDAAsync(da) != null || await _tutorRepo.GetByDAAsync(da) != null;
+            if (exists) return false;
+
+            string motDePasseHashe = BCrypt.Net.BCrypt.HashPassword(password);
+
+            if (role == "Etudiant")
             {
-                bool exists = await db.Students.AnyAsync(u => u.DA == da) || await db.Tutors.AnyAsync(u => u.DA == da);
-                if (exists) return false;
-
-                string motDePasseHashe = BCrypt.Net.BCrypt.HashPassword(password);
-
-                if (role == "Etudiant")
+                await _studentRepo.AddAsync(new Student
                 {
-                    db.Students.Add(new Student
-                    {
-                        Nom = nom,
-                        Prenom = prenom,
-                        DA = da,
-                        Password = motDePasseHashe,
-                        AverageGrade = gpa,
-                        Role = "Étudiant"
-                    });
-                }
-                else
-                {
-                    db.Tutors.Add(new Tutor
-                    {
-                        Nom = nom,
-                        Prenom = prenom,
-                        DA = da,
-                        Password = motDePasseHashe,
-                        AverageGrade = gpa,
-                        Role = "Tuteur",
-                        IsValidated = false
-                    });
-                }
-
-                await db.SaveChangesAsync();
-                return true;
+                    Nom = nom,
+                    Prenom = prenom,
+                    DA = da,
+                    Password = motDePasseHashe,
+                    Role = "Étudiant",
+                    GPA = gpa
+                });
             }
+            else
+            {
+                await _tutorRepo.AddAsync(new Tutor
+                {
+                    Nom = nom,
+                    Prenom = prenom,
+                    DA = da,
+                    Password = motDePasseHashe,
+                    Role = "Tuteur",
+                    AverageGrade = gpa,
+                    Subject = "À définir",
+                    Availability = "À définir",
+                    IsValidated = false
+                });
+            }
+
+            await _studentRepo.SaveChangesAsync();
+            return true;
         }
     }
 }

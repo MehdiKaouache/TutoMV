@@ -1,51 +1,55 @@
 using System.Windows;
+using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class ProfileView : Window
+    public partial class ProfileView : UserControl
     {
+        private ProfileViewModel? _viewModel;
         private Student? _currentStudent;
 
-        public ProfileView(Student student)
+        public ProfileView(object user)
         {
             InitializeComponent();
-            _currentStudent = student;
-            DataContext = new ProfileViewModel(student);
 
-            this.Loaded += (sender, e) =>
+            if (user is Student s)
             {
-                if (_currentStudent != null) CheckAcceptedAppointmentsAndNotify();
-            };
-        }
+                _currentStudent = s;
+                _viewModel = new ProfileViewModel(s);
+                AvailabilityContainer.Visibility = Visibility.Collapsed;
+                colDispos.Width = new GridLength(0);
 
-        public ProfileView(Tutor tutor)
-        {
-            InitializeComponent();
-            DataContext = new ProfileViewModel(tutor);
+                this.Loaded += (sender, e) =>
+                {
+                    _ = App.NotificationService.CheckAndShowAcceptedAppointmentsAsync(s);
+                };
+            }
+            else if (user is Tutor t)
+            {
+                _viewModel = new ProfileViewModel(t);
+                AvailabilityContainer.Visibility = Visibility.Visible;
+                colDispos.Width = new GridLength(350);
+                ctrlAvailability.Initialize(t);
+            }
+
+            if (_viewModel != null)
+            {
+                this.DataContext = _viewModel;
+                if (dgAppointments != null)
+                {
+                    dgAppointments.ItemsSource = _viewModel.MyAppointments;
+                }
+            }
         }
 
         private void SearchTutor_Click(object sender, RoutedEventArgs e)
         {
             if (_currentStudent != null)
-                MainView.Instance.NavigateTo(new TutorListView(_currentStudent));
-        }
-
-        private void CheckAcceptedAppointmentsAndNotify()
-        {
-            if (_currentStudent == null) return;
-            try
             {
-                using (var db = new AppDbContext())
-                {
-                    var appts = db.Appointments.ToList();
-                    var tutors = db.Tutors.ToList();
-                    NotificationService.ShowAcceptedAppointmentsForStudent(_currentStudent, appts, tutors);
-                }
+                MainView.Instance.NavigateTo(new TutorListView(_currentStudent));
             }
-            catch { }
         }
     }
 }

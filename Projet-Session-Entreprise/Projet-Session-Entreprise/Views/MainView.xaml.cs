@@ -32,6 +32,11 @@ namespace Projet_Session_Entreprise.Views
                 LeftSidebar.Visibility = Visibility.Visible;
                 SidebarCol.Width = new GridLength(280);
                 LeftSidebar.UpdateMenu(CurrentSessionService.IsTutor);
+
+                if (CurrentSessionService.CurrentUser is Models.Student s)
+                {
+                    _ = App.NotificationService.CheckAndShowAcceptedAppointmentsAsync(s);
+                }
             }
             else
             {
