@@ -39,7 +39,7 @@ namespace Projet_Session_Entreprise.Views
             else if (CurrentSessionService.CurrentUser is Tutor t) new ProfileView(t).Show();
         }
 
-        private void btnProfile_Click(object sender, RoutedEventArgs e)
+      /*private void btnProfile_Click(object sender, RoutedEventArgs e)
         {
             // Do not reference a concrete MainWindow type.
             // Prefer the application's MainWindow if present, otherwise activate any open window.
@@ -67,7 +67,7 @@ namespace Projet_Session_Entreprise.Views
 
             // Fallback: open a safe entry point (login) if no window is available
             MainView.Instance.NavigateTo(new LoginView());
-        }
+        }*/
 
         private void btnManageRequests_Click(object sender, RoutedEventArgs e)
         {
@@ -80,9 +80,13 @@ namespace Projet_Session_Entreprise.Views
             try
             {
                 var user = CurrentSessionService.CurrentUser;
-                if (user != null)
+                if (user is Student s)
                 {
-                    MainView.Instance.NavigateTo(new ProfileView(user));
+                    new ProfileView(s).Show();
+                }
+                else if (user is Tutor t)
+                {
+                    new ProfileView(t).Show();
                 }
             }
             catch (Exception ex)

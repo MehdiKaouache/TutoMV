@@ -11,29 +11,13 @@ namespace Projet_Session_Entreprise.Views
     public partial class ProfileView : Window
     {
         private Student? _currentStudent;
+        private Tutor? _currentTutor;
 
         public ProfileView(Student student)
         {
             InitializeComponent();
             _currentStudent = student;
             DataContext = new ProfileViewModel(student);
-
-            if (user is Tutor t)
-            {
-                this.DataContext = t;
-                AvailabilityContainer.Visibility = Visibility.Visible;
-                colDispos.Width = new GridLength(350);
-                ctrlAvailability.Initialize(t);
-                LoadAppointments(t.Id, true);
-            }
-            else if (user is Student s)
-            {
-                _currentStudent = s;
-                this.DataContext = s;
-                AvailabilityContainer.Visibility = Visibility.Collapsed;
-                colDispos.Width = new GridLength(0);
-                LoadAppointments(s.Id, false);
-            }
 
             this.Loaded += (sender, e) => {
                 if (_currentStudent != null) CheckAcceptedAppointmentsAndNotify();
@@ -43,14 +27,19 @@ namespace Projet_Session_Entreprise.Views
         public ProfileView(Tutor tutor)
         {
             InitializeComponent();
+            _currentTutor = tutor;
             DataContext = new ProfileViewModel(tutor);
+
+            this.Loaded += (sender, e) => {
+                if (_currentTutor != null) CheckAcceptedAppointmentsAndNotify();
+            };
         }
 
-        private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
+        /*private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
         {
             AjouterSlotArea.Visibility = Visibility.Visible;
             btnShowAdd.Visibility = Visibility.Collapsed;
-        }
+        }*/
 
         private void CheckAcceptedAppointmentsAndNotify()
         {
@@ -67,7 +56,7 @@ namespace Projet_Session_Entreprise.Views
             catch { }
         }
 
-        private DateTime GetDateTimeAppointment() //pour retourner les dates en DateTime pour comparer les appointments avec leurs daates
+        /*private DateTime GetDateTimeAppointment() //pour retourner les dates en DateTime pour comparer les appointments avec leurs daates
         {
             string day = (cmbDay.SelectedItem as ComboBoxItem)?.Content.ToString();
             string time = (cmbTime.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -82,6 +71,6 @@ namespace Projet_Session_Entreprise.Views
 
             TimeSpan ts = TimeSpan.Parse(time);
             return date.Date.Add(ts);
-        }
+        }*/
     }
 }
