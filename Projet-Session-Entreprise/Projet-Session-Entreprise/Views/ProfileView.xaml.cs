@@ -1,8 +1,6 @@
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
@@ -37,12 +35,6 @@ namespace Projet_Session_Entreprise.Views
                     dgAppointments.ItemsSource = _viewModel.MyAppointments;
                 }
             }
-        }
-
-        private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
-        {
-            AjouterSlotArea.Visibility = Visibility.Visible;
-            btnShowAdd.Visibility = Visibility.Collapsed;
         }
     }
 }

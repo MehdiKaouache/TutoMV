@@ -22,19 +22,34 @@ namespace Projet_Session_Entreprise.ViewModels
         private async Task LoadAppointmentsAsync()
         {
             Appointments.Clear();
+            var requests = await App.AppointmentRepo.GetByTutorIdAsync(_tutor.Id);
+
+            if (requests != null)
+            {
+                foreach (var req in requests.Where(a => a.Status == "En attente"))
+                {
+                    Appointments.Add(req);
+                }
+            }
         }
 
         [RelayCommand]
-        private void Accepter(Appointment appointment)
+        private async Task Accepter(Appointment appointment)
         {
             appointment.Status = "Accepté";
+            App.AppointmentRepo.Update(appointment);
+            await App.AppointmentRepo.SaveChangesAsync();
+            Appointments.Remove(appointment);
             MessageBox.Show("Rendez-vous accepté !");
         }
 
         [RelayCommand]
-        private void Refuser(Appointment appointment)
+        private async Task Refuser(Appointment appointment)
         {
             appointment.Status = "Refusé";
+            App.AppointmentRepo.Update(appointment);
+            await App.AppointmentRepo.SaveChangesAsync();
+            Appointments.Remove(appointment);
             MessageBox.Show("Rendez-vous refusé.");
         }
     }

@@ -1,14 +1,13 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Projet_Session_Entreprise.Models;
-using System;
+using Projet_Session_Entreprise.Repositories.Interfaces;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
     public partial class ProfileViewModel : ObservableObject
     {
+        private readonly IAppointmentRepository _appointmentRepo;
         private Student? _student;
         private Tutor? _tutor;
 
@@ -18,71 +17,41 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private string _prenom = "";
         [ObservableProperty] private string _role = "";
 
-        public ObservableCollection<Appointment> MyAppointments { get; set; } = new ObservableCollection<Appointment>();
+        public ObservableCollection<Appointment> MyAppointments { get; set; } = new();
 
-        public ProfileViewModel(Student student)
+        public ProfileViewModel(Student student) : this(student, App.AppointmentRepo) { }
+        public ProfileViewModel(Tutor tutor) : this(tutor, App.AppointmentRepo) { }
+
+        public ProfileViewModel(Student student, IAppointmentRepository appointmentRepo)
         {
             _student = student;
-            _isTutor = false;
-            _dA = student.DA;
-            _nom = student.Nom;
-            _prenom = student.Prenom;
-            _role = student.Role;
+            _appointmentRepo = appointmentRepo;
+            _dA = student.DA; _nom = student.Nom; _prenom = student.Prenom; _role = student.Role;
             _ = LoadDataAsync();
         }
 
-        public ProfileViewModel(Tutor tutor)
+        public ProfileViewModel(Tutor tutor, IAppointmentRepository appointmentRepo)
         {
-            _tutor = tutor;
-            _isTutor = true;
-            _dA = tutor.DA;
-            _nom = tutor.Nom;
-            _prenom = tutor.Prenom;
-            _role = tutor.Role;
+            _tutor = tutor; _isTutor = true;
+            _appointmentRepo = appointmentRepo;
+            _dA = tutor.DA; _nom = tutor.Nom; _prenom = tutor.Prenom; _role = tutor.Role;
             _ = LoadDataAsync();
         }
 
         public async Task LoadDataAsync()
         {
-            try
+            MyAppointments.Clear();
+            var appointments = IsTutor ?
+                await _appointmentRepo.GetByTutorIdAsync(_tutor!.Id) :
+                await _appointmentRepo.GetByStudentIdAsync(_student!.Id);
+
+            if (appointments != null)
             {
-                MyAppointments.Clear();
-                System.Collections.Generic.IEnumerable<Appointment> appointments;
-
-                if (IsTutor && _tutor != null)
+                foreach (var a in appointments.OrderByDescending(x => x.DateRDV))
                 {
-                    appointments = await App.AppointmentRepo.GetByTutorIdAsync(_tutor.Id);
-                }
-                else if (_student != null)
-                {
-                    appointments = await App.AppointmentRepo.GetByStudentIdAsync(_student.Id);
-                }
-                else
-                {
-                    return;
-                }
-
-                if (appointments != null)
-                {
-                    foreach (var a in appointments.OrderByDescending(x => x.DateRDV))
-                    {
-                        MyAppointments.Add(a);
-                    }
+                    MyAppointments.Add(a);
                 }
             }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Erreur de chargement des rendez-vous : " + ex.Message);
-            }
-        }
-
-        public async Task<bool> AppointmentExistsAsync(DateTime date)
-        {
-            var appointments = IsTutor && _tutor != null
-                ? await App.AppointmentRepo.GetByTutorIdAsync(_tutor.Id)
-                : await App.AppointmentRepo.GetByStudentIdAsync(_student?.Id ?? 0);
-
-            return appointments != null && appointments.Any(a => a.DateRDV == date);
         }
     }
 }

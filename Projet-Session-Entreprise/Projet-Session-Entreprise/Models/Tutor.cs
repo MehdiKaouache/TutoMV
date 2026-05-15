@@ -3,18 +3,12 @@ using System.Collections.Generic;
 
 namespace Projet_Session_Entreprise.Models
 {
-    public class Tutor
+    public class Tutor : User
     {
-        public int Id { get; set; }
-        public string Nom { get; set; } = "";
-        public string Prenom { get; set; } = "";
-        public string DA { get; set; } = "";
-        public string Password { get; set; } = "";
         public string Subject { get; set; } = "";
         public string Availability { get; set; } = "";
         public double AverageGrade { get; set; } = 85.0;
         public bool IsValidated { get; set; } = false;
-        public string Role { get; set; } = "Tuteur";
         public List<Review> Reviews { get; set; } = new List<Review>();
         public int NumberOfRatings { get; set; } = 0;
         public int TotalRatings { get; set; } = 0;
