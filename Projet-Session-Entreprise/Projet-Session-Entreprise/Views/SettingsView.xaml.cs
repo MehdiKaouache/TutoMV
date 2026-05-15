@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
@@ -18,52 +18,51 @@ namespace Projet_Session_Entreprise.Views
         {
             string nouveauDA = txtNouveauDA.Text.Trim();
 
-            if (string.IsNullOrEmpty(nouveauDA))
+            if (string.IsNullOrWhiteSpace(nouveauDA))
             {
-                txtStatut.Text = "Le nouveau DA ne peut pas être vide.";
+                MessageBox.Show("Veuillez entrer un nouveau numéro DA.");
                 return;
             }
 
-            try
+            if (nouveauDA.Length != 7 || !nouveauDA.All(char.IsDigit))
             {
-                using (var db = new AppDbContext())
+                MessageBox.Show("Le numéro de DA doit contenir exactement 7 chiffres.");
+                return;
+            }
+
+            using (var db = new AppDbContext())
+            {
+                bool daDejaUtilise = await db.Students.AnyAsync(s => s.DA == nouveauDA)
+                                  || await db.Tutors.AnyAsync(t => t.DA == nouveauDA);
+
+                if (daDejaUtilise)
                 {
-                    bool daDejaUtilise = await db.Students.AnyAsync(s => s.DA == nouveauDA)
-                                     || await db.Tutors.AnyAsync(t => t.DA == nouveauDA);
+                    MessageBox.Show("Ce DA est déjà utilisé par un autre compte.");
+                    return;
+                }
 
-                    if (daDejaUtilise)
+                if (CurrentSessionService.CurrentUser is Student student)
+                {
+                    var studentDb = await db.Students.FirstOrDefaultAsync(s => s.Id == student.Id);
+                    if (studentDb != null)
                     {
-                        txtStatut.Text = "Ce DA est déjà utilisé par un autre compte.";
-                        return;
-                    }
-
-                    if (CurrentSessionService.CurrentUser is Student student)
-                    {
-                        var studentDb = await db.Students.FirstOrDefaultAsync(s => s.Id == student.Id);
-                        if (studentDb != null)
-                        {
-                            studentDb.DA = nouveauDA;
-                            await db.SaveChangesAsync();
-                            student.DA = nouveauDA;
-                            txtStatut.Text = "Numéro DA mis à jour avec succès.";
-                        }
-                    }
-                    else if (CurrentSessionService.CurrentUser is Tutor tutor)
-                    {
-                        var tutorDb = await db.Tutors.FirstOrDefaultAsync(t => t.Id == tutor.Id);
-                        if (tutorDb != null)
-                        {
-                            tutorDb.DA = nouveauDA;
-                            await db.SaveChangesAsync();
-                            tutor.DA = nouveauDA;
-                            txtStatut.Text = "Numéro DA mis à jour avec succès.";
-                        }
+                        studentDb.DA = nouveauDA;
+                        await db.SaveChangesAsync();
+                        student.DA = nouveauDA;
+                        MessageBox.Show("Numéro DA mis à jour avec succès !");
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                txtStatut.Text = "Erreur : " + ex.Message;
+                else if (CurrentSessionService.CurrentUser is Tutor tutor)
+                {
+                    var tutorDb = await db.Tutors.FirstOrDefaultAsync(t => t.Id == tutor.Id);
+                    if (tutorDb != null)
+                    {
+                        tutorDb.DA = nouveauDA;
+                        await db.SaveChangesAsync();
+                        tutor.DA = nouveauDA;
+                        MessageBox.Show("Numéro DA mis à jour avec succès !");
+                    }
+                }
             }
         }
 
@@ -73,62 +72,61 @@ namespace Projet_Session_Entreprise.Views
             string nouveauMotDePasse = txtNouveauMotDePasse.Password;
             string confirmMotDePasse = txtConfirmMotDePasse.Password;
 
-            if (string.IsNullOrEmpty(motDePasseActuel) || string.IsNullOrEmpty(nouveauMotDePasse) || string.IsNullOrEmpty(confirmMotDePasse))
+            if (string.IsNullOrWhiteSpace(motDePasseActuel) || string.IsNullOrWhiteSpace(nouveauMotDePasse) || string.IsNullOrWhiteSpace(confirmMotDePasse))
             {
-                txtStatut.Text = "Tous les champs sont obligatoires.";
+                MessageBox.Show("Veuillez remplir tous les champs.");
+                return;
+            }
+
+            if (nouveauMotDePasse.Length < 8)
+            {
+                MessageBox.Show("Le nouveau mot de passe doit contenir au moins 8 caractères.");
                 return;
             }
 
             if (nouveauMotDePasse != confirmMotDePasse)
             {
-                txtStatut.Text = "Le nouveau mot de passe et la confirmation ne correspondent pas.";
+                MessageBox.Show("Le nouveau mot de passe et la confirmation ne correspondent pas.");
                 return;
             }
 
-            try
+            using (var db = new AppDbContext())
             {
-                using (var db = new AppDbContext())
+                if (CurrentSessionService.CurrentUser is Student student)
                 {
-                    if (CurrentSessionService.CurrentUser is Student student)
+                    var studentDb = await db.Students.FirstOrDefaultAsync(s => s.Id == student.Id);
+                    if (studentDb == null) return;
+
+                    if (!BCrypt.Net.BCrypt.Verify(motDePasseActuel, studentDb.Password))
                     {
-                        var studentDb = await db.Students.FirstOrDefaultAsync(s => s.Id == student.Id);
-                        if (studentDb == null) return;
-
-                        if (!BCrypt.Net.BCrypt.Verify(motDePasseActuel, studentDb.Password))
-                        {
-                            txtStatut.Text = "Mot de passe actuel incorrect.";
-                            return;
-                        }
-
-                        studentDb.Password = BCrypt.Net.BCrypt.HashPassword(nouveauMotDePasse);
-                        await db.SaveChangesAsync();
-                        txtStatut.Text = "Mot de passe mis à jour avec succès.";
+                        MessageBox.Show("Mot de passe actuel incorrect.");
+                        return;
                     }
-                    else if (CurrentSessionService.CurrentUser is Tutor tutor)
-                    {
-                        var tutorDb = await db.Tutors.FirstOrDefaultAsync(t => t.Id == tutor.Id);
-                        if (tutorDb == null) return;
 
-                        if (!BCrypt.Net.BCrypt.Verify(motDePasseActuel, tutorDb.Password))
-                        {
-                            txtStatut.Text = "Mot de passe actuel incorrect.";
-                            return;
-                        }
-
-                        tutorDb.Password = BCrypt.Net.BCrypt.HashPassword(nouveauMotDePasse);
-                        await db.SaveChangesAsync();
-                        txtStatut.Text = "Mot de passe mis à jour avec succès.";
-                    }
+                    studentDb.Password = BCrypt.Net.BCrypt.HashPassword(nouveauMotDePasse);
+                    await db.SaveChangesAsync();
+                    MessageBox.Show("Mot de passe mis à jour avec succès !");
                 }
+                else if (CurrentSessionService.CurrentUser is Tutor tutor)
+                {
+                    var tutorDb = await db.Tutors.FirstOrDefaultAsync(t => t.Id == tutor.Id);
+                    if (tutorDb == null) return;
 
-                txtMotDePasseActuel.Clear();
-                txtNouveauMotDePasse.Clear();
-                txtConfirmMotDePasse.Clear();
+                    if (!BCrypt.Net.BCrypt.Verify(motDePasseActuel, tutorDb.Password))
+                    {
+                        MessageBox.Show("Mot de passe actuel incorrect.");
+                        return;
+                    }
+
+                    tutorDb.Password = BCrypt.Net.BCrypt.HashPassword(nouveauMotDePasse);
+                    await db.SaveChangesAsync();
+                    MessageBox.Show("Mot de passe mis à jour avec succès !");
+                }
             }
-            catch (Exception ex)
-            {
-                txtStatut.Text = "Erreur : " + ex.Message;
-            }
+
+            txtMotDePasseActuel.Clear();
+            txtNouveauMotDePasse.Clear();
+            txtConfirmMotDePasse.Clear();
         }
     }
 }

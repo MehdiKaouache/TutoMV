@@ -56,13 +56,6 @@
                 </StackPanel>
             </Border>
 
-            <!-- MESSAGE DE STATUT -->
-            <TextBlock x:Name="txtStatut"
-                       Foreground="{StaticResource PrimaryMauve}"
-                       FontSize="14"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"/>
-
         </StackPanel>
     </Grid>
 </UserControl>
