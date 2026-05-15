@@ -61,7 +61,7 @@ namespace Projet_Session_Entreprise.Views
                         Nom = nom,
                         Prenom = prenom,
                         DA = da,
-                        Password = password,
+                        Password = BCrypt.Net.BCrypt.HashPassword(password),
                         AverageGrade = gpa,
                         Role = "Tuteur",
                         IsValidated = false

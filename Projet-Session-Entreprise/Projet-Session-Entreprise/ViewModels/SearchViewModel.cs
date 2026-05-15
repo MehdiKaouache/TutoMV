@@ -13,6 +13,8 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private string _searchText = "";
         [ObservableProperty] private string _selectedFilter = "Nom";
 
+        public ObservableCollection<string> FilterChoices { get; } = new ObservableCollection<string> { "Nom", "Matière" };
+
         public ObservableCollection<Tutor> Results { get; set; } = new ObservableCollection<Tutor>();
 
         public SearchViewModel()
