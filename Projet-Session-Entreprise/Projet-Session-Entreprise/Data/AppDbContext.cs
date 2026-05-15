@@ -13,7 +13,7 @@ namespace Projet_Session_Entreprise
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Server=127.0.0.1;Port=3307;Database=schooldb;User=root;Password=1234;";
+            string connectionString = "Server=127.0.0.1;Port=3306;Database=schooldb;User=root;Password=1234;";
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
     }
