@@ -24,13 +24,13 @@ namespace Projet_Session_Entreprise.Services
             if (student == null) return;
 
             var appointments = await _appointmentRepo.GetByStudentIdAsync(student.Id);
-            var acceptedStatuses = new[] { "Accepté", "Acceptée", "Accepted", "Approuvé" };
+            var acceptedStatuses = new[] { "AcceptÃ©", "AcceptÃ©e", "Accepted", "ApprouvÃ©" };
 
             var accepted = appointments.Where(a => acceptedStatuses.Contains(a.Status)).ToList();
             if (!accepted.Any()) return;
 
             var sb = new StringBuilder();
-            sb.AppendLine("Vous avez des rendez-vous acceptés :");
+            sb.AppendLine("Vous avez des rendez-vous acceptÃ©s :");
 
             foreach (var a in accepted)
             {
@@ -39,7 +39,7 @@ namespace Projet_Session_Entreprise.Services
                 sb.AppendLine($"- {a.DateRDV:g} avec {tutorName}");
             }
 
-            MessageBox.Show(sb.ToString(), "Rendez-vous accepté", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(sb.ToString(), "Rendez-vous acceptÃ©", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

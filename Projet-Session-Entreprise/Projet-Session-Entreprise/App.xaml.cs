@@ -1,4 +1,4 @@
-﻿using Projet_Session_Entreprise.Data;
+using Projet_Session_Entreprise.Data;
 using Projet_Session_Entreprise.Repositories;
 using Projet_Session_Entreprise.Repositories.Interfaces;
 using Projet_Session_Entreprise.Services;
@@ -20,8 +20,12 @@ namespace Projet_Session_Entreprise
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            var context = new AppDbContext();
 
+            var context = new AppDbContext();
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+            DbInitialSetup.SetupDonnees(context);
+            
             TutorRepo = new TutorRepository(context);
             StudentRepo = new StudentRepository(context);
             AppointmentRepo = new AppointmentRepository(context);
