@@ -1,46 +1,41 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Services;
 
 namespace Projet_Session_Entreprise.Views
 {
     public partial class TutorListView : UserControl
     {
-        private Student _student;
+        private readonly Student? _currentStudent;
+
+        public TutorListView()
+        {
+            InitializeComponent();
+            this.DataContext = new TutorListViewModel();
+        }
 
         public TutorListView(Student student)
         {
             InitializeComponent();
-            _student = student;
-            LoadTutors();
-        }
-
-        private void LoadTutors()
-        {
-            try
-            {
-                using (var db = new AppDbContext())
-                {
-                    var validatedTutors = db.Tutors.Where(t => t.IsValidated).ToList();
-                    dgTutors.ItemsSource = validatedTutors;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erreur lors du chargement des tuteurs : " + ex.Message);
-            }
+            _currentStudent = student;
+            this.DataContext = new TutorListViewModel(student);
         }
 
         private void Reserve_Click(object sender, RoutedEventArgs e)
         {
             var tutor = (sender as Button)?.DataContext as Tutor;
+            var student = _currentStudent ?? CurrentSessionService.CurrentUser as Student;
 
-            if (tutor != null)
+            if (tutor != null && student != null)
             {
-                MainView.Instance.NavigateTo(new BookingView(_student, tutor));
+                MainView.Instance.NavigateTo(new BookingView(student, tutor));
+            }
+            else if (student == null)
+            {
+                MessageBox.Show("Veuillez vous connecter en tant qu'étudiant pour réserver.");
             }
         }
     }

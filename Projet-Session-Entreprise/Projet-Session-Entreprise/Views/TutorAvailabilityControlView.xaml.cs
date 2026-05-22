@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
 using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Data;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -12,10 +13,10 @@ namespace Projet_Session_Entreprise.Views
     {
         private Tutor? _currentTutor;
         private Dictionary<string, DayOfWeek> _dayMap = new Dictionary<string, DayOfWeek> {
-            { "Lundi", DayOfWeek.Monday }, 
-            { "Mardi", DayOfWeek.Tuesday }, 
+            { "Lundi", DayOfWeek.Monday },
+            { "Mardi", DayOfWeek.Tuesday },
             { "Mercredi", DayOfWeek.Wednesday },
-            { "Jeudi", DayOfWeek.Thursday }, 
+            { "Jeudi", DayOfWeek.Thursday },
             { "Vendredi", DayOfWeek.Friday }
         };
 

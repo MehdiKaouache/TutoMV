@@ -1,80 +1,55 @@
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.ViewModels;
 
 namespace Projet_Session_Entreprise.Views
 {
-    public partial class ProfileView : Window
+    public partial class ProfileView : UserControl
     {
+        private ProfileViewModel? _viewModel;
         private Student? _currentStudent;
-        private Tutor? _currentTutor;
 
-        public ProfileView(Student student)
+        public ProfileView(object user)
         {
             InitializeComponent();
-            _currentStudent = student;
-            var dc = new ProfileViewModel(student);
-            DataContext = dc;
-            dgAppointments.ItemsSource = dc.MyAppointments;
 
-            this.Loaded += (sender, e) => {
-                if (_currentStudent != null) CheckAcceptedAppointmentsAndNotify();
-            };
-        }
-
-        public ProfileView(Tutor tutor)
-        {
-            InitializeComponent();
-            _currentTutor = tutor;
-            var dc = new ProfileViewModel(tutor);
-            DataContext = dc;
-            dgAppointments.ItemsSource = dc.MyAppointments;
-
-            this.Loaded += (sender, e) => {
-                if (_currentTutor != null) CheckAcceptedAppointmentsAndNotify();
-            };
-        }
-
-        /*private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
-        {
-            AjouterSlotArea.Visibility = Visibility.Visible;
-            btnShowAdd.Visibility = Visibility.Collapsed;
-        }*/
-
-        private void CheckAcceptedAppointmentsAndNotify()
-        {
-            if (_currentStudent == null) return;
-            try
+            if (user is Student s)
             {
-                using (var db = new AppDbContext())
+                _currentStudent = s;
+                _viewModel = new ProfileViewModel(s);
+                AvailabilityContainer.Visibility = Visibility.Collapsed;
+                colDispos.Width = new GridLength(0);
+
+                this.Loaded += (sender, e) =>
                 {
-                    var appts = db.Appointments.ToList();
-                    var tutors = db.Tutors.ToList();
-                    NotificationService.ShowAcceptedAppointmentsForStudent(_currentStudent, appts, tutors);
+                    _ = App.NotificationService.CheckAndShowAcceptedAppointmentsAsync(s);
+                };
+            }
+            else if (user is Tutor t)
+            {
+                _viewModel = new ProfileViewModel(t);
+                AvailabilityContainer.Visibility = Visibility.Visible;
+                colDispos.Width = new GridLength(350);
+                ctrlAvailability.Initialize(t);
+            }
+
+            if (_viewModel != null)
+            {
+                this.DataContext = _viewModel;
+                if (dgAppointments != null)
+                {
+                    dgAppointments.ItemsSource = _viewModel.MyAppointments;
                 }
             }
-            catch { }
         }
 
-        /*private DateTime GetDateTimeAppointment() //pour retourner les dates en DateTime pour comparer les appointments avec leurs daates
+        private void SearchTutor_Click(object sender, RoutedEventArgs e)
         {
-            string day = (cmbDay.SelectedItem as ComboBoxItem)?.Content.ToString();
-            string time = (cmbTime.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-            //prends la date de today, check si c'est le même jours que l'user à choisi, sinon, va au next day et recommence.
-            //Ex: je pick mercredi prochain et on est jeudi, ça va parse les jours jusqu'a hit mercredi (donc +6 jours)
-            DateTime date = DateTime.Today;
-            while (date.ToString("dddd", new System.Globalization.CultureInfo("fr-CA")).ToLower() != day.ToLower())
+            if (_currentStudent != null)
             {
-                date = date.AddDays(1);
+                MainView.Instance.NavigateTo(new TutorListView(_currentStudent));
             }
-
-            TimeSpan ts = TimeSpan.Parse(time);
-            return date.Date.Add(ts);
-        }*/
+        }
     }
 }

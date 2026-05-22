@@ -1,19 +1,34 @@
 <UserControl x:Class="Projet_Session_Entreprise.Views.TutorListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource MainBG}">
+    <Grid Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="0,0,0,25">
-            <TextBlock Text="Trouver un tuteur" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,25">
+            <TextBlock Text="Trouver un tuteur" FontSize="32" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}"/>
             <TextBlock Text="Parcourez la liste des experts disponibles." Foreground="{StaticResource SubText}" Margin="0,5,0,0"/>
+            
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                <TextBox x:Name="txtSearch" 
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Width="400" Height="40" VerticalContentAlignment="Center" 
+                         Padding="10,0" Style="{StaticResource ModernTextBoxStyle}"/>
+                
+                <Button Content="Rechercher" Width="120" Height="40" Margin="15,0,0,0" 
+                        Style="{StaticResource PrimaryButtonStyle}" Command="{Binding RechercherCommand}"/>
+            </StackPanel>
         </StackPanel>
 
         <Border Grid.Row="1" Style="{StaticResource CardStyle}" Padding="0">
-            <DataGrid x:Name="dgTutors" ItemsSource="{Binding Tuteurs}" AutoGenerateColumns="False">
+            <DataGrid x:Name="dgTutors" 
+                      ItemsSource="{Binding Results}"
+                      AutoGenerateColumns="False" IsReadOnly="True" 
+                      Background="Transparent" BorderThickness="0" Foreground="White" 
+                      RowBackground="Transparent" HeadersVisibility="Column">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="PRÉNOM" Binding="{Binding Prenom}" Width="*"/>
                     <DataGridTextColumn Header="NOM" Binding="{Binding Nom}" Width="*"/>
@@ -22,7 +37,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Voir dispo" Style="{StaticResource ActionButton}" 
-                                        Height="32" Margin="10,0" Click="Reserve_Click"/>
+                                        Height="32" Margin="10,5" Click="Reserve_Click"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

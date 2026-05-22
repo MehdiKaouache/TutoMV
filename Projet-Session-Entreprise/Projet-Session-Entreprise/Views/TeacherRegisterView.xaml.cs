@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Data;
 
 namespace Projet_Session_Entreprise.Views
 {
@@ -61,7 +62,7 @@ namespace Projet_Session_Entreprise.Views
                         Nom = nom,
                         Prenom = prenom,
                         DA = da,
-                        Password = password,
+                        Password = BCrypt.Net.BCrypt.HashPassword(password),
                         AverageGrade = gpa,
                         Role = "Tuteur",
                         IsValidated = false
