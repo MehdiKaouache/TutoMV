@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using Projet_Session_Entreprise.Services;
 
@@ -35,7 +36,11 @@ namespace Projet_Session_Entreprise.Views
 
                 if (CurrentSessionService.CurrentUser is Models.Student s)
                 {
-                    _ = App.NotificationService.CheckAndShowAcceptedAppointmentsAsync(s);
+                    CheckNotificationsAsync(s);
+                }
+                else
+                {
+                    NotificationBanner.Visibility = Visibility.Collapsed;
                 }
             }
             else
@@ -43,6 +48,28 @@ namespace Projet_Session_Entreprise.Views
                 TopNavbar.Visibility = Visibility.Visible;
                 LeftSidebar.Visibility = Visibility.Collapsed;
                 SidebarCol.Width = new GridLength(0);
+                NotificationBanner.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private async void CheckNotificationsAsync(Models.Student student)
+        {
+            try
+            {
+                string message = await App.NotificationService.GetAcceptedAppointmentsMessageAsync(student);
+                if (!string.IsNullOrEmpty(message))
+                {
+                    NotificationText.Text = message;
+                    NotificationBanner.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    NotificationBanner.Visibility = Visibility.Collapsed;
+                }
+            }
+            catch
+            {
+                NotificationBanner.Visibility = Visibility.Collapsed;
             }
         }
     }

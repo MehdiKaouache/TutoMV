@@ -1,12 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Projet_Session_Entreprise.Data;
 using Projet_Session_Entreprise.Models;
 using Projet_Session_Entreprise.Repositories.Interfaces;
-using Projet_Session_Entreprise.Services.Interfaces;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Projet_Session_Entreprise.ViewModels
@@ -14,8 +13,6 @@ namespace Projet_Session_Entreprise.ViewModels
     public partial class ProfileViewModel : ObservableObject
     {
         private readonly IAppointmentRepository _appointmentRepo;
-        private readonly ITutorRepository _tutorRepo;
-        private readonly IReviewRepository _reviewRepo;
         private Student? _student;
         private Tutor? _tutor;
 
@@ -24,117 +21,184 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private string _nom = "";
         [ObservableProperty] private string _prenom = "";
         [ObservableProperty] private string _role = "";
-        [ObservableProperty] private string _availability = "";
         [ObservableProperty] private string _statusMessage = "";
-        [ObservableProperty] private Appointment? _selectedAppointment;
+
+        [ObservableProperty] private Visibility _studentSectionVisibility = Visibility.Collapsed;
+        [ObservableProperty] private Visibility _tutorSectionVisibility = Visibility.Collapsed;
+        [ObservableProperty] private Visibility _reviewSectionVisibility = Visibility.Collapsed;
+        [ObservableProperty] private Visibility _detailsVisibility = Visibility.Collapsed;
+
+        [ObservableProperty] private int _totalSeances;
+        [ObservableProperty] private int _heuresCompletees;
+        [ObservableProperty] private string _moyenneStats = "N/A";
+
         [ObservableProperty] private int _rating;
         [ObservableProperty] private string _comment = "";
+
+        [ObservableProperty] private Appointment? _selectedAppointment;
 
         public ObservableCollection<Appointment> MyAppointments { get; set; } = new();
         public ObservableCollection<Review> Reviews { get; set; } = new();
 
-        public ObservableCollection<string> AvailabilityChoices { get; } = new()
+        public ProfileViewModel(Student student)
         {
-            "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"
-        };
-
-        public Visibility TutorSectionVisibility => IsTutor ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility StudentSectionVisibility => !IsTutor ? Visibility.Visible : Visibility.Collapsed;
-
-        public ProfileViewModel(Student student) : this(student, App.AppointmentRepo, App.TutorRepo, App.ReviewRepo) { }
-        public ProfileViewModel(Tutor tutor) : this(tutor, App.AppointmentRepo, App.TutorRepo, App.ReviewRepo) { }
-
-        public ProfileViewModel(Student student, IAppointmentRepository appointmentRepo, ITutorRepository tutorRepo, IReviewRepository reviewRepo)
-        {
+            _appointmentRepo = App.AppointmentRepo;
             _student = student;
-            _appointmentRepo = appointmentRepo;
-            _tutorRepo = tutorRepo;
-            _reviewRepo = reviewRepo;
             IsTutor = false;
-            DA = student.DA; Nom = student.Nom; Prenom = student.Prenom; Role = student.Role;
-            _ = LoadDataAsync();
+            DA = student.DA;
+            Nom = student.Nom;
+            Prenom = student.Prenom;
+            Role = student.Role;
+            StudentSectionVisibility = Visibility.Visible;
+            LoadData();
         }
 
-        public ProfileViewModel(Tutor tutor, IAppointmentRepository appointmentRepo, ITutorRepository tutorRepo, IReviewRepository reviewRepo)
+        public ProfileViewModel(Tutor tutor) : this(tutor, App.AppointmentRepo) { }
+
+        public ProfileViewModel(Tutor tutor, IAppointmentRepository appointmentRepo)
         {
-            _tutor = tutor;
             _appointmentRepo = appointmentRepo;
-            _tutorRepo = tutorRepo;
-            _reviewRepo = reviewRepo;
+            _tutor = tutor;
             IsTutor = true;
-            DA = tutor.DA; Nom = tutor.Nom; Prenom = tutor.Prenom; Role = tutor.Role;
-            Availability = tutor.Availability;
-            _ = LoadDataAsync();
+            DA = tutor.DA;
+            Nom = tutor.Nom;
+            Prenom = tutor.Prenom;
+            Role = tutor.Role;
+            TutorSectionVisibility = Visibility.Visible;
+            LoadData();
         }
 
-        public async Task LoadDataAsync()
+        public void LoadData()
         {
-            MyAppointments.Clear();
-            Reviews.Clear();
-
-            if (IsTutor && _tutor != null)
+            using (var db = new AppDbContext())
             {
-                var appts = await _appointmentRepo.GetByTutorIdAsync(_tutor.Id);
-                foreach (var a in appts.OrderByDescending(x => x.DateRDV)) MyAppointments.Add(a);
+                MyAppointments.Clear();
+                Reviews.Clear();
 
-                var tutorReviews = await _reviewRepo.GetByTutorIdAsync(_tutor.Id);
-                foreach (var r in tutorReviews) Reviews.Add(r);
+                if (IsTutor && _tutor != null)
+                {
+                    var appts = db.Appointments.Where(a => a.TutorId == _tutor.Id).ToList();
+                    foreach (var a in appts) MyAppointments.Add(a);
+
+                    var revs = db.Reviews.Where(r => r.TutorId == _tutor.Id).ToList();
+                    foreach (var r in revs) Reviews.Add(r);
+
+                    TotalSeances = appts.Count(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "accepté"));
+                    HeuresCompletees = TotalSeances;
+                    MoyenneStats = revs.Any() ? Math.Round(revs.Average(r => r.Rating), 1).ToString() + " / 5" : "N/A";
+                }
+                else if (_student != null)
+                {
+                    var appts = db.Appointments.Where(a => a.StudentId == _student.Id).ToList();
+                    foreach (var a in appts) MyAppointments.Add(a);
+
+                    TotalSeances = appts.Count(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "accepté"));
+                    HeuresCompletees = TotalSeances;
+                    MoyenneStats = "-";
+                }
             }
-            else if (_student != null)
+        }
+
+        partial void OnSelectedAppointmentChanged(Appointment? value)
+        {
+            if (value != null)
             {
-                var appts = await _appointmentRepo.GetByStudentIdAsync(_student.Id);
-                foreach (var a in appts.OrderByDescending(x => x.DateRDV)) MyAppointments.Add(a);
+                DetailsVisibility = Visibility.Visible;
+
+                if (!IsTutor && (value.Status?.ToLower() == "complété" || value.Status?.ToLower() == "accepté"))
+                {
+                    ReviewSectionVisibility = Visibility.Visible;
+                }
+                else
+                {
+                    ReviewSectionVisibility = Visibility.Collapsed;
+                }
+            }
+            else
+            {
+                DetailsVisibility = Visibility.Collapsed;
+                ReviewSectionVisibility = Visibility.Collapsed;
             }
         }
 
         [RelayCommand]
-        private async Task SaveAvailabilityAsync()
+        public void AddReview()
         {
-            if (_tutor == null) return;
-            var t = await _tutorRepo.GetByIdAsync(_tutor.Id);
-            if (t != null)
+            if (SelectedAppointment == null || Rating < 1 || Rating > 5)
             {
-                t.Availability = Availability;
-                _tutorRepo.Update(t);
-                await _tutorRepo.SaveChangesAsync();
-                StatusMessage = "Disponibilités mises à jour.";
+                StatusMessage = "Veuillez entrer une note de 1 à 5.";
+                return;
+            }
+
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var review = new Review
+                    {
+                        TutorId = SelectedAppointment.TutorId,
+                        Rating = Rating,
+                        Comment = Comment
+                    };
+
+                    db.Reviews.Add(review);
+                    db.SaveChanges();
+
+                    StatusMessage = "Avis envoyé avec succès !";
+                    Rating = 0;
+                    Comment = "";
+                    ReviewSectionVisibility = Visibility.Collapsed;
+                    LoadData();
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = "Erreur BD : " + (ex.InnerException?.Message ?? ex.Message);
             }
         }
 
         [RelayCommand]
-        private async Task AcceptAppointmentAsync(Appointment appointment)
+        public void AcceptAppointment(Appointment appt)
         {
-            if (_tutor == null || appointment == null) return;
-            appointment.Status = "Accepté";
-            _appointmentRepo.Update(appointment);
-            await _appointmentRepo.SaveChangesAsync();
-            await LoadDataAsync();
+            UpdateAppointmentStatus(appt, "Accepté");
         }
 
         [RelayCommand]
-        private async Task RefuseAppointmentAsync(Appointment appointment)
+        public void RefuseAppointment(Appointment appt)
         {
-            if (_tutor == null || appointment == null) return;
-            appointment.Status = "Refusé";
-            _appointmentRepo.Update(appointment);
-            await _appointmentRepo.SaveChangesAsync();
-            await LoadDataAsync();
+            UpdateAppointmentStatus(appt, "Refusé");
         }
 
-        [RelayCommand]
-        private async Task AddReviewAsync()
+        private void UpdateAppointmentStatus(Appointment appt, string status)
         {
-            if (_student == null || SelectedAppointment == null) return;
-            await _reviewRepo.AddAsync(new Review
+            if (appt == null) return;
+            using (var db = new AppDbContext())
             {
-                TutorId = SelectedAppointment.TutorId,
-                StudentId = _student.Id,
-                Rating = Rating,
-                Comment = Comment
-            });
-            await _reviewRepo.SaveChangesAsync();
-            Rating = 0; Comment = "";
-            await LoadDataAsync();
+                var existing = db.Appointments.Find(appt.Id);
+                if (existing != null)
+                {
+                    existing.Status = status;
+                    db.SaveChanges();
+                    LoadData();
+                }
+            }
+        }
+
+        public bool AppointmentExists(DateTime date)
+        {
+            using (var db = new AppDbContext())
+            {
+                if (_student != null)
+                {
+                    return db.Appointments.Any(a => a.DateRDV == date && a.StudentId == _student.Id);
+                }
+
+                if (_tutor != null)
+                {
+                    return db.Appointments.Any(a => a.DateRDV == date && a.TutorId == _tutor.Id);
+                }
+            }
+            return false;
         }
     }
 }

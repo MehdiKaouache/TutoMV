@@ -14,6 +14,8 @@
                 <TextBlock Text="Mot de passe" Foreground="{StaticResource MainText}" Margin="0,15,0,5"/>
                 <PasswordBox x:Name="txtPassword"/>
 
+                <TextBlock x:Name="txtError" Foreground="#ff4444" Margin="0,10,0,0" TextWrapping="Wrap" HorizontalAlignment="Center" Visibility="Collapsed"/>
+
                 <Button Content="Se connecter" Style="{StaticResource ActionButton}" Margin="0,30,0,10" Click="BtnLogin_Click"/>
                 <Button Content="Créer un compte" Style="{StaticResource LinkButton}" Click="BtnRegister_Click"/>
             </StackPanel>

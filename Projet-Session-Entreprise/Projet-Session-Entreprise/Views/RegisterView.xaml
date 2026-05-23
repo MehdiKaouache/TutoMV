@@ -32,6 +32,8 @@
                 <TextBlock Text="Mot de passe" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
                 <PasswordBox x:Name="txtPassword"/>
 
+                <TextBlock x:Name="txtError" Foreground="#ff4444" Margin="0,10,0,0" TextWrapping="Wrap" HorizontalAlignment="Center" Visibility="Collapsed"/>
+
                 <Button Content="Créer mon compte" Style="{StaticResource ActionButton}" Margin="0,30,0,10" Click="btnSignUp_Click"/>
                 <Button Content="Annuler" Style="{StaticResource LinkButton}" Click="btnCancel_Click"/>
             </StackPanel>

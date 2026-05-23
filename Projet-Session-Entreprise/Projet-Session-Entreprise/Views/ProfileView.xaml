@@ -14,7 +14,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,30"> <TextBlock Text="Mon Profil" FontSize="36" FontWeight="ExtraBold" Foreground="{StaticResource PrimaryMauve}"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,30">
+            <TextBlock Text="Mon Profil" FontSize="36" FontWeight="ExtraBold" Foreground="{StaticResource PrimaryMauve}"/>
             <Border Height="3" Background="{StaticResource PrimaryMauve}" Width="60" HorizontalAlignment="Left" Margin="2,5,0,0"/>
         </StackPanel>
 
@@ -25,81 +26,48 @@
                 <ColumnDefinition x:Name="colDispos" Width="350"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="0,0,20,0" VerticalAlignment="Top">
-                <StackPanel>
-                    <TextBlock Text="Informations" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,20"/>
-                    
-                    <TextBlock Text="Numéro de DA" Foreground="{StaticResource SubText}" FontSize="12"/>
-                    <TextBlock Text="{Binding DA}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
-                    
-                    <TextBlock Text="Prénom" Foreground="{StaticResource SubText}" FontSize="12"/>
-                    <TextBlock Text="{Binding Prenom}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
-                    
-                    <TextBlock Text="Nom" Foreground="{StaticResource SubText}" FontSize="12"/>
-                    <TextBlock Text="{Binding Nom}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
-                    
-                    <Border Background="#2D2D2D" CornerRadius="5" HorizontalAlignment="Left" Padding="10,5">
-                        <TextBlock Text="{Binding Role}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}"/>
-                    </Border>
+            <StackPanel Grid.Column="0" Margin="0,0,20,0" VerticalAlignment="Top">
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Informations" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,20"/>
 
-                    <TextBlock Text="{Binding StatusMessage}" Foreground="LightGreen" Margin="0,15,0,0" TextWrapping="Wrap"/>
-                </StackPanel>
-            </Border>
+                        <TextBlock Text="Numéro de DA" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="{Binding DA}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
 
-            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="0,0,20,0">
-                <StackPanel>
-                    <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
-                        <StackPanel>
-                            <TextBlock Text="Mes Rendez-vous" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,20"/>
-                            <DataGrid x:Name="dgAppointments" ItemsSource="{Binding MyAppointments}" SelectedItem="{Binding SelectedAppointment}" 
-                                      AutoGenerateColumns="False" IsReadOnly="True" Background="Transparent" BorderThickness="0" Foreground="White">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Date" Binding="{Binding DateRDV, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="*"/>
-                                    <DataGridTextColumn Header="Statut" Binding="{Binding Status}" Width="100"/>
-                                    
-                                    <DataGridTemplateColumn Header="Actions" Width="150">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal" Visibility="{Binding DataContext.TutorSectionVisibility, RelativeSource={RelativeSource AncestorType=UserControl}}">
-                                                    <Button Content="✓" Command="{Binding DataContext.AcceptAppointmentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                                            CommandParameter="{Binding}" Background="Green" Foreground="White" Width="30" Margin="0,0,5,0"/>
-                                                    <Button Content="✕" Command="{Binding DataContext.RefuseAppointmentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                                                            CommandParameter="{Binding}" Background="Red" Foreground="White" Width="30"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </StackPanel>
-                    </Border>
+                        <TextBlock Text="Prénom" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="{Binding Prenom}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
 
-                    <Border Style="{StaticResource CardStyle}" Visibility="{Binding StudentSectionVisibility}" Margin="0,0,0,20">
-                        <StackPanel>
-                            <TextBlock Text="Noter la séance" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,10"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,5">
-                                <TextBlock Text="Note (/5) :" VerticalAlignment="Center" Foreground="White" Margin="0,0,10,0"/>
-                                <TextBox Text="{Binding Rating}" Width="40" Background="#3D3D3D" Foreground="White" BorderThickness="0"/>
+                        <TextBlock Text="Nom" Foreground="{StaticResource SubText}" FontSize="12"/>
+                        <TextBlock Text="{Binding Nom}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
+
+                        <Border Background="#2D2D2D" CornerRadius="5" HorizontalAlignment="Left" Padding="10,5">
+                            <TextBlock Text="{Binding Role}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}"/>
+                        </Border>
+
+                        <TextBlock Text="{Binding StatusMessage}" Foreground="LightGreen" Margin="0,15,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource CardStyle}" Margin="0,20,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Statistiques" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,15"/>
+                        <UniformGrid Columns="3">
+                            <StackPanel>
+                                <TextBlock Text="Séances" Foreground="{StaticResource SubText}" FontSize="12"/>
+                                <TextBlock Text="{Binding TotalSeances}" FontSize="24" FontWeight="Bold" Foreground="White"/>
                             </StackPanel>
-                            <TextBlock Text="Commentaire :" Foreground="White" Margin="0,5"/>
-                            <TextBox Text="{Binding Comment}" Height="60" TextWrapping="Wrap" AcceptsReturn="True" Background="#3D3D3D" Foreground="White" BorderThickness="0"/>
-                            <Button Content="Envoyer l'avis" Command="{Binding AddReviewCommand}" Style="{StaticResource PrimaryButtonStyle}" Margin="0,10,0,0"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Style="{StaticResource CardStyle}" Visibility="{Binding TutorSectionVisibility}">
-                        <StackPanel>
-                            <TextBlock Text="Avis reçus" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,10"/>
-                            <DataGrid ItemsSource="{Binding Reviews}" AutoGenerateColumns="False" IsReadOnly="True" Background="Transparent" Foreground="White" MaxHeight="200">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="Note" Binding="{Binding Rating}" Width="50"/>
-                                    <DataGridTextColumn Header="Commentaire" Binding="{Binding Comment}" Width="*"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-            </ScrollViewer>
+                            <StackPanel>
+                                <TextBlock Text="Heures" Foreground="{StaticResource SubText}" FontSize="12"/>
+                                <TextBlock Text="{Binding HeuresCompletees}" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                            <StackPanel Visibility="{Binding TutorSectionVisibility}">
+                                <TextBlock Text="Moyenne" Foreground="{StaticResource SubText}" FontSize="12"/>
+                                <TextBlock Text="{Binding MoyenneStats}" FontSize="24" FontWeight="Bold" Foreground="#FFD700"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
 
             <StackPanel x:Name="AvailabilityContainer" Grid.Column="2" Visibility="{Binding TutorSectionVisibility}">
                 <Border Style="{StaticResource CardStyle}">

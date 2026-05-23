@@ -20,11 +20,6 @@ namespace Projet_Session_Entreprise.Views
                 _viewModel = new ProfileViewModel(s);
                 AvailabilityContainer.Visibility = Visibility.Collapsed;
                 colDispos.Width = new GridLength(0);
-
-                this.Loaded += (sender, e) =>
-                {
-                    _ = App.NotificationService.CheckAndShowAcceptedAppointmentsAsync(s);
-                };
             }
             else if (user is Tutor t)
             {
@@ -37,9 +32,10 @@ namespace Projet_Session_Entreprise.Views
             if (_viewModel != null)
             {
                 this.DataContext = _viewModel;
-                if (dgAppointments != null)
+                if (this.FindName("dgAppointments") != null)
                 {
-                    dgAppointments.ItemsSource = _viewModel.MyAppointments;
+                    var dg = (DataGrid)this.FindName("dgAppointments");
+                    dg.ItemsSource = _viewModel.MyAppointments;
                 }
             }
         }

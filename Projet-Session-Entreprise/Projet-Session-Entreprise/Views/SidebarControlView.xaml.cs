@@ -43,7 +43,11 @@ namespace Projet_Session_Entreprise.Views
 
         private void btnAppointments_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Le calendrier sera disponible au Sprint 4.");
+            var user = CurrentSessionService.CurrentUser;
+            if (user != null)
+            {
+                MainView.Instance.NavigateTo(new AppointmentsView(user));
+            }
         }
 
         private void btnBecomeTutor_Click(object sender, RoutedEventArgs e)

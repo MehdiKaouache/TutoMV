@@ -18,7 +18,16 @@
         <local:SidebarControlView x:Name="LeftSidebar" Grid.Row="0" Grid.RowSpan="2" Grid.Column="0" Visibility="Visible"/>
 
         <Grid Grid.Row="1" Grid.Column="1" Margin="35">
-            <ContentControl x:Name="MainContentArea"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border x:Name="NotificationBanner" Grid.Row="0" Background="#2D5A27" CornerRadius="8" Padding="15" Margin="0,0,0,20" Visibility="Collapsed">
+                <TextBlock x:Name="NotificationText" Foreground="White" FontSize="14" FontWeight="SemiBold" TextWrapping="Wrap"/>
+            </Border>
+
+            <ContentControl x:Name="MainContentArea" Grid.Row="1"/>
         </Grid>
     </Grid>
 </Window>

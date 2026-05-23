@@ -59,6 +59,7 @@ namespace Projet_Session_Entreprise.Services
                     Role = "Étudiant",
                     GPA = gpa
                 });
+                await _studentRepo.SaveChangesAsync();
             }
             else
             {
@@ -74,9 +75,9 @@ namespace Projet_Session_Entreprise.Services
                     Availability = "À définir",
                     IsValidated = false
                 });
+                await _tutorRepo.SaveChangesAsync();
             }
 
-            await _studentRepo.SaveChangesAsync();
             return true;
         }
     }

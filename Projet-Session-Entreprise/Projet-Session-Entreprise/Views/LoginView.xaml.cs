@@ -21,21 +21,26 @@ namespace Projet_Session_Entreprise.Views
                 string da = txtDA.Text.Trim();
                 string password = txtPassword.Password.Trim();
 
+                txtError.Visibility = Visibility.Collapsed;
+
                 var user = await App.AuthService.LoginAsync(da, password);
 
                 if (user != null)
                 {
                     CurrentSessionService.CurrentUser = user;
+                    MainView.Instance.UpdateNavigationMode();
                     MainView.Instance.NavigateTo(new HomeView());
                 }
                 else
                 {
-                    MessageBox.Show("DA ou mot de passe invalide.");
+                    txtError.Text = "DA ou mot de passe invalide.";
+                    txtError.Visibility = Visibility.Visible;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur : " + ex.Message);
+                txtError.Text = "Erreur : " + ex.Message;
+                txtError.Visibility = Visibility.Visible;
             }
         }
 

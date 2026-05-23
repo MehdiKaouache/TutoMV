@@ -4,7 +4,6 @@ using Projet_Session_Entreprise.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Windows;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
@@ -12,6 +11,9 @@ namespace Projet_Session_Entreprise.ViewModels
     {
         private readonly Tutor _tutor;
         public ObservableCollection<Appointment> Appointments { get; set; } = new();
+
+        [ObservableProperty]
+        private string _statusMessage = "";
 
         public ReceivedRequestViewModel(Tutor tutor)
         {
@@ -40,7 +42,7 @@ namespace Projet_Session_Entreprise.ViewModels
             App.AppointmentRepo.Update(appointment);
             await App.AppointmentRepo.SaveChangesAsync();
             Appointments.Remove(appointment);
-            MessageBox.Show("Rendez-vous accepté !");
+            StatusMessage = "Le rendez-vous a été accepté avec succès.";
         }
 
         [RelayCommand]
@@ -50,7 +52,7 @@ namespace Projet_Session_Entreprise.ViewModels
             App.AppointmentRepo.Update(appointment);
             await App.AppointmentRepo.SaveChangesAsync();
             Appointments.Remove(appointment);
-            MessageBox.Show("Rendez-vous refusé.");
+            StatusMessage = "Le rendez-vous a été refusé.";
         }
     }
 }

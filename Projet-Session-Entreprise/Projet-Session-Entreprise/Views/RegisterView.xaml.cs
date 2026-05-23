@@ -20,6 +20,12 @@ namespace Projet_Session_Entreprise.Views
 
         private void btnCancel_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new LoginView());
 
+        private void ShowError(string message)
+        {
+            txtError.Text = message;
+            txtError.Visibility = Visibility.Visible;
+        }
+
         private async void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
             string nom = txtName.Text.Trim();
@@ -27,21 +33,23 @@ namespace Projet_Session_Entreprise.Views
             string da = txtDA.Text.Trim();
             string password = txtPassword.Password;
 
+            txtError.Visibility = Visibility.Collapsed;
+
             if (string.IsNullOrWhiteSpace(nom) || string.IsNullOrWhiteSpace(prenom) || string.IsNullOrWhiteSpace(da) || !double.TryParse(txtGPA.Text, out double gpa))
             {
-                MessageBox.Show("Veuillez remplir tous les champs.");
+                ShowError("Veuillez remplir tous les champs correctement.");
                 return;
             }
 
             if (da.Length != 7 || !da.All(char.IsDigit))
             {
-                MessageBox.Show("Le numéro de DA doit contenir exactement 7 chiffres.");
+                ShowError("Le numéro de DA doit contenir exactement 7 chiffres.");
                 return;
             }
 
             if (password.Length < 8)
             {
-                MessageBox.Show("Le mot de passe doit contenir au moins 8 caractères.");
+                ShowError("Le mot de passe doit contenir au moins 8 caractères.");
                 return;
             }
 
@@ -49,12 +57,14 @@ namespace Projet_Session_Entreprise.Views
 
             if (success)
             {
-                MessageBox.Show("Compte créé avec succès !");
+                txtError.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Green);
+                ShowError("Compte créé avec succès ! Redirection...");
+                await System.Threading.Tasks.Task.Delay(1000);
                 MainView.Instance.NavigateTo(new LoginView());
             }
             else
             {
-                MessageBox.Show("Ce DA est déjà utilisé.");
+                ShowError("Ce DA est déjà utilisé.");
             }
         }
     }

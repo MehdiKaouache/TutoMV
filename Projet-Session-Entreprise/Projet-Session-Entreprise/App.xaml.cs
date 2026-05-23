@@ -3,6 +3,7 @@ using Projet_Session_Entreprise.Repositories;
 using Projet_Session_Entreprise.Repositories.Interfaces;
 using Projet_Session_Entreprise.Services;
 using Projet_Session_Entreprise.Services.Interfaces;
+using System;
 using System.Windows;
 
 namespace Projet_Session_Entreprise
@@ -22,14 +23,11 @@ namespace Projet_Session_Entreprise
             base.OnStartup(e);
 
             var context = new AppDbContext();
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-            DbInitialSetup.SetupDonnees(context);
-            
+
             TutorRepo = new TutorRepository(context);
             StudentRepo = new StudentRepository(context);
             AppointmentRepo = new AppointmentRepository(context);
-            ReviewRepo = new ReviewRepository(context); 
+            ReviewRepo = new ReviewRepository(context);
 
             AuthService = new AuthService(StudentRepo, TutorRepo);
             TutorService = new TutorService(TutorRepo);

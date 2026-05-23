@@ -23,6 +23,9 @@
             <Button Content="Paramètres" Click="btnSettings_Click" Style="{StaticResource MenuButton}"/>
         </StackPanel>
 
+        <StackPanel Grid.Row="2" Margin="15,0,15,20">
+            <Button Content="Déconnexion" Click="btnLogInOrOut" Style="{StaticResource MenuButton}" Foreground="#ff4444"/>
+        </StackPanel>
 
     </Grid>
 </UserControl>
