@@ -11,6 +11,8 @@ using System.Windows;
 
 namespace Projet_Session_Entreprise.ViewModels
 {
+    public sealed record AppointmentStatusChange(Appointment Appointment, string Status);
+
     public partial class ProfileViewModel : ObservableObject
     {
         private readonly IAppointmentRepository _appointmentRepo;
@@ -102,21 +104,11 @@ namespace Projet_Session_Entreprise.ViewModels
         }
 
         [RelayCommand]
-        private async Task AcceptAppointmentAsync(Appointment appointment)
+        private async Task UpdateAppointmentStatusAsync(AppointmentStatusChange change)
         {
-            if (_tutor == null || appointment == null) return;
-            appointment.Status = "Accepté";
-            _appointmentRepo.Update(appointment);
-            await _appointmentRepo.SaveChangesAsync();
-            await LoadDataAsync();
-        }
-
-        [RelayCommand]
-        private async Task RefuseAppointmentAsync(Appointment appointment)
-        {
-            if (_tutor == null || appointment == null) return;
-            appointment.Status = "Refusé";
-            _appointmentRepo.Update(appointment);
+            if (_tutor == null || change == null) return;
+            change.Appointment.Status = change.Status;
+            _appointmentRepo.Update(change.Appointment);
             await _appointmentRepo.SaveChangesAsync();
             await LoadDataAsync();
         }

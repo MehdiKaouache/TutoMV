@@ -20,6 +20,8 @@ namespace Projet_Session_Entreprise.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (optionsBuilder.IsConfigured) return;
+
             string connectionString = "Server=127.0.0.1;Port=3306;Database=schooldb;User=root;Password=1234;";
             optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
         }
