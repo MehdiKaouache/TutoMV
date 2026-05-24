@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Projet_Session_Entreprise.ViewModels
+namespace Projet_Session_Entreprise.UI.ViewModels
 {
     public partial class RegisterViewModel : ObservableObject
     {

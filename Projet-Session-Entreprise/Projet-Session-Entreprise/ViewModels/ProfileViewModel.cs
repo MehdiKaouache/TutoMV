@@ -1,30 +1,31 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Projet_Session_Entreprise.Data;
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Repositories.Interfaces;
+using Projet_Session_Entreprise.Infrastructure.Data;
+using Projet_Session_Entreprise.Core.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 
-namespace Projet_Session_Entreprise.ViewModels
+namespace Projet_Session_Entreprise.UI.ViewModels
 {
     public partial class ProfileViewModel : ObservableObject
     {
-        private readonly IAppointmentRepository _appointmentRepo;
         private Student? _student;
         private Tutor? _tutor;
 
         [ObservableProperty] private bool _isTutor;
+        [ObservableProperty] private bool _isStudent;
         [ObservableProperty] private string _dA = "";
         [ObservableProperty] private string _nom = "";
         [ObservableProperty] private string _prenom = "";
         [ObservableProperty] private string _role = "";
         [ObservableProperty] private string _statusMessage = "";
 
-        [ObservableProperty] private Visibility _studentSectionVisibility = Visibility.Collapsed;
-        [ObservableProperty] private Visibility _tutorSectionVisibility = Visibility.Collapsed;
+        [ObservableProperty] private string _gpa = "";
+        [ObservableProperty] private string _matiere = "";
+        [ObservableProperty] private string _statutValidation = "";
+
         [ObservableProperty] private Visibility _reviewSectionVisibility = Visibility.Collapsed;
         [ObservableProperty] private Visibility _detailsVisibility = Visibility.Collapsed;
 
@@ -38,33 +39,31 @@ namespace Projet_Session_Entreprise.ViewModels
         [ObservableProperty] private Appointment? _selectedAppointment;
 
         public ObservableCollection<Appointment> MyAppointments { get; set; } = new();
-        public ObservableCollection<Review> Reviews { get; set; } = new();
 
         public ProfileViewModel(Student student)
         {
-            _appointmentRepo = App.AppointmentRepo;
             _student = student;
             IsTutor = false;
+            IsStudent = true;
             DA = student.DA;
             Nom = student.Nom;
             Prenom = student.Prenom;
             Role = student.Role;
-            StudentSectionVisibility = Visibility.Visible;
+            Gpa = student.GPA.ToString("0.0");
             LoadData();
         }
 
-        public ProfileViewModel(Tutor tutor) : this(tutor, App.AppointmentRepo) { }
-
-        public ProfileViewModel(Tutor tutor, IAppointmentRepository appointmentRepo)
+        public ProfileViewModel(Tutor tutor)
         {
-            _appointmentRepo = appointmentRepo;
             _tutor = tutor;
             IsTutor = true;
+            IsStudent = false;
             DA = tutor.DA;
             Nom = tutor.Nom;
             Prenom = tutor.Prenom;
             Role = tutor.Role;
-            TutorSectionVisibility = Visibility.Visible;
+            Matiere = tutor.Subject;
+            StatutValidation = tutor.IsValidated ? "Certifié ✅" : "En attente de certification";
             LoadData();
         }
 
@@ -73,7 +72,6 @@ namespace Projet_Session_Entreprise.ViewModels
             using (var db = new AppDbContext())
             {
                 MyAppointments.Clear();
-                Reviews.Clear();
 
                 if (IsTutor && _tutor != null)
                 {
@@ -81,7 +79,6 @@ namespace Projet_Session_Entreprise.ViewModels
                     foreach (var a in appts) MyAppointments.Add(a);
 
                     var revs = db.Reviews.Where(r => r.TutorId == _tutor.Id).ToList();
-                    foreach (var r in revs) Reviews.Add(r);
 
                     TotalSeances = appts.Count(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "accepté"));
                     HeuresCompletees = TotalSeances;
@@ -104,15 +101,10 @@ namespace Projet_Session_Entreprise.ViewModels
             if (value != null)
             {
                 DetailsVisibility = Visibility.Visible;
-
                 if (!IsTutor && (value.Status?.ToLower() == "complété" || value.Status?.ToLower() == "accepté"))
-                {
                     ReviewSectionVisibility = Visibility.Visible;
-                }
                 else
-                {
                     ReviewSectionVisibility = Visibility.Collapsed;
-                }
             }
             else
             {
@@ -136,69 +128,26 @@ namespace Projet_Session_Entreprise.ViewModels
                 {
                     var review = new Review
                     {
+                        AppointmentId = SelectedAppointment.Id,
                         TutorId = SelectedAppointment.TutorId,
+                        StudentId = SelectedAppointment.StudentId,
                         Rating = Rating,
                         Comment = Comment
                     };
-
                     db.Reviews.Add(review);
                     db.SaveChanges();
-
-                    StatusMessage = "Avis envoyé avec succès !";
-                    Rating = 0;
-                    Comment = "";
-                    ReviewSectionVisibility = Visibility.Collapsed;
-                    LoadData();
                 }
+
+                StatusMessage = "Avis envoyé avec succès !";
+                Rating = 0;
+                Comment = "";
+                ReviewSectionVisibility = Visibility.Collapsed;
+                LoadData();
             }
             catch (Exception ex)
             {
                 StatusMessage = "Erreur BD : " + (ex.InnerException?.Message ?? ex.Message);
             }
-        }
-
-        [RelayCommand]
-        public void AcceptAppointment(Appointment appt)
-        {
-            UpdateAppointmentStatus(appt, "Accepté");
-        }
-
-        [RelayCommand]
-        public void RefuseAppointment(Appointment appt)
-        {
-            UpdateAppointmentStatus(appt, "Refusé");
-        }
-
-        private void UpdateAppointmentStatus(Appointment appt, string status)
-        {
-            if (appt == null) return;
-            using (var db = new AppDbContext())
-            {
-                var existing = db.Appointments.Find(appt.Id);
-                if (existing != null)
-                {
-                    existing.Status = status;
-                    db.SaveChanges();
-                    LoadData();
-                }
-            }
-        }
-
-        public bool AppointmentExists(DateTime date)
-        {
-            using (var db = new AppDbContext())
-            {
-                if (_student != null)
-                {
-                    return db.Appointments.Any(a => a.DateRDV == date && a.StudentId == _student.Id);
-                }
-
-                if (_tutor != null)
-                {
-                    return db.Appointments.Any(a => a.DateRDV == date && a.TutorId == _tutor.Id);
-                }
-            }
-            return false;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Projet_Session_Entreprise.Views.SidebarControlView"
+﻿<UserControl x:Class="Projet_Session_Entreprise.UI.Views.SidebarControlView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid Background="{StaticResource SurfaceColor}">

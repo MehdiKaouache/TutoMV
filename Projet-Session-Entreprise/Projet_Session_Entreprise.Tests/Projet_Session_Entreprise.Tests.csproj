@@ -17,6 +17,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Projet-Session-Entreprise\Projet-Session-Entreprise.csproj" />
+	  <ProjectReference Include="..\Projet-Session-Entreprise\Projet-Session-Entreprise.UI.csproj" />
+	  <ProjectReference Include="..\Projet_Session_Entreprise.Core\Projet_Session_Entreprise.Core.csproj" />
+	  <ProjectReference Include="..\Projet_Session_Entreprise.Infrastructure\Projet_Session_Entreprise.Infrastructure.csproj" />
 	</ItemGroup>
 </Project>

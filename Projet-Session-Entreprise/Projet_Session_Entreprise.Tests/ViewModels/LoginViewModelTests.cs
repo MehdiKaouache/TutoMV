@@ -1,8 +1,6 @@
 ﻿using Moq;
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.Services.Interfaces;
-using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Core.Interfaces;
+using Projet_Session_Entreprise.UI.ViewModels;
 using System.Threading.Tasks;
 using Xunit;
 

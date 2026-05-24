@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.Data;
+using Projet_Session_Entreprise.Core.Models;
+using Projet_Session_Entreprise.Infrastructure.Services;
+using Projet_Session_Entreprise.Infrastructure.Data;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.UI.Views
 {
     public partial class RequeteRoleTuteurView : UserControl
     {

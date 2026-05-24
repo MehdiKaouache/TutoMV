@@ -1,4 +1,4 @@
-﻿using Projet_Session_Entreprise.Models;
+﻿using Projet_Session_Entreprise.Core.Models;
 using Xunit;
 
 namespace Projet_Session_Entreprise.Tests.Models

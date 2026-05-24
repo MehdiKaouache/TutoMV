@@ -1,7 +1,7 @@
 ﻿using Moq;
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Repositories.Interfaces;
-using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Core.Models;
+using Projet_Session_Entreprise.Core.Interfaces;
+using Projet_Session_Entreprise.UI.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;

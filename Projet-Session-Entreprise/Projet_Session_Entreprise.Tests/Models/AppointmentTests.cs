@@ -1,4 +1,4 @@
-﻿using Projet_Session_Entreprise.Models;
+﻿using Projet_Session_Entreprise.Core.Models;
 using System;
 using Xunit;
 

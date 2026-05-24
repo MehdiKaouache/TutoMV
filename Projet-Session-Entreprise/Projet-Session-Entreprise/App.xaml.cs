@@ -1,12 +1,11 @@
-using Projet_Session_Entreprise.Data;
-using Projet_Session_Entreprise.Repositories;
-using Projet_Session_Entreprise.Repositories.Interfaces;
-using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.Services.Interfaces;
+using Projet_Session_Entreprise.Infrastructure.Data;
+using Projet_Session_Entreprise.Infrastructure.Repositories;
+using Projet_Session_Entreprise.Core.Interfaces;
+using Projet_Session_Entreprise.Infrastructure.Services;
 using System;
 using System.Windows;
 
-namespace Projet_Session_Entreprise
+namespace Projet_Session_Entreprise.UI
 {
     public partial class App : Application
     {

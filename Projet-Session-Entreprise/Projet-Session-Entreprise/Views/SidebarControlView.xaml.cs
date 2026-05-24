@@ -1,10 +1,10 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Infrastructure.Services;
+using Projet_Session_Entreprise.Core.Models;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.UI.Views
 {
     public partial class SidebarControlView : UserControl
     {

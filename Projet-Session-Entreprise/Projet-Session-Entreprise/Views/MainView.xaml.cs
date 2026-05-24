@@ -1,9 +1,8 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Infrastructure.Services;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.UI.Views
 {
     public partial class MainView : Window
     {
@@ -33,43 +32,12 @@ namespace Projet_Session_Entreprise.Views
                 LeftSidebar.Visibility = Visibility.Visible;
                 SidebarCol.Width = new GridLength(280);
                 LeftSidebar.UpdateMenu(CurrentSessionService.IsTutor);
-
-                if (CurrentSessionService.CurrentUser is Models.Student s)
-                {
-                    CheckNotificationsAsync(s);
-                }
-                else
-                {
-                    NotificationBanner.Visibility = Visibility.Collapsed;
-                }
             }
             else
             {
                 TopNavbar.Visibility = Visibility.Visible;
                 LeftSidebar.Visibility = Visibility.Collapsed;
                 SidebarCol.Width = new GridLength(0);
-                NotificationBanner.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private async void CheckNotificationsAsync(Models.Student student)
-        {
-            try
-            {
-                string message = await App.NotificationService.GetAcceptedAppointmentsMessageAsync(student);
-                if (!string.IsNullOrEmpty(message))
-                {
-                    NotificationText.Text = message;
-                    NotificationBanner.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    NotificationBanner.Visibility = Visibility.Collapsed;
-                }
-            }
-            catch
-            {
-                NotificationBanner.Visibility = Visibility.Collapsed;
             }
         }
     }
