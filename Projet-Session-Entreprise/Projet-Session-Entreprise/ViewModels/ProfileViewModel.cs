@@ -80,7 +80,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
 
                     var revs = db.Reviews.Where(r => r.TutorId == _tutor.Id).ToList();
 
-                    TotalSeances = appts.Count(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "accepté"));
+                    TotalSeances = appts.Count(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "terminé"));
                     HeuresCompletees = TotalSeances;
                     MoyenneStats = revs.Any() ? Math.Round(revs.Average(r => r.Rating), 1).ToString() + " / 5" : "N/A";
                 }
@@ -89,7 +89,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
                     var appts = db.Appointments.Where(a => a.StudentId == _student.Id).ToList();
                     foreach (var a in appts) MyAppointments.Add(a);
 
-                    TotalSeances = appts.Count(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "accepté"));
+                    TotalSeances = appts.Count(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "terminé"));
                     HeuresCompletees = TotalSeances;
                     MoyenneStats = "-";
                 }
@@ -101,7 +101,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
             if (value != null)
             {
                 DetailsVisibility = Visibility.Visible;
-                if (!IsTutor && (value.Status?.ToLower() == "complété" || value.Status?.ToLower() == "accepté"))
+                if (!IsTutor && (value.Status?.ToLower() == "complété" || value.Status?.ToLower() == "terminé"))
                     ReviewSectionVisibility = Visibility.Visible;
                 else
                     ReviewSectionVisibility = Visibility.Collapsed;
@@ -110,6 +110,37 @@ namespace Projet_Session_Entreprise.UI.ViewModels
             {
                 DetailsVisibility = Visibility.Collapsed;
                 ReviewSectionVisibility = Visibility.Collapsed;
+            }
+        }
+
+        [RelayCommand]
+        public void CompleteAppointment(Appointment appt)
+        {
+            if (appt == null || _tutor == null) return;
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    var dbAppt = db.Appointments.Find(appt.Id);
+                    if (dbAppt != null)
+                    {
+                        dbAppt.Status = "Terminé";
+                        db.CompletedAppointments.Add(new CompletedAppointment
+                        {
+                            AppointmentId = dbAppt.Id,
+                            StudentId = dbAppt.StudentId,
+                            TutorId = dbAppt.TutorId,
+                            CompletedDate = DateTime.Now
+                        });
+                        db.SaveChanges();
+                    }
+                }
+                StatusMessage = "Séance marquée comme terminée !";
+                LoadData();
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = "Erreur BD : " + (ex.InnerException?.Message ?? ex.Message);
             }
         }
 

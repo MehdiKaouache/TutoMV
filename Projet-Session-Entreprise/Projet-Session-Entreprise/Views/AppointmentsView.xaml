@@ -11,6 +11,7 @@
         <StackPanel Grid.Row="0" Margin="0,0,0,30">
             <TextBlock Text="Mes Rendez-vous" FontSize="36" FontWeight="ExtraBold" Foreground="{StaticResource PrimaryMauve}"/>
             <Border Height="3" Background="{StaticResource PrimaryMauve}" Width="60" HorizontalAlignment="Left" Margin="2,5,0,0"/>
+            <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource SuccessGreen}" FontWeight="Bold" Margin="0,10,0,0"/>
         </StackPanel>
 
         <Grid Grid.Row="1">
@@ -19,27 +20,71 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <ListBox Grid.Column="0" Margin="0,0,20,0" Background="Transparent" BorderThickness="0" 
-                     ItemsSource="{Binding MyAppointments}" 
-                     SelectedItem="{Binding SelectedAppointment}" 
-                     ItemContainerStyle="{StaticResource CleanListBoxItem}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border Style="{StaticResource ListCardStyle}">
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="{Binding DateRDV, StringFormat={}{0:dd MMMM yyyy à HH:mm}}" FontWeight="Bold" FontSize="18" Foreground="White" Margin="0,0,0,5"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Border Background="#2D2D2D" CornerRadius="5" Padding="8,4" Margin="0,0,10,0">
-                                        <TextBlock Text="{Binding Status}" Foreground="{StaticResource PrimaryMauve}" FontSize="12" FontWeight="Bold"/>
-                                    </Border>
-                                    <TextBlock Text="{Binding Duree, TargetNullValue='Durée non spécifiée'}" Foreground="{StaticResource SubText}" VerticalAlignment="Center" FontSize="13"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <Grid Grid.Column="0" Margin="0,0,20,0">
+                <TextBlock Text="📭 Aucun rendez-vous pour le moment." 
+                           Foreground="{StaticResource SubText}" FontSize="16" FontStyle="Italic" 
+                           HorizontalAlignment="Center" Margin="0,50,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=dgAppointments, Path=HasItems}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <ListBox x:Name="dgAppointments" Background="Transparent" BorderThickness="0" 
+                         ItemsSource="{Binding MyAppointments}" 
+                         SelectedItem="{Binding SelectedAppointment}" 
+                         ItemContainerStyle="{StaticResource CleanListBoxItem}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource ListCardStyle}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding DateRDV, StringFormat={}{0:dd MMMM yyyy à HH:mm}}" FontWeight="Bold" FontSize="18" Foreground="White" Margin="0,0,0,5"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="#2D2D2D" CornerRadius="5" Padding="8,4" Margin="0,0,10,0">
+                                                <TextBlock Text="{Binding Status}" Foreground="{StaticResource PrimaryMauve}" FontSize="12" FontWeight="Bold"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Duree, TargetNullValue='Durée non spécifiée'}" Foreground="{StaticResource SubText}" VerticalAlignment="Center" FontSize="13"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <Button Content="Terminer la séance" Height="35" Width="140"
+                                                Command="{Binding DataContext.CompleteAppointmentCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                CommandParameter="{Binding}">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource SuccessButton}">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding Status}" Value="Accepté"/>
+                                                                <Condition Binding="{Binding DataContext.IsTutor, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
 
             <StackPanel Grid.Column="1" Visibility="{Binding DetailsVisibility}">
                 <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
@@ -67,7 +112,6 @@
                         <TextBlock Text="Commentaire :" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
                         <TextBox Text="{Binding Comment}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Style="{StaticResource ModernTextBoxStyle}" Margin="0,0,0,15" VerticalContentAlignment="Top"/>
                         <Button Content="Envoyer l'avis" Command="{Binding AddReviewCommand}" Style="{StaticResource PrimaryButtonStyle}"/>
-                        <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource SuccessGreen}" Margin="0,15,0,0" TextWrapping="Wrap" FontWeight="SemiBold" TextAlignment="Center"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

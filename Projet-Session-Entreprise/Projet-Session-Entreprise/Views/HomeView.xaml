@@ -7,34 +7,39 @@
     </UserControl.Resources>
 
     <Grid Margin="30">
-        <StackPanel x:Name="GuestPanel" Visibility="{Binding IsGuest, Converter={StaticResource BoolToVis}}">
-            <TextBlock Text="Bienvenue sur TutoMV" FontSize="42" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,10"/>
-            <TextBlock Text="La plateforme de tutorat n°1 pour réussir vos examens." FontSize="18" Foreground="{StaticResource SubText}" Margin="0,0,0,40"/>
-            <Border Style="{StaticResource CardStyle}" Padding="40" MaxWidth="600" HorizontalAlignment="Left">
-                <StackPanel>
-                    <TextBlock Text="Pourquoi choisir TutoMV ?" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
-                    <TextBlock Text="• Tuteurs certifiés par l'école" Foreground="White" FontSize="16" Margin="0,0,0,10"/>
-                    <TextBlock Text="• Réservation simple et rapide" Foreground="White" FontSize="16" Margin="0,0,0,10"/>
-                    <Button Content="Créer un compte maintenant" Style="{StaticResource ActionButton}" Width="250" HorizontalAlignment="Left" Command="{Binding RegisterGuestCommand}" Margin="0,20,0,0"/>
-                </StackPanel>
-            </Border>
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <StackPanel Visibility="{Binding IsGuest, Converter={StaticResource BoolToVis}, ConverterParameter=Inverted}">
+        <Border Grid.Row="0" CornerRadius="8" Padding="15,10" Margin="0,0,0,25" HorizontalAlignment="Left" MinWidth="400" Visibility="{Binding HasNotifications, Converter={StaticResource BoolToVis}}">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="#1A1A2E"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryMauve}"/>
+                </Style>
+            </Border.Style>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="🔔" FontSize="16" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                <TextBlock Text="{Binding NotificationText}" Foreground="White" FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
 
-            <Border CornerRadius="8" Padding="15,10" Margin="0,0,0,25" HorizontalAlignment="Left" MinWidth="400" Visibility="{Binding HasNotifications, Converter={StaticResource BoolToVis}}">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Background" Value="#1A1A2E"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="BorderBrush" Value="{StaticResource PrimaryMauve}"/>
-                    </Style>
-                </Border.Style>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="🔔" FontSize="16" VerticalAlignment="Center" Margin="0,0,15,0"/>
-                    <TextBlock Text="{Binding NotificationText}" Foreground="White" FontSize="14" VerticalAlignment="Center" TextWrapping="Wrap"/>
-                </StackPanel>
-            </Border>
+        <Grid Grid.Row="1">
+
+            <StackPanel x:Name="GuestPanel" Visibility="{Binding IsGuest, Converter={StaticResource BoolToVis}}">
+                <TextBlock Text="Bienvenue sur TutoMV" FontSize="42" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,10"/>
+                <TextBlock Text="La plateforme de tutorat n°1 pour réussir vos examens." FontSize="18" Foreground="{StaticResource SubText}" Margin="0,0,0,40"/>
+                <Border Style="{StaticResource CardStyle}" Padding="40" MaxWidth="600" HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock Text="Pourquoi choisir TutoMV ?" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+                        <TextBlock Text="• Tuteurs certifiés par l'école" Foreground="White" FontSize="16" Margin="0,0,0,10"/>
+                        <TextBlock Text="• Réservation simple et rapide" Foreground="White" FontSize="16" Margin="0,0,0,10"/>
+                        <Button Content="Créer un compte maintenant" Style="{StaticResource ActionButton}" Width="250" HorizontalAlignment="Left" Command="{Binding RegisterGuestCommand}" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
 
             <StackPanel x:Name="StudentPanel" Visibility="{Binding IsStudent, Converter={StaticResource BoolToVis}}">
                 <TextBlock Text="Tableau de bord - Étudiant" FontSize="32" FontWeight="Bold" Foreground="{StaticResource MainText}"/>
@@ -95,6 +100,7 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-        </StackPanel>
+
+        </Grid>
     </Grid>
 </UserControl>

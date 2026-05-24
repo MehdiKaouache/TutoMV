@@ -31,7 +31,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
             LoadData();
         }
 
-        private async void LoadData()
+        private void LoadData()
         {
             var user = CurrentSessionService.CurrentUser;
 
@@ -39,7 +39,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
             IsTutor = user is Tutor;
             IsStudent = user is Student;
 
-            if (IsGuest) return;
+            if (IsGuest || CurrentSessionService.HasSeenNotifications) return;
 
             using (var db = new AppDbContext())
             {
@@ -48,31 +48,55 @@ namespace Projet_Session_Entreprise.UI.ViewModels
                     var appts = db.Appointments.Where(a => a.TutorId == t.Id).ToList();
                     var revs = db.Reviews.Where(r => r.TutorId == t.Id).ToList();
 
-                    var completedAppts = appts.Where(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "accepté")).ToList();
+                    var completedAppts = appts.Where(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "terminé")).ToList();
 
                     TutorEtudiants = completedAppts.Select(a => a.StudentId).Distinct().Count().ToString();
                     TutorHeures = completedAppts.Count.ToString() + "h";
                     TutorNote = revs.Any() ? Math.Round(revs.Average(r => r.Rating), 1).ToString() + "/5" : "-/5";
 
                     var pendingRequests = appts.Count(a => a.Status == "En attente");
-                    if (pendingRequests > 0)
+                    var upcomingAppts = appts.Count(a => a.Status == "Accepté");
+
+                    if (pendingRequests > 0 && upcomingAppts > 0)
+                    {
+                        NotificationText = $"Vous avez {pendingRequests} demande(s) en attente et {upcomingAppts} séance(s) prévue(s).";
+                        HasNotifications = true;
+                    }
+                    else if (pendingRequests > 0)
                     {
                         NotificationText = $"Vous avez {pendingRequests} demande(s) de rendez-vous en attente.";
+                        HasNotifications = true;
+                    }
+                    else if (upcomingAppts > 0)
+                    {
+                        NotificationText = $"Vous avez {upcomingAppts} séance(s) prévue(s).";
                         HasNotifications = true;
                     }
                 }
                 else if (IsStudent && user is Student s)
                 {
                     var appts = db.Appointments.Where(a => a.StudentId == s.Id).ToList();
-                    var completedAppts = appts.Where(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "accepté")).ToList();
+                    var completedAppts = appts.Where(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "terminé")).ToList();
 
                     StudentTotalSeances = completedAppts.Count.ToString();
                     StudentHeures = completedAppts.Count.ToString() + "h";
 
-                    string message = await App.NotificationService.GetAcceptedAppointmentsMessageAsync(s);
-                    if (!string.IsNullOrEmpty(message))
+                    var pendingRequests = appts.Count(a => a.Status == "En attente");
+                    var upcomingAppts = appts.Count(a => a.Status == "Accepté");
+
+                    if (pendingRequests > 0 && upcomingAppts > 0)
                     {
-                        NotificationText = message;
+                        NotificationText = $"Vous avez {pendingRequests} demande(s) en attente et {upcomingAppts} séance(s) prévue(s).";
+                        HasNotifications = true;
+                    }
+                    else if (pendingRequests > 0)
+                    {
+                        NotificationText = $"Vous avez {pendingRequests} demande(s) de rendez-vous en attente.";
+                        HasNotifications = true;
+                    }
+                    else if (upcomingAppts > 0)
+                    {
+                        NotificationText = $"Vous avez {upcomingAppts} séance(s) prévue(s).";
                         HasNotifications = true;
                     }
                 }
