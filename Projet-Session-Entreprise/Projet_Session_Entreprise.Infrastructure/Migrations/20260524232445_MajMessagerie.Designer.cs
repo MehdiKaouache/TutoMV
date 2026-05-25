@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Projet_Session_Entreprise.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Projet_Session_Entreprise.Infrastructure.Data;
 namespace Projet_Session_Entreprise.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260524232445_MajMessagerie")]
+    partial class MajMessagerie
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,10 +133,6 @@ namespace Projet_Session_Entreprise.Infrastructure.Migrations
 
                     b.Property<int>("SenderId")
                         .HasColumnType("int");
-
-                    b.Property<string>("SenderRole")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime(6)");

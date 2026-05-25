@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Projet_Session_Entreprise.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Projet_Session_Entreprise.Infrastructure.Data;
 namespace Projet_Session_Entreprise.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260524231321_MessagerieFinale")]
+    partial class MessagerieFinale
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,25 +60,6 @@ namespace Projet_Session_Entreprise.Infrastructure.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("Projet_Session_Entreprise.Core.Models.ArchivedConversation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("PartnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ArchivedConversations");
-                });
-
             modelBuilder.Entity("Projet_Session_Entreprise.Core.Models.CompletedAppointment", b =>
                 {
                     b.Property<int>("Id")
@@ -115,30 +99,28 @@ namespace Projet_Session_Entreprise.Infrastructure.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AttachmentPath")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<bool>("IsRead")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SenderId")
                         .HasColumnType("int");
-
-                    b.Property<string>("SenderRole")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
 
                     b.ToTable("Messages");
                 });
@@ -338,6 +320,17 @@ namespace Projet_Session_Entreprise.Infrastructure.Migrations
                     b.Navigation("Student");
 
                     b.Navigation("Tutor");
+                });
+
+            modelBuilder.Entity("Projet_Session_Entreprise.Core.Models.Message", b =>
+                {
+                    b.HasOne("Projet_Session_Entreprise.Core.Models.Appointment", "Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
                 });
 
             modelBuilder.Entity("Projet_Session_Entreprise.Core.Models.Review", b =>

@@ -10,12 +10,42 @@ namespace Projet_Session_Entreprise.UI.Views
     public partial class RegisterView : UserControl
     {
         private string _role;
+        private bool _isPasswordVisible = false;
 
         public RegisterView(string role)
         {
             InitializeComponent();
             _role = role;
             lblTitle.Text = _role == "Etudiant" ? "Inscription Étudiant" : "Inscription Enseignant";
+        }
+
+        private void btnTogglePassword_Click(object sender, RoutedEventArgs e)
+        {
+            _isPasswordVisible = !_isPasswordVisible;
+            if (_isPasswordVisible)
+            {
+                txtVisiblePassword.Text = txtPassword.Password;
+                txtVisiblePassword.Visibility = Visibility.Visible;
+                txtPassword.Visibility = Visibility.Collapsed;
+                btnTogglePassword.Content = "🙈";
+            }
+            else
+            {
+                txtPassword.Password = txtVisiblePassword.Text;
+                txtVisiblePassword.Visibility = Visibility.Collapsed;
+                txtPassword.Visibility = Visibility.Visible;
+                btnTogglePassword.Content = "👁";
+            }
+        }
+
+        private void txtPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (!_isPasswordVisible) txtVisiblePassword.Text = txtPassword.Password;
+        }
+
+        private void txtVisiblePassword_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_isPasswordVisible) txtPassword.Password = txtVisiblePassword.Text;
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new LoginView());

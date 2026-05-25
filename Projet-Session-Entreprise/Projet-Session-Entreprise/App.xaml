@@ -8,6 +8,8 @@
                 <ResourceDictionary Source="RessourcesUI.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+
             <SolidColorBrush x:Key="PrimaryMauve" Color="#A29BFE"/>
             <SolidColorBrush x:Key="MainBG" Color="#121212"/>
             <SolidColorBrush x:Key="SubText" Color="#888888"/>
