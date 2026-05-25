@@ -2,27 +2,95 @@ DROP DATABASE IF EXISTS schooldb;
 CREATE DATABASE schooldb;
 USE schooldb;
 
-CREATE TABLE Users (
+CREATE TABLE Students (
     Id INT AUTO_INCREMENT PRIMARY KEY,
-    DA VARCHAR(50),
-    Password VARCHAR(50)
+    DA VARCHAR(50) NOT NULL,
+    Nom VARCHAR(100) NOT NULL,
+    Prenom VARCHAR(100) NOT NULL,
+    Password VARCHAR(50) NOT NULL,
+    AverageGrade DOUBLE NOT NULL,
+    Role VARCHAR(50) NOT NULL
 );
 
-INSERT INTO Users (DA, Password) VALUES
-('1234567', 'admin123');
-
-CREATE TABLE Teachers (
+CREATE TABLE Tutors (
     Id INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
+    Nom VARCHAR(100) NOT NULL,
+    Prenom VARCHAR(100) NOT NULL,
+    DA VARCHAR(50) NOT NULL,
+    Password VARCHAR(50) NOT NULL,
     Subject VARCHAR(100) NOT NULL,
-    Availability VARCHAR(100) NOT NULL
+    Availability VARCHAR(100) NOT NULL,
+    AverageGrade DOUBLE NOT NULL,
+    IsValidated BIT NOT NULL,
+    Role VARCHAR(50) NOT NULL,
+    NumberOfRatings INT NOT NULL DEFAULT 0,
+    TotalRatings INT NOT NULL DEFAULT 0
 );
 
+CREATE TABLE Appointments (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    StudentId INT NOT NULL,
+    TutorId INT NOT NULL,
+    DateRDV DATETIME NOT NULL,
+    Status VARCHAR(50) DEFAULT 'Pending',
+    FOREIGN KEY (StudentId) REFERENCES Students(Id),
+    FOREIGN KEY (TutorId) REFERENCES Tutors(Id)
+);
 
+CREATE TABLE CompletedAppointments (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    AppointmentId INT NOT NULL,
+    StudentId INT NOT NULL,
+    TutorId INT NOT NULL,
+    CompletedDate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (AppointmentId) REFERENCES Appointments(Id),
+    FOREIGN KEY (StudentId) REFERENCES Students(Id),
+    FOREIGN KEY (TutorId) REFERENCES Tutors(Id),
+    UNIQUE (AppointmentId)
+);
 
-INSERT INTO Teachers (Name, Subject, Availability) VALUES
-('John Smith', 'Math', 'Monday'),
-('Sarah Lee', 'English', 'Tuesday'),
-('Michael Brown', 'Physics', 'Wednesday'),
-('Emma Davis', 'Chemistry', 'Thursday'),
-('Daniel Wilson', 'History', 'Friday');
+CREATE TABLE Reviews (
+    Id INT AUTO_INCREMENT PRIMARY KEY,
+    CompletedAppointmentId INT NOT NULL,
+    TutorId INT NOT NULL,
+    StudentId INT NOT NULL,
+    Comment VARCHAR(255),
+    Rating INT NOT NULL,
+    FOREIGN KEY (CompletedAppointmentId) REFERENCES CompletedAppointments(Id),
+    FOREIGN KEY (TutorId) REFERENCES Tutors(Id),
+    FOREIGN KEY (StudentId) REFERENCES Students(Id),
+    CHECK (Rating >= 1 AND Rating <= 5),
+    UNIQUE (CompletedAppointmentId, StudentId)
+);
+
+INSERT INTO Students (DA, Nom, Prenom, Password, AverageGrade, Role) VALUES
+('1001', 'Dupont', 'Alice', 'Password!23', 85.5, 'Student'),
+('1002', 'Martin', 'Benoit', 'LetMeIn42', 72.3, 'Student'),
+('1003', 'Nguyen', 'Clara', 'Clara2024#', 91.0, 'Student');
+
+INSERT INTO Tutors (Nom, Prenom, DA, Password, Subject, Availability, AverageGrade, IsValidated, Role, NumberOfRatings, TotalRatings) VALUES
+('Leblanc', 'Sophie', '2001', 'TutorPass1', 'Mathematiques', 'Lundi,Mardi,Jeudi', 88.4, 1, 'Tutor', 10, 44),
+('Rousseau', 'Marc', '2002', 'TutorPass2', 'Physique', 'Mercredi,Vendredi', 79.2, 1, 'Tutor', 5, 18),
+('Khan', 'Amina', '2003', 'TutorPass3', 'Informatique', 'Mardi,Jeudi', 94.0, 0, 'Tutor', 0, 0);
+
+INSERT INTO Appointments (StudentId, TutorId, DateRDV, Status) VALUES
+(1, 1, '2026-04-15 14:00:00', 'Accepté'),
+(2, 2, '2026-05-10 10:30:00', 'Pending'),
+(3, 1, '2026-06-01 09:00:00', 'Refusé');
+
+INSERT INTO CompletedAppointments (AppointmentId, StudentId, TutorId) VALUES
+(1, 1, 1);
+
+INSERT INTO Reviews (CompletedAppointmentId, TutorId, StudentId, Comment, Rating) VALUES
+(1, 1, 1, 'Tres clair et patient.', 5);
+
+UPDATE Tutors
+SET NumberOfRatings = NumberOfRatings + 1,
+    TotalRatings = TotalRatings + 5
+WHERE Id = 1;
+
+ALTER TABLE Students AUTO_INCREMENT = 4;
+ALTER TABLE Tutors AUTO_INCREMENT = 4;
+ALTER TABLE Appointments AUTO_INCREMENT = 4;
+ALTER TABLE CompletedAppointments AUTO_INCREMENT = 2;
+ALTER TABLE Reviews AUTO_INCREMENT = 2;
