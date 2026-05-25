@@ -5,102 +5,133 @@
              Background="{StaticResource MainBG}">
 
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
-    <Grid Margin="30">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="40">
+            <StackPanel MaxWidth="900" HorizontalAlignment="Left">
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,30">
-            <TextBlock Text="Mon Profil" FontSize="36" FontWeight="ExtraBold" Foreground="{StaticResource PrimaryMauve}"/>
-            <Border Height="3" Background="{StaticResource PrimaryMauve}" Width="60" HorizontalAlignment="Left" Margin="2,5,0,0"/>
-        </StackPanel>
+                <Border Background="#161625" CornerRadius="15" Padding="30" Margin="0,0,0,30" BorderBrush="#2A2A4A" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="380"/>
-                <ColumnDefinition Width="40"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0" VerticalAlignment="Top">
-                <Border Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Informations Personnelles" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,25"/>
-
-                        <Grid Margin="0,0,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Prénom" Foreground="{StaticResource SubText}" FontSize="12"/>
-                                <TextBlock Text="{Binding Prenom}" FontSize="18" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="1">
-                                <TextBlock Text="Nom" Foreground="{StaticResource SubText}" FontSize="12"/>
-                                <TextBlock Text="{Binding Nom}" FontSize="18" Foreground="White"/>
-                            </StackPanel>
-                        </Grid>
-
-                        <TextBlock Text="Numéro de DA" Foreground="{StaticResource SubText}" FontSize="12"/>
-                        <TextBlock Text="{Binding DA}" FontSize="18" Foreground="White" Margin="0,0,0,15"/>
-
-                        <StackPanel Visibility="{Binding IsStudent, Converter={StaticResource BoolToVis}}">
-                            <TextBlock Text="Cote R / GPA" Foreground="{StaticResource SubText}" FontSize="12"/>
-                            <TextBlock Text="{Binding Gpa}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource SuccessGreen}" Margin="0,0,0,15"/>
-                        </StackPanel>
-
-                        <StackPanel Visibility="{Binding IsTutor, Converter={StaticResource BoolToVis}}">
-                            <TextBlock Text="Matière enseignée" Foreground="{StaticResource SubText}" FontSize="12"/>
-                            <TextBlock Text="{Binding Matiere}" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
-
-                            <TextBlock Text="Statut" Foreground="{StaticResource SubText}" FontSize="12"/>
-                            <TextBlock Text="{Binding StatutValidation}" FontSize="16" FontWeight="SemiBold" Foreground="#FBC531" Margin="0,0,0,15"/>
-                        </StackPanel>
-
-                        <Border Background="#2D2D2D" CornerRadius="8" HorizontalAlignment="Left" Padding="15,8" Margin="0,10,0,0">
-                            <TextBlock Text="{Binding Role}" FontSize="14" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}"/>
+                        <Border Grid.Column="0" Width="100" Height="100" CornerRadius="50" Background="{StaticResource PrimaryMauve}" Margin="0,0,25,0">
+                            <TextBlock Text="👤" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
                         </Border>
 
-                    </StackPanel>
-                </Border>
-
-                <Border Style="{StaticResource CardStyle}" Margin="0,20,0,0">
-                    <StackPanel>
-                        <TextBlock Text="Aperçu de l'activité" FontSize="20" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,0,0,20"/>
-                        <UniformGrid Columns="3">
-                            <StackPanel>
-                                <TextBlock Text="Séances" Foreground="{StaticResource SubText}" FontSize="12" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding TotalSeances}" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Role, StringFormat='Profil {0}'}" FontSize="14" Foreground="{StaticResource PrimaryMauve}" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="{Binding Prenom}" FontSize="32" FontWeight="ExtraBold" Foreground="White" Margin="0,0,10,0"/>
+                                <TextBlock Text="{Binding Nom}" FontSize="32" FontWeight="ExtraBold" Foreground="White"/>
                             </StackPanel>
-                            <StackPanel>
-                                <TextBlock Text="Heures" Foreground="{StaticResource SubText}" FontSize="12" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding HeuresCompletees}" FontSize="28" FontWeight="Bold" Foreground="White"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Numéro DA :" Foreground="{StaticResource SubText}" FontSize="15" Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding DA}" Foreground="White" FontSize="15" FontWeight="Bold"/>
                             </StackPanel>
-                            <StackPanel Visibility="{Binding IsTutor, Converter={StaticResource BoolToVis}}">
-                                <TextBlock Text="Note (/5)" Foreground="{StaticResource SubText}" FontSize="12" Margin="0,0,0,5"/>
-                                <TextBlock Text="{Binding MoyenneStats}" FontSize="28" FontWeight="Bold" Foreground="#FFD700"/>
-                            </StackPanel>
-                        </UniformGrid>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-
-            <Grid x:Name="AvailabilityContainer" Grid.Column="2" Visibility="{Binding IsTutor, Converter={StaticResource BoolToVis}}">
-                <Border Style="{StaticResource CardStyle}" VerticalAlignment="Stretch">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <local:TutorAvailabilityControlView x:Name="ctrlAvailability" Grid.Row="1"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
-            </Grid>
+
+                <Border Background="#201A35" BorderBrush="{StaticResource PrimaryMauve}" BorderThickness="1" CornerRadius="12" Padding="25" Margin="0,0,0,30" Visibility="{Binding CanEditGpa, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel>
+                        <TextBlock Text="👨‍🏫 Évaluation Académique" FontSize="20" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                        <TextBlock Text="En tant que tuteur de cet élève, vous pouvez mettre à jour sa moyenne générale suite à vos séances." Foreground="{StaticResource SubText}" FontSize="14" Margin="0,0,0,20"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Nouvelle moyenne (%) :" Foreground="White" VerticalAlignment="Center" Margin="0,0,15,0" FontSize="15"/>
+                            <TextBox Grid.Column="1" Text="{Binding NewGpaInput, UpdateSourceTrigger=PropertyChanged}" Height="45" Style="{StaticResource ModernTextBoxStyle}" MaxWidth="150" HorizontalAlignment="Left" FontSize="16" TextAlignment="Center"/>
+                            <Button Grid.Column="2" Content="Sauvegarder" Command="{Binding UpdateStudentGpaCommand}" Style="{StaticResource PrimaryButtonStyle}" Height="45" Width="140" Margin="15,0,0,0"/>
+                        </Grid>
+                        <TextBlock Text="{Binding GpaStatusMessage}" Foreground="#00E676" FontWeight="Bold" Margin="0,15,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <StackPanel Visibility="{Binding IsStudent, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="Résumé Académique" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+                    <Grid Margin="0,0,0,30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Moyenne Actuelle" FontSize="15" Foreground="{StaticResource SubText}"/>
+                                <TextBlock Text="{Binding Gpa, StringFormat='{}{0} %'}" FontSize="36" FontWeight="Bold" Foreground="#FBC531" Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="2" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Séances Complétées" FontSize="15" Foreground="{StaticResource SubText}"/>
+                                <TextBlock Text="{Binding TotalSeances}" FontSize="36" FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="4" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Heures de tutorat" FontSize="15" Foreground="{StaticResource SubText}"/>
+                                <TextBlock Text="{Binding HeuresCompletees, StringFormat='{}{0}h'}" FontSize="36" FontWeight="Bold" Foreground="#00E676" Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Button Content="🔍 Trouver un tuteur" Style="{StaticResource PrimaryButtonStyle}" Height="50" Width="250" HorizontalAlignment="Left" FontSize="16" Click="SearchTutor_Click"/>
+                </StackPanel>
+
+                <StackPanel Visibility="{Binding IsTutor, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <TextBlock Text="Expertise &amp; Impact" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+
+                    <Border Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Matières enseignées" FontSize="15" Foreground="{StaticResource SubText}" Margin="0,0,0,10"/>
+                            <TextBlock Text="{Binding Matiere}" FontSize="18" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Grid Margin="0,0,0,30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Statut" FontSize="15" Foreground="{StaticResource SubText}"/>
+                                <TextBlock Text="{Binding StatutValidation}" FontSize="20" FontWeight="Bold" Foreground="#00E676" Margin="0,10,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="2" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Séances Données" FontSize="15" Foreground="{StaticResource SubText}"/>
+                                <TextBlock Text="{Binding TotalSeances}" FontSize="36" FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Column="4" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="Note Moyenne" FontSize="15" Foreground="{StaticResource SubText}"/>
+                                <TextBlock Text="{Binding MoyenneStats}" FontSize="36" FontWeight="Bold" Foreground="#FBC531" Margin="0,5,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <local:TutorAvailabilityControlView x:Name="ctrlAvailability" Margin="0,0,0,20"/>
+
+                </StackPanel>
+
+            </StackPanel>
         </Grid>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

@@ -32,6 +32,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
 
         public ObservableCollection<Appointment> UpcomingAppointments { get; set; } = new();
         public ObservableCollection<Appointment> PendingRequestsList { get; set; } = new();
+        public ObservableCollection<Tutor> TopTutors { get; set; } = new();
 
         public HomeViewModel()
         {
@@ -48,11 +49,17 @@ namespace Projet_Session_Entreprise.UI.ViewModels
 
             UpcomingAppointments.Clear();
             PendingRequestsList.Clear();
-
-            if (IsGuest || CurrentSessionService.HasSeenNotifications) return;
+            TopTutors.Clear();
 
             using (var db = new AppDbContext())
             {
+                if (IsGuest)
+                {
+                    var vedettes = db.Tutors.Where(tut => tut.IsValidated).Take(3).ToList();
+                    foreach (var tut in vedettes) TopTutors.Add(tut);
+                    return;
+                }
+
                 if (IsTutor && user is Tutor t)
                 {
                     TutorName = t.Prenom;
@@ -68,13 +75,16 @@ namespace Projet_Session_Entreprise.UI.ViewModels
                     var pending = appts.Where(a => a.Status == "En attente").OrderBy(a => a.DateRDV).ToList();
                     foreach (var p in pending) PendingRequestsList.Add(p);
 
+                    var upcoming = appts.Where(a => a.Status == "Accepté").OrderBy(a => a.DateRDV).ToList();
+                    foreach (var u in upcoming) UpcomingAppointments.Add(u);
+
                     var unreadMsgs = db.Messages.Count(m => m.ReceiverId == t.Id && m.SenderRole == "Student" && !m.IsRead && !m.IsDeleted);
 
                     string notifMsg = "";
                     if (unreadMsgs > 0) notifMsg += $"💬 Vous avez {unreadMsgs} message(s) non lu(s).\n";
                     if (pending.Any()) notifMsg += $"⏳ Vous avez {pending.Count} demande(s) en attente.\n";
 
-                    if (!string.IsNullOrEmpty(notifMsg))
+                    if (!string.IsNullOrEmpty(notifMsg) && !CurrentSessionService.HasSeenNotifications)
                     {
                         NotificationText = notifMsg.TrimEnd('\n');
                         HasNotifications = true;
@@ -100,7 +110,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
                     if (unreadMsgs > 0) notifMsg += $"💬 Vous avez {unreadMsgs} message(s) non lu(s).\n";
                     if (upcoming.Any()) notifMsg += $"✅ Vous avez {upcoming.Count} séance(s) prévue(s) !";
 
-                    if (!string.IsNullOrEmpty(notifMsg))
+                    if (!string.IsNullOrEmpty(notifMsg) && !CurrentSessionService.HasSeenNotifications)
                     {
                         NotificationText = notifMsg.TrimEnd('\n');
                         HasNotifications = true;
@@ -118,8 +128,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
         [RelayCommand]
         public void ManageRequests()
         {
-            if (CurrentSessionService.CurrentUser is Tutor t)
-                MainView.Instance.NavigateTo(new ReceivedRequestsView(t));
+            if (CurrentSessionService.CurrentUser is Tutor t) MainView.Instance.NavigateTo(new ReceivedRequestsView(t));
         }
 
         [RelayCommand]

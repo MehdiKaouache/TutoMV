@@ -2,10 +2,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Projet_Session_Entreprise.Infrastructure.Data;
 using Projet_Session_Entreprise.Core.Models;
+using Projet_Session_Entreprise.UI.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using Projet_Session_Entreprise.Infrastructure.Services;
 
 namespace Projet_Session_Entreprise.UI.ViewModels
 {
@@ -36,6 +38,10 @@ namespace Projet_Session_Entreprise.UI.ViewModels
         [ObservableProperty] private int _rating;
         [ObservableProperty] private string _comment = "";
 
+        [ObservableProperty] private bool _canEditGpa;
+        [ObservableProperty] private string _newGpaInput = "";
+        [ObservableProperty] private string _gpaStatusMessage = "";
+
         [ObservableProperty] private Appointment? _selectedAppointment;
 
         public ObservableCollection<Appointment> MyAppointments { get; set; } = new();
@@ -50,6 +56,20 @@ namespace Projet_Session_Entreprise.UI.ViewModels
             Prenom = student.Prenom;
             Role = student.Role;
             Gpa = student.GPA.ToString("0.0");
+
+            var currentUser = CurrentSessionService.CurrentUser;
+            if (currentUser is Tutor t)
+            {
+                using (var db = new AppDbContext())
+                {
+                    CanEditGpa = db.Appointments.Any(a => a.TutorId == t.Id && a.StudentId == student.Id && a.Status != "Refusé");
+                }
+            }
+            else
+            {
+                CanEditGpa = false;
+            }
+
             LoadData();
         }
 
@@ -64,6 +84,7 @@ namespace Projet_Session_Entreprise.UI.ViewModels
             Role = tutor.Role;
             Matiere = tutor.Subject;
             StatutValidation = tutor.IsValidated ? "Certifié ✅" : "En attente de certification";
+            CanEditGpa = false;
             LoadData();
         }
 
@@ -92,6 +113,33 @@ namespace Projet_Session_Entreprise.UI.ViewModels
                     TotalSeances = appts.Count(a => a.Status != null && (a.Status.ToLower() == "complété" || a.Status.ToLower() == "terminé"));
                     HeuresCompletees = TotalSeances;
                     MoyenneStats = "-";
+                }
+            }
+        }
+
+        [RelayCommand]
+        public void UpdateStudentGPA()
+        {
+            if (_student != null && CanEditGpa)
+            {
+                if (double.TryParse(NewGpaInput, out double val))
+                {
+                    using (var db = new AppDbContext())
+                    {
+                        var s = db.Students.Find(_student.Id);
+                        if (s != null)
+                        {
+                            s.GPA = val;
+                            db.SaveChanges();
+                            Gpa = val.ToString("0.0");
+                            GpaStatusMessage = "✅ Moyenne mise à jour avec succès !";
+                            NewGpaInput = "";
+                        }
+                    }
+                }
+                else
+                {
+                    GpaStatusMessage = "❌ Format invalide. Entrez un nombre.";
                 }
             }
         }
@@ -178,6 +226,15 @@ namespace Projet_Session_Entreprise.UI.ViewModels
             catch (Exception ex)
             {
                 StatusMessage = "Erreur BD : " + (ex.InnerException?.Message ?? ex.Message);
+            }
+        }
+
+        [RelayCommand]
+        public void OpenChat()
+        {
+            if (SelectedAppointment != null)
+            {
+                MainView.Instance.NavigateTo(new MessageListView());
             }
         }
     }

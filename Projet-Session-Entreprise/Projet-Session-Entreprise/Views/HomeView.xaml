@@ -2,164 +2,203 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="{StaticResource MainBG}">
-    <Grid Margin="40">
-        <StackPanel Visibility="{Binding IsGuest, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Bienvenue sur TutoMV" FontSize="48" FontWeight="ExtraBold" Foreground="{StaticResource PrimaryMauve}" HorizontalAlignment="Center" Margin="0,0,0,15"/>
-            <TextBlock Text="La plateforme d'excellence pour la réussite scolaire au Cégep." FontSize="18" Foreground="{StaticResource SubText}" HorizontalAlignment="Center" Margin="0,0,0,50"/>
 
-            <Grid MaxWidth="900" Margin="0,0,0,50">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </UserControl.Resources>
 
-                <Border Grid.Column="0" Background="#111122" CornerRadius="12" Padding="25" BorderBrush="#2A2A4A" BorderThickness="1">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="40">
+
+            <StackPanel Visibility="{Binding IsGuest, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center" MaxWidth="1200">
+                <Border Background="#161625" CornerRadius="20" Padding="50" Margin="0,0,0,40" BorderBrush="#2A2A4A" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="🔍" FontSize="40" HorizontalAlignment="Center" Margin="0,0,0,15"/>
-                        <TextBlock Text="Cherchez" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                        <TextBlock Text="Trouvez le tuteur idéal selon vos matières et vos disponibilités." Foreground="{StaticResource SubText}" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock Text="Bienvenue sur TutoMV" FontSize="54" FontWeight="ExtraBold" Foreground="{StaticResource PrimaryMauve}" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+                        <TextBlock Text="La plateforme d'excellence pour la réussite scolaire au Cégep." FontSize="20" Foreground="{StaticResource SubText}" HorizontalAlignment="Center" Margin="0,0,0,40"/>
+                        <Button Content="🚀 Créer mon compte maintenant" Style="{StaticResource PrimaryButtonStyle}" Height="65" Width="350" FontSize="18" Command="{Binding RegisterGuestCommand}"/>
                     </StackPanel>
                 </Border>
 
-                <Border Grid.Column="2" Background="#111122" CornerRadius="12" Padding="25" BorderBrush="#2A2A4A" BorderThickness="1">
-                    <StackPanel>
-                        <TextBlock Text="📅" FontSize="40" HorizontalAlignment="Center" Margin="0,0,0,15"/>
-                        <TextBlock Text="Réservez" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                        <TextBlock Text="Planifiez une rencontre en ligne ou en personne en quelques clics." Foreground="{StaticResource SubText}" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Border>
+                <Grid Margin="0,0,0,50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="#0F0F1A" CornerRadius="15" Padding="30" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="🔍" FontSize="45" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Cherchez" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                            <TextBlock Text="Trouvez le tuteur idéal selon vos matières et vos disponibilités." Foreground="{StaticResource SubText}" TextWrapping="Wrap" TextAlignment="Center" FontSize="15"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="2" Background="#0F0F1A" CornerRadius="15" Padding="30" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="📅" FontSize="45" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Réservez" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                            <TextBlock Text="Planifiez une rencontre en ligne ou en personne en quelques clics." Foreground="{StaticResource SubText}" TextWrapping="Wrap" TextAlignment="Center" FontSize="15"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="4" Background="#0F0F1A" CornerRadius="15" Padding="30" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="🎓" FontSize="45" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                            <TextBlock Text="Réussissez" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                            <TextBlock Text="Améliorez vos notes et atteignez vos objectifs académiques." Foreground="{StaticResource SubText}" TextWrapping="Wrap" TextAlignment="Center" FontSize="15"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
 
-                <Border Grid.Column="4" Background="#111122" CornerRadius="12" Padding="25" BorderBrush="#2A2A4A" BorderThickness="1">
-                    <StackPanel>
-                        <TextBlock Text="🎓" FontSize="40" HorizontalAlignment="Center" Margin="0,0,0,15"/>
-                        <TextBlock Text="Réussissez" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                        <TextBlock Text="Améliorez vos notes et atteignez vos objectifs académiques." Foreground="{StaticResource SubText}" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
-
-            <Button Content="Créer mon compte maintenant" Style="{StaticResource PrimaryButtonStyle}" Height="60" Width="300" FontSize="18" Command="{Binding RegisterGuestCommand}"/>
-        </StackPanel>
-
-        <StackPanel Visibility="{Binding IsStudent, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock Text="{Binding StudentName, StringFormat='Bonjour, {0} 👋'}" FontSize="36" FontWeight="ExtraBold" Foreground="White" Margin="0,0,0,5"/>
-            <TextBlock Text="Voici un résumé de votre progression." Foreground="{StaticResource SubText}" FontSize="16" Margin="0,0,0,30"/>
-
-            <Border Background="#161625" BorderBrush="#7B61FF" BorderThickness="1" CornerRadius="10" Padding="15" Margin="0,0,0,30" Visibility="{Binding HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="{Binding NotificationText}" Foreground="White" FontSize="14" FontWeight="Bold" TextWrapping="Wrap"/>
-            </Border>
-
-            <Grid Margin="0,0,0,30">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Séances suivies" Foreground="{StaticResource SubText}"/>
-                        <TextBlock Text="{Binding StudentTotalSeances}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
-                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Heures complétées" Foreground="{StaticResource SubText}"/>
-                        <TextBlock Text="{Binding StudentHeures}" FontSize="32" FontWeight="Bold" Foreground="#00E676" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
-                <Border Grid.Column="4" Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Moyenne Générale" Foreground="{StaticResource SubText}"/>
-                        <TextBlock Text="{Binding StudentMoyenne}" FontSize="32" FontWeight="Bold" Foreground="#FBC531" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
-
-            <TextBlock Text="Prochaines séances" FontSize="22" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
-            <ListBox ItemsSource="{Binding UpcomingAppointments}" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border Style="{StaticResource ListCardStyle}" Margin="0,0,0,10">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding Tutor.Prenom, StringFormat='Avec {0}'}" FontWeight="Bold" FontSize="16" Foreground="White"/>
-                                    <TextBlock Text="{Binding DateRDV, StringFormat={}{0:dd MMMM yyyy à HH:mm}}" Foreground="{StaticResource SubText}" FontSize="14"/>
+                <TextBlock Text="🌟 Nos tuteurs vedettes" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+                <ItemsControl ItemsSource="{Binding TopTutors}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#161625" CornerRadius="12" Padding="20" Margin="10" Width="250" BorderBrush="#2A2A4A" BorderThickness="1">
+                                <StackPanel>
+                                    <Border Width="60" Height="60" CornerRadius="30" Background="{StaticResource PrimaryMauve}" Margin="0,0,0,15" HorizontalAlignment="Center">
+                                        <TextBlock Text="👤" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"/>
+                                    </Border>
+                                    <TextBlock Text="{Binding Prenom}" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Subject}" FontSize="14" Foreground="{StaticResource PrimaryMauve}" HorizontalAlignment="Center" Margin="0,5,0,0" TextWrapping="Wrap"/>
                                 </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
 
-            <Button Content="Trouver un nouveau tuteur" Style="{StaticResource ActionButton}" Width="250" Height="45" HorizontalAlignment="Left" Margin="0,20,0,0" Command="{Binding ExploreCommand}"/>
-        </StackPanel>
+            <StackPanel Visibility="{Binding IsStudent, Converter={StaticResource BooleanToVisibilityConverter}}" MaxWidth="1100" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding StudentName, StringFormat='Bonjour, {0} 👋'}" FontSize="42" FontWeight="ExtraBold" Foreground="White" Margin="0,0,0,5"/>
+                <TextBlock Text="Prêt à exceller aujourd'hui ? Voici votre tableau de bord." Foreground="{StaticResource SubText}" FontSize="18" Margin="0,0,0,30"/>
 
-        <StackPanel Visibility="{Binding IsTutor, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock Text="{Binding TutorName, StringFormat='Espace Tuteur de {0} 📚'}" FontSize="36" FontWeight="ExtraBold" Foreground="White" Margin="0,0,0,5"/>
-            <TextBlock Text="Gérez vos élèves et vos disponibilités." Foreground="{StaticResource SubText}" FontSize="16" Margin="0,0,0,30"/>
-
-            <Border Background="#161625" BorderBrush="#7B61FF" BorderThickness="1" CornerRadius="10" Padding="15" Margin="0,0,0,30" Visibility="{Binding HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Text="{Binding NotificationText}" Foreground="White" FontSize="14" FontWeight="Bold" TextWrapping="Wrap"/>
-            </Border>
-
-            <Grid Margin="0,0,0,30">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Élèves aidés" Foreground="{StaticResource SubText}"/>
-                        <TextBlock Text="{Binding TutorEtudiants}" FontSize="32" FontWeight="Bold" Foreground="{StaticResource PrimaryMauve}" Margin="0,10,0,0"/>
+                <Border Background="#201A35" BorderBrush="#7B61FF" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,30" Visibility="{Binding HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🔔" FontSize="24" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding NotificationText}" Foreground="White" FontSize="16" FontWeight="Bold" TextWrapping="Wrap" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Border>
-                <Border Grid.Column="2" Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Heures données" Foreground="{StaticResource SubText}"/>
-                        <TextBlock Text="{Binding TutorHeures}" FontSize="32" FontWeight="Bold" Foreground="#00E676" Margin="0,10,0,0"/>
+
+                <Grid Margin="0,0,0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="📚 Séances suivies" FontSize="15" Foreground="{StaticResource SubText}"/>
+                            <TextBlock Text="{Binding StudentTotalSeances}" FontSize="40" FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="2" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="⏱️ Heures complétées" FontSize="15" Foreground="{StaticResource SubText}"/>
+                            <TextBlock Text="{Binding StudentHeures}" FontSize="40" FontWeight="Bold" Foreground="#00E676" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="4" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="📈 Moyenne Générale" FontSize="15" Foreground="{StaticResource SubText}"/>
+                            <TextBlock Text="{Binding StudentMoyenne}" FontSize="40" FontWeight="Bold" Foreground="#FBC531" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <TextBlock Text="📅 Vos prochains rendez-vous" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
+                <ListBox ItemsSource="{Binding UpcomingAppointments}" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#161625" CornerRadius="12" Padding="20" Margin="0,0,0,15" BorderBrush="#2A2A4A" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Tutor.Prenom, StringFormat='Séance avec {0}'}" FontWeight="Bold" FontSize="18" Foreground="White" Margin="0,0,0,5"/>
+                                        <TextBlock Text="{Binding DateRDV, StringFormat={}{0:dd MMMM yyyy à HH:mm}}" Foreground="{StaticResource PrimaryMauve}" FontSize="15" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Détails" Style="{StaticResource ActionButton}" Command="{Binding DataContext.GoToAppointmentsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                    <Button Content="🔍 Trouver un tuteur" Style="{StaticResource PrimaryButtonStyle}" Width="250" Height="50" FontSize="16" Command="{Binding ExploreCommand}" Margin="0,0,20,0"/>
+                    <Button Content="📂 Voir mon historique" Style="{StaticResource ActionButton}" Width="250" Height="50" FontSize="16" Command="{Binding GoToAppointmentsCommand}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Visibility="{Binding IsTutor, Converter={StaticResource BooleanToVisibilityConverter}}" MaxWidth="1100" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding TutorName, StringFormat='Espace Tuteur de {0} 🎓'}" FontSize="42" FontWeight="ExtraBold" Foreground="White" Margin="0,0,0,5"/>
+                <TextBlock Text="Gérez vos élèves, vos demandes et votre impact." Foreground="{StaticResource SubText}" FontSize="18" Margin="0,0,0,30"/>
+
+                <Border Background="#201A35" BorderBrush="#7B61FF" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,30" Visibility="{Binding HasNotifications, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="🔔" FontSize="24" Margin="0,0,15,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding NotificationText}" Foreground="White" FontSize="16" FontWeight="Bold" TextWrapping="Wrap" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Border>
-                <Border Grid.Column="4" Style="{StaticResource CardStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Note globale" Foreground="{StaticResource SubText}"/>
-                        <TextBlock Text="{Binding TutorNote}" FontSize="32" FontWeight="Bold" Foreground="#FBC531" Margin="0,10,0,0"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
 
-            <TextBlock Text="Demandes en attente" FontSize="22" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
-            <ListBox ItemsSource="{Binding PendingRequestsList}" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border Style="{StaticResource ListCardStyle}" Margin="0,0,0,10">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding Student.Prenom, StringFormat='Demande de {0}'}" FontWeight="Bold" FontSize="16" Foreground="White"/>
-                                    <TextBlock Text="{Binding DateRDV, StringFormat={}{0:dd MMMM yyyy à HH:mm}}" Foreground="{StaticResource SubText}" FontSize="14"/>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                <Grid Margin="0,0,0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="👥 Élèves aidés" FontSize="15" Foreground="{StaticResource SubText}"/>
+                            <TextBlock Text="{Binding TutorEtudiants}" FontSize="40" FontWeight="Bold" Foreground="White" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="2" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="⏱️ Heures données" FontSize="15" Foreground="{StaticResource SubText}"/>
+                            <TextBlock Text="{Binding TutorHeures}" FontSize="40" FontWeight="Bold" Foreground="#00E676" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="4" Background="#161625" CornerRadius="12" Padding="20" BorderBrush="#2A2A4A" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="⭐ Note globale" FontSize="15" Foreground="{StaticResource SubText}"/>
+                            <TextBlock Text="{Binding TutorNote}" FontSize="40" FontWeight="Bold" Foreground="#FBC531" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
 
-            <Button Content="Gérer mes demandes" Style="{StaticResource ActionButton}" Width="250" Height="45" HorizontalAlignment="Left" Margin="0,20,0,0" Command="{Binding ManageRequestsCommand}"/>
-        </StackPanel>
-    </Grid>
+                <TextBlock Text="⏳ Demandes en attente" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,0,0,15"/>
+                <ListBox ItemsSource="{Binding PendingRequestsList}" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#161625" CornerRadius="12" Padding="20" Margin="0,0,0,15" BorderBrush="#2A2A4A" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Student.Prenom, StringFormat='Demande de {0}'}" FontWeight="Bold" FontSize="18" Foreground="White" Margin="0,0,0,5"/>
+                                        <TextBlock Text="{Binding DateRDV, StringFormat={}{0:dd MMMM yyyy à HH:mm}}" Foreground="{StaticResource SubText}" FontSize="15"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="Gérer" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding DataContext.ManageRequestsCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>
