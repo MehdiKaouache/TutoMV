@@ -61,7 +61,6 @@ namespace Projet_Session_Entreprise.Infrastructure.Services
             if (completedAppointment == null)
                 return false;
 
-            // CORRECTION ICI : On utilise AppointmentId au lieu de CompletedAppointmentId
             bool alreadyReviewed = await _db.Reviews
                 .AnyAsync(r =>
                     r.AppointmentId == completedAppointment.AppointmentId &&

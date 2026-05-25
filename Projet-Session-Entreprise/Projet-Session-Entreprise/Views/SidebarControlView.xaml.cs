@@ -23,7 +23,7 @@ namespace Projet_Session_Entreprise.UI.Views
         private void btnHome_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new HomeView());
         private void btnSearch_Click(object sender, RoutedEventArgs e) => MainView.Instance.NavigateTo(new TutorListView());
 
-        private void btnMessages_Click(object sender, RoutedEventArgs e) // NOUVELLE FONCTION
+        private void btnMessages_Click(object sender, RoutedEventArgs e)
         {
             var user = CurrentSessionService.CurrentUser;
             if (user != null) MainView.Instance.NavigateTo(new MessageListView());

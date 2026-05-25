@@ -10,7 +10,6 @@ namespace Projet_Session_Entreprise.Tests.ViewModels
         public void LoadData_ChargeRDV()
         {
             var student = new Student { Id = 1, Nom = "John" };
-
             var vm = new ProfileViewModel(student);
 
             vm.LoadData();

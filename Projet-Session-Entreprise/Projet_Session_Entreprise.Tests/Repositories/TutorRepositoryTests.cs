@@ -24,7 +24,7 @@ namespace Projet_Session_Entreprise.Tests.Repositories
             context.Tutors.Add(new Tutor { Nom = "John", DA = "1", Password = "1", Availability = "", Role = "T" });
             await context.SaveChangesAsync();
 
-            var result = await repo.SearchTutorsAsync("Momo");
+            var result = await repo.SearchTutorsAsync("John");
             Assert.Single(result);
         }
     }

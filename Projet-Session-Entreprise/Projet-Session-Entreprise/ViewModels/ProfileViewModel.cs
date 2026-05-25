@@ -11,6 +11,8 @@ using Projet_Session_Entreprise.Infrastructure.Services;
 
 namespace Projet_Session_Entreprise.UI.ViewModels
 {
+    public sealed record AppointmentStatusChange(Appointment Appointment, string Status);
+
     public partial class ProfileViewModel : ObservableObject
     {
         private Student? _student;

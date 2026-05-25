@@ -12,14 +12,13 @@ namespace Projet_Session_Entreprise.Infrastructure.Data
     {
         public static void SetupDonnees(AppDbContext context)
         {
-            if (context.Tutors.Any()) return; //si l'app à déjà des tuteurs, va pas en ajouter
+            if (context.Tutors.Any()) return; 
             var tuteursInit = Enumerable.Range(1, 1000).Select(i => new Tutor
             {
                 Nom = $"Tuteur{i}",
                 Prenom = $"John {i}",
                 DA = $"{1230560 + i}",
                 Password = "password123",
-                //va check si i à un reste de 1-3, si le reste = 0 -> Maths, = 1 -> Info, = 2 -> Francais
                 Subject = i % 3 == 0 ? "Mathématiques" : i % 3 == 1 ? "Informatique" : "Francais",
                 Availability = "Lundi 9h-12h",
                 AverageGrade = 85.0 + (i % 15),
