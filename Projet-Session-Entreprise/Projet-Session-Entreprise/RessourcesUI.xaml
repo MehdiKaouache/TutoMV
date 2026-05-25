@@ -42,6 +42,7 @@
         <Setter Property="Background" Value="{StaticResource PrimaryMauve}"/>
         <Setter Property="Foreground" Value="#000000"/>
         <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -56,6 +57,16 @@
                 <Setter Property="Opacity" Value="0.9"/>
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+        <Setter Property="Background" Value="{StaticResource SuccessGreen}"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+
+    <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource ActionButton}">
+        <Setter Property="Background" Value="{StaticResource DangerRed}"/>
+        <Setter Property="Foreground" Value="White"/>
     </Style>
 
     <Style x:Key="LinkButton" TargetType="Button">
@@ -128,30 +139,35 @@
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
-    <Style TargetType="DataGrid">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="GridLinesVisibility" Value="None"/>
-        <Setter Property="CanUserAddRows" Value="False"/>
-        <Setter Property="RowHeight" Value="60"/>
-        <Setter Property="ColumnHeaderHeight" Value="50"/>
-    </Style>
-
-    <Style TargetType="DataGridColumnHeader">
-        <Setter Property="Background" Value="#1A1A1A"/>
-        <Setter Property="Foreground" Value="{StaticResource PrimaryMauve}"/>
-        <Setter Property="Padding" Value="15,0"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="BorderThickness" Value="0,0,0,1"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
-    </Style>
-
-    <Style TargetType="DataGridRow">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="White"/>
+    <Style x:Key="ListCardStyle" TargetType="Border" BasedOn="{StaticResource CardStyle}">
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#252525"/>
+                <Setter Property="Background" Value="#1E1E1E"/>
+                <Setter Property="BorderBrush" Value="{StaticResource PrimaryMauve}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="CleanListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="Transparent"/>
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Projet_Session_Entreprise.Data;
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Repositories;
+using Projet_Session_Entreprise.Infrastructure.Data;
+using Projet_Session_Entreprise.Core.Models;
+using Projet_Session_Entreprise.Infrastructure.Repositories;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

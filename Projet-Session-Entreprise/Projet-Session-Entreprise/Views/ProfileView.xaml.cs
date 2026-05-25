@@ -1,13 +1,12 @@
 using System.Windows;
 using System.Windows.Controls;
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Core.Models;
+using Projet_Session_Entreprise.UI.ViewModels;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.UI.Views
 {
     public partial class ProfileView : UserControl
     {
-        private ProfileViewModel? _viewModel;
         private Student? _currentStudent;
 
         public ProfileView(object user)
@@ -17,29 +16,15 @@ namespace Projet_Session_Entreprise.Views
             if (user is Student s)
             {
                 _currentStudent = s;
-                _viewModel = new ProfileViewModel(s);
-                AvailabilityContainer.Visibility = Visibility.Collapsed;
-                colDispos.Width = new GridLength(0);
-
-                this.Loaded += (sender, e) =>
-                {
-                    _ = App.NotificationService.CheckAndShowAcceptedAppointmentsAsync(s);
-                };
+                this.DataContext = new ProfileViewModel(s);
             }
             else if (user is Tutor t)
             {
-                _viewModel = new ProfileViewModel(t);
-                AvailabilityContainer.Visibility = Visibility.Visible;
-                colDispos.Width = new GridLength(350);
-                ctrlAvailability.Initialize(t);
-            }
+                this.DataContext = new ProfileViewModel(t);
 
-            if (_viewModel != null)
-            {
-                this.DataContext = _viewModel;
-                if (dgAppointments != null)
+                if (ctrlAvailability != null)
                 {
-                    dgAppointments.ItemsSource = _viewModel.MyAppointments;
+                    ctrlAvailability.Initialize(t);
                 }
             }
         }

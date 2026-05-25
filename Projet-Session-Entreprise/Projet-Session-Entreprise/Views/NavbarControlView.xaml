@@ -1,4 +1,4 @@
-<UserControl x:Class="Projet_Session_Entreprise.Views.NavbarControlView"
+<UserControl x:Class="Projet_Session_Entreprise.UI.Views.NavbarControlView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Height="70" Background="{StaticResource SurfaceColor}">

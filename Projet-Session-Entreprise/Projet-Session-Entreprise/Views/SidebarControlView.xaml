@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Projet_Session_Entreprise.Views.SidebarControlView"
+﻿<UserControl x:Class="Projet_Session_Entreprise.UI.Views.SidebarControlView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid Background="{StaticResource SurfaceColor}">
@@ -19,10 +19,14 @@
             <Button x:Name="btnBecomeTutor" Content="Devenir Tuteur" Click="btnBecomeTutor_Click" Style="{StaticResource MenuButton}"/>
             <Button x:Name="btnManageRequests" Content="Gérer les demandes" Click="btnManageRequests_Click" Style="{StaticResource MenuButton}" Visibility="Collapsed"/>
             <Button Content="Mes rendez-vous" Click="btnAppointments_Click" Style="{StaticResource MenuButton}"/>
+            <Button Content="Mes Messages" Click="btnMessages_Click" Style="{StaticResource MenuButton}"/>
             <Button Content="Mon Profil" Click="btnProfile_Click" Style="{StaticResource MenuButton}"/>
             <Button Content="Paramètres" Click="btnSettings_Click" Style="{StaticResource MenuButton}"/>
         </StackPanel>
 
+        <StackPanel Grid.Row="2" Margin="15,0,15,20">
+            <Button Content="Déconnexion" Click="btnLogInOrOut" Style="{StaticResource MenuButton}" Foreground="#ff4444"/>
+        </StackPanel>
 
     </Grid>
 </UserControl>

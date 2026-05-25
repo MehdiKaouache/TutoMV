@@ -1,5 +1,5 @@
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Core.Models;
+using Projet_Session_Entreprise.UI.ViewModels;
 using System;
 using System.Globalization;
 using System.Windows.Data;

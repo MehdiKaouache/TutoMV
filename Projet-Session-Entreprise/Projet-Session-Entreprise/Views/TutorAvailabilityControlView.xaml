@@ -1,4 +1,4 @@
-<UserControl x:Class="Projet_Session_Entreprise.Views.TutorAvailabilityControlView"
+<UserControl x:Class="Projet_Session_Entreprise.UI.Views.TutorAvailabilityControlView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Border Style="{StaticResource CardStyle}">

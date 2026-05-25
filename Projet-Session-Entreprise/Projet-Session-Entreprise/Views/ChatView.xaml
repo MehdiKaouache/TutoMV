@@ -1,0 +1,90 @@
+<UserControl x:Class="Projet_Session_Entreprise.UI.Views.ChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#161625" BorderBrush="#2A2A4A" BorderThickness="0,0,0,1" Padding="20" CornerRadius="12,12,0,0">
+            <StackPanel Orientation="Horizontal">
+                <Border Width="40" Height="40" CornerRadius="20" Background="{StaticResource PrimaryMauve}" Margin="0,0,15,0">
+                    <TextBlock Text="👤" Foreground="Black" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="{Binding ChatPartnerName}" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer x:Name="ChatScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="20">
+            <ItemsControl ItemsSource="{Binding Messages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,10">
+                            <Border Background="{Binding BubbleColor}" 
+                                    HorizontalAlignment="{Binding Alignment}" 
+                                    CornerRadius="15" Padding="15,12" MaxWidth="500">
+                                <StackPanel>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Content}" Foreground="White" FontSize="15" TextWrapping="Wrap" Margin="0,0,15,0" LineHeight="22"/>
+
+                                        <Button Grid.Column="1" Content="✕" Command="{Binding DataContext.DeleteMessageCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding Id}" Background="Transparent" BorderThickness="0" Foreground="#ff4444" Cursor="Hand" VerticalAlignment="Top" FontSize="12">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsMine}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                    </Grid>
+                                    <TextBlock Text="{Binding Timestamp}" Foreground="#A0A0B0" FontSize="11" HorizontalAlignment="Right" Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="#161625" Padding="20" CornerRadius="0,0,12,12" BorderBrush="#2A2A4A" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding NewMessageText, UpdateSourceTrigger=PropertyChanged}" 
+                         Grid.Column="0" Height="50" Background="#0A0A15" Foreground="White" BorderBrush="#3A3A5A" BorderThickness="1" 
+                         Padding="15,0" VerticalContentAlignment="Center" AcceptsReturn="True" TextWrapping="Wrap" FontSize="15"
+                         Tag="Écrivez un message...">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="25"/>
+                        </Style>
+                    </TextBox.Resources>
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding SendMessageCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <Button Grid.Column="1" Content="Envoyer ➔" Style="{StaticResource PrimaryButtonStyle}" 
+                        Command="{Binding SendMessageCommand}" Width="120" Height="50" Margin="15,0,0,0" FontSize="15">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="25"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

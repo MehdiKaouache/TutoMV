@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.UI.Views
 {
     public partial class RoleSelectionView : UserControl
     {

@@ -1,4 +1,4 @@
-﻿using Projet_Session_Entreprise.Models;
+﻿using Projet_Session_Entreprise.Core.Models;
 using Xunit;
 
 namespace Projet_Session_Entreprise.Tests.Models
@@ -10,15 +10,15 @@ namespace Projet_Session_Entreprise.Tests.Models
         {
             var student = new Student
             {
-                DA = "2387924",
-                Nom = "Kaouache",
-                Prenom = "Mehdi",
+                DA = "2000100",
+                Nom = "Doe",
+                Prenom = "John",
                 Role = "Étudiant"
             };
 
-            Assert.Equal("2387924", student.DA);
-            Assert.Equal("Kaouache", student.Nom);
-            Assert.Equal("Mehdi", student.Prenom);
+            Assert.Equal("2000100", student.DA);
+            Assert.Equal("Doe", student.Nom);
+            Assert.Equal("John", student.Prenom);
             Assert.Equal("Étudiant", student.Role);
         }
 

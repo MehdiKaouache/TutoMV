@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.UI.Views
 {
     public partial class NavbarControlView : UserControl
     {

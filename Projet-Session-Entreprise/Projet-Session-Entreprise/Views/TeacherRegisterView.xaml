@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Projet_Session_Entreprise.Views.TeacherRegisterView"
+﻿<UserControl x:Class="Projet_Session_Entreprise.UI.Views.TeacherRegisterView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="{StaticResource MainBG}">
@@ -29,8 +29,12 @@
                 <TextBlock Text="Moyenne générale (%)" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
                 <TextBox x:Name="txtGPA"/>
 
-                <TextBlock Text="Mot de passe (min. 8 car.)" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
-                <PasswordBox x:Name="txtPassword"/>
+                <TextBlock Text="Mot de passe" Foreground="{StaticResource SubText}" Margin="5,15,0,5"/>
+                <Grid>
+                    <PasswordBox x:Name="txtPassword" PasswordChanged="txtPassword_PasswordChanged" Background="#0A0A15" Foreground="White"/>
+                    <TextBox x:Name="txtVisiblePassword" Visibility="Collapsed" TextChanged="txtVisiblePassword_TextChanged" Background="#0A0A15" Foreground="White"/>
+                    <Button x:Name="btnTogglePassword" Content="👁" Width="30" HorizontalAlignment="Right" Background="Transparent" BorderThickness="0" Foreground="{StaticResource SubText}" Cursor="Hand" Click="btnTogglePassword_Click"/>
+                </Grid>
 
                 <Button x:Name="btnSignUp" Content="Continuer vers les détails" Style="{StaticResource ActionButton}" Margin="0,30,0,0" Click="BtnSignUp_Click"/>
                 <Button x:Name="btnCancel" Content="Annuler" Style="{StaticResource LinkButton}" Margin="0,10,0,0" Click="BtnCancel_Click"/>

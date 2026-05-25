@@ -1,61 +1,117 @@
-<UserControl x:Class="Projet_Session_Entreprise.Views.SettingsView"
+<UserControl x:Class="Projet_Session_Entreprise.UI.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="{StaticResource MainBG}">
-    <Grid>
-        <StackPanel Width="420" VerticalAlignment="Center" HorizontalAlignment="Center">
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Paramètres du compte"
-                       Foreground="{StaticResource PrimaryMauve}"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,30"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,30">
+            <TextBlock Text="Paramètres du compte" FontSize="36" FontWeight="ExtraBold" Foreground="{StaticResource PrimaryMauve}"/>
+            <Border Height="3" Background="{StaticResource PrimaryMauve}" Width="60" HorizontalAlignment="Left" Margin="2,5,0,0"/>
 
-            <!-- CHANGER LE DA -->
-            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
-                <StackPanel>
-                    <TextBlock Text="Changer le numéro DA"
-                               Foreground="{StaticResource MainText}"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Margin="0,0,0,15"/>
-
-                    <TextBlock Text="Nouveau DA" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txtNouveauDA"/>
-
-                    <Button Content="Mettre à jour le DA"
-                            Style="{StaticResource ActionButton}"
-                            Margin="0,15,0,0"
-                            Click="BtnUpdateDA_Click"/>
-                </StackPanel>
-            </Border>
-
-            <!-- CHANGER LE MOT DE PASSE -->
-            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
-                <StackPanel>
-                    <TextBlock Text="Changer le mot de passe"
-                               Foreground="{StaticResource MainText}"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Margin="0,0,0,15"/>
-
-                    <TextBlock Text="Mot de passe actuel" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
-                    <PasswordBox x:Name="txtMotDePasseActuel"/>
-
-                    <TextBlock Text="Nouveau mot de passe" Foreground="{StaticResource SubText}" Margin="0,15,0,5"/>
-                    <PasswordBox x:Name="txtNouveauMotDePasse"/>
-
-                    <TextBlock Text="Confirmer le nouveau mot de passe" Foreground="{StaticResource SubText}" Margin="0,15,0,5"/>
-                    <PasswordBox x:Name="txtConfirmMotDePasse"/>
-
-                    <Button Content="Mettre à jour le mot de passe"
-                            Style="{StaticResource ActionButton}"
-                            Margin="0,15,0,0"
-                            Click="BtnUpdatePassword_Click"/>
-                </StackPanel>
-            </Border>
-
+            <TextBlock Text="{Binding StatusMessage}" FontWeight="Bold" FontSize="14" Margin="0,15,0,0">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Foreground" Value="{StaticResource DangerRed}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSuccess}" Value="True">
+                                <Setter Property="Foreground" Value="{StaticResource SuccessGreen}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
         </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,15,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="400"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Changer le numéro DA" Foreground="{StaticResource MainText}" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+                            <TextBlock Text="Nouveau DA" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
+                            <TextBox x:Name="txtNouveauDA" Style="{StaticResource ModernTextBoxStyle}"/>
+                            <Button Content="Mettre à jour le DA" Style="{StaticResource ActionButton}" Margin="0,15,0,0" Click="BtnUpdateDA_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock Text="Sécurité" Foreground="{StaticResource MainText}" FontSize="18" FontWeight="Bold" Margin="0,0,0,15"/>
+                            <TextBlock Text="Mot de passe actuel" Foreground="{StaticResource SubText}" Margin="0,0,0,5"/>
+                            <PasswordBox x:Name="txtMotDePasseActuel" Style="{StaticResource BaseInputStyle}"/>
+                            <TextBlock Text="Nouveau mot de passe" Foreground="{StaticResource SubText}" Margin="0,15,0,5"/>
+                            <PasswordBox x:Name="txtNouveauMotDePasse" Style="{StaticResource BaseInputStyle}"/>
+                            <TextBlock Text="Confirmer le nouveau mot de passe" Foreground="{StaticResource SubText}" Margin="0,15,0,5"/>
+                            <PasswordBox x:Name="txtConfirmMotDePasse" Style="{StaticResource BaseInputStyle}"/>
+                            <Button Content="Mettre à jour le mot de passe" Style="{StaticResource ActionButton}" Margin="0,20,0,0" Click="BtnUpdatePassword_Click"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <Border Grid.Column="2" Style="{StaticResource CardStyle}" VerticalAlignment="Top">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="Historique des séances terminées" Foreground="{StaticResource PrimaryMauve}" FontSize="20" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                        <TextBlock Grid.Row="1" Text="📭 Aucun historique pour le moment." 
+                                   Foreground="{StaticResource SubText}" FontSize="16" FontStyle="Italic" 
+                                   HorizontalAlignment="Center" Margin="0,50,0,0">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=lstHistory, Path=HasItems}" Value="False">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <ListBox x:Name="lstHistory" Grid.Row="1" ItemsSource="{Binding Historique}" Background="Transparent" BorderThickness="0" 
+                                 ItemContainerStyle="{StaticResource CleanListBoxItem}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#1A1A2E" CornerRadius="10" Padding="15" Margin="0,0,0,10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Date}" FontWeight="Bold" FontSize="16" Foreground="White" Margin="0,0,0,5"/>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Rencontre avec : " Foreground="{StaticResource SubText}" FontSize="13"/>
+                                                    <TextBlock Text="{Binding Partenaire}" Foreground="{StaticResource PrimaryMauve}" FontWeight="Bold" FontSize="13"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <Border Grid.Column="1" Background="#252545" CornerRadius="5" Padding="10,5" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding RolePartenaire}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

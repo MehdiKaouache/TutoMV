@@ -1,7 +1,7 @@
 ﻿using Moq;
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Repositories.Interfaces;
-using Projet_Session_Entreprise.ViewModels;
+using Projet_Session_Entreprise.Core.Models;
+using Projet_Session_Entreprise.Core.Interfaces;
+using Projet_Session_Entreprise.UI.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -11,20 +11,23 @@ namespace Projet_Session_Entreprise.Tests.ViewModels
     public class TutorListViewModelTests
     {
         [Fact]
-        public async Task RechercherAsync_TexteRecherche_AppelleRepositoryEtRemplitResultats()
+        public async Task ApplyFilters_TexteRecherche_AppelleRepositoryEtRemplitResultats()
         {
             var mockRepo = new Mock<ITutorRepository>();
-            var tutors = new List<Tutor> { new Tutor { Nom = "John" } };
-            mockRepo.Setup(r => r.SearchTutorsAsync("John")).ReturnsAsync(tutors);
-            var vm = new TutorListViewModel(null, mockRepo.Object);
-            vm.SearchText = "John";
-            vm.SelectedFilter = "Nom";
+            var tutors = new List<Tutor> { new Tutor { Nom = "John", Prenom = "Doe", Subject = "Maths" } };
+            mockRepo.Setup(r => r.GetAllAsync()).ReturnsAsync(tutors);
 
-            await vm.RechercherAsync();
+            var vm = new TutorListViewModel(null, mockRepo.Object);
+
+            await Task.Delay(100);
+
+            vm.SearchText = "John";
+            vm.SelectedSubject = "Toutes les matières";
+
+            vm.ApplyFilters();
 
             Assert.Single(vm.Results);
             Assert.Equal("John", vm.Results[0].Nom);
-            mockRepo.Verify(r => r.SearchTutorsAsync("John"), Times.Once);
         }
     }
 }

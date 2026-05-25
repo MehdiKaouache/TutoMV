@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Projet_Session_Entreprise.Services;
+using Projet_Session_Entreprise.Infrastructure.Services;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.UI.Views
 {
     public partial class MainView : Window
     {
@@ -32,11 +32,6 @@ namespace Projet_Session_Entreprise.Views
                 LeftSidebar.Visibility = Visibility.Visible;
                 SidebarCol.Width = new GridLength(280);
                 LeftSidebar.UpdateMenu(CurrentSessionService.IsTutor);
-
-                if (CurrentSessionService.CurrentUser is Models.Student s)
-                {
-                    _ = App.NotificationService.CheckAndShowAcceptedAppointmentsAsync(s);
-                }
             }
             else
             {

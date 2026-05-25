@@ -1,4 +1,4 @@
-﻿<Application x:Class="Projet_Session_Entreprise.App"
+﻿<Application x:Class="Projet_Session_Entreprise.UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="Views/MainView.xaml">
@@ -7,6 +7,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="RessourcesUI.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
             <SolidColorBrush x:Key="PrimaryMauve" Color="#A29BFE"/>
             <SolidColorBrush x:Key="MainBG" Color="#121212"/>

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Projet_Session_Entreprise.Models;
-using Projet_Session_Entreprise.Services;
-using Projet_Session_Entreprise.Data;
+using Projet_Session_Entreprise.Core.Models;
+using Projet_Session_Entreprise.Infrastructure.Services;
+using Projet_Session_Entreprise.Infrastructure.Data;
 
-namespace Projet_Session_Entreprise.Views
+namespace Projet_Session_Entreprise.UI.Views
 {
     public partial class RequeteRoleTuteurView : UserControl
     {
@@ -23,6 +23,7 @@ namespace Projet_Session_Entreprise.Views
             public DayOfWeek Day { get; set; }
             public string DayDisplay { get; set; } = string.Empty;
             public TimeSpan StartTime { get; set; }
+            public TimeSpan EndTime { get; set; }
         }
 
         public RequeteRoleTuteurView(Tutor tutor)
@@ -31,42 +32,95 @@ namespace Projet_Session_Entreprise.Views
             _tutor = tutor;
         }
 
+        private void ShowError(string message)
+        {
+            txtError.Text = message;
+            txtError.Visibility = Visibility.Visible;
+        }
+
+        private void BtnShowAdd_Click(object sender, RoutedEventArgs e)
+        {
+            txtError.Visibility = Visibility.Collapsed;
+            lblSlotError.Visibility = Visibility.Collapsed;
+            AjouterSlotArea.Visibility = Visibility.Visible;
+            btnShowAdd.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnCancelAdd_Click(object sender, RoutedEventArgs e)
+        {
+            txtError.Visibility = Visibility.Collapsed;
+            lblSlotError.Visibility = Visibility.Collapsed;
+            AjouterSlotArea.Visibility = Visibility.Collapsed;
+            btnShowAdd.Visibility = Visibility.Visible;
+        }
+
         private void BtnAddSlot_Click(object sender, RoutedEventArgs e)
         {
-            string? dayStr = (cmbDay.SelectedItem as ComboBoxItem)?.Content?.ToString();
-            string? timeStr = (cmbTime.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            txtError.Visibility = Visibility.Collapsed;
+            lblSlotError.Visibility = Visibility.Collapsed;
 
-            if (dayStr != null && timeStr != null)
+            string? dayStr = (cmbDay.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            string? startStr = (cmbTime.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            string? endStr = (cmbEndTime.SelectedItem as ComboBoxItem)?.Content?.ToString();
+
+            if (dayStr != null && startStr != null && endStr != null)
             {
-                if (!_tempSlots.Any(s => s.DayDisplay == dayStr && s.StartTime == TimeSpan.Parse(timeStr)))
+                var start = TimeSpan.Parse(startStr);
+                var end = TimeSpan.Parse(endStr);
+
+                if (end <= start)
+                {
+                    lblSlotError.Text = "L'heure de fin doit être après le début.";
+                    lblSlotError.Visibility = Visibility.Visible;
+                    return;
+                }
+
+                if (!_tempSlots.Any(s => s.DayDisplay == dayStr && s.StartTime == start && s.EndTime == end))
                 {
                     _tempSlots.Add(new SlotDisplay
                     {
                         Day = _dayMap[dayStr],
                         DayDisplay = dayStr,
-                        StartTime = TimeSpan.Parse(timeStr)
+                        StartTime = start,
+                        EndTime = end
                     });
+
                     lstAddedSlots.ItemsSource = null;
                     lstAddedSlots.ItemsSource = _tempSlots;
+
+                    AjouterSlotArea.Visibility = Visibility.Collapsed;
+                    btnShowAdd.Visibility = Visibility.Visible;
                 }
+            }
+        }
+
+        private void BtnDeleteSlot_Click(object sender, RoutedEventArgs e)
+        {
+            var slot = (sender as Button)?.DataContext as SlotDisplay;
+            if (slot != null)
+            {
+                _tempSlots.Remove(slot);
+                lstAddedSlots.ItemsSource = null;
+                lstAddedSlots.ItemsSource = _tempSlots;
             }
         }
 
         private void BtnFinalize_Click(object sender, RoutedEventArgs e)
         {
+            txtError.Visibility = Visibility.Collapsed;
             string course = txtCourseTargeted.Text.Trim();
             string gradeStr = txtGradeCourse.Text.Trim();
             var subjects = lstSubjects.SelectedItems.Cast<ListBoxItem>().Select(i => i.Content.ToString() ?? "").ToList();
 
             if (string.IsNullOrEmpty(course) || !double.TryParse(gradeStr, out double grade) || subjects.Count == 0 || _tempSlots.Count == 0)
             {
-                MessageBox.Show("Veuillez remplir tous les champs et ajouter au moins une disponibilité.");
+                ShowError("Veuillez remplir tous les champs et ajouter au moins une disponibilité.");
                 return;
             }
 
             if (grade < 80)
             {
-                MessageBox.Show("Une note de 80% est requise pour ce cours.");
+                ShowError("Une note de 80% minimum est requise pour ce cours.");
                 return;
             }
 
@@ -82,7 +136,7 @@ namespace Projet_Session_Entreprise.Views
 
                         foreach (var s in _tempSlots)
                         {
-                            db.TutorSlots.Add(new TutorSlot { TutorId = tInDb.Id, Day = s.Day, StartTime = s.StartTime, IsBooked = false });
+                            db.TutorSlots.Add(new TutorSlot { TutorId = tInDb.Id, Day = s.Day, StartTime = s.StartTime, EndTime = s.EndTime, IsBooked = false });
                         }
                         db.SaveChanges();
                         CurrentSessionService.CurrentUser = tInDb;
@@ -90,7 +144,10 @@ namespace Projet_Session_Entreprise.Views
                 }
                 MainView.Instance.NavigateTo(new HomeView());
             }
-            catch (Exception ex) { MessageBox.Show("Erreur : " + ex.Message); }
+            catch (Exception ex)
+            {
+                ShowError("Erreur lors de l'enregistrement : " + ex.Message);
+            }
         }
     }
 }

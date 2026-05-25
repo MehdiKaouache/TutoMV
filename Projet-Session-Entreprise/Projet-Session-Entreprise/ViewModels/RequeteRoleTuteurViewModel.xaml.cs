@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Projet_Session_Entreprise.Models;
+using Projet_Session_Entreprise.Core.Models;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace Projet_Session_Entreprise.ViewModels
+namespace Projet_Session_Entreprise.UI.ViewModels
 {
     public partial class RequeteRoleTuteurViewModel : ObservableObject
     {
